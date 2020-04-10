@@ -1,0 +1,52 @@
+version: '3.5'
+
+volumes:
+  zzpj-mysql:
+
+networks:
+  zzpj:
+    driver: bridge
+
+services:
+  zzpj-backend:
+    container_name: zzpj-backend
+    build:
+      context: ./backend/
+      dockerfile: Dockerfile
+    ports:
+      - "9091:9090"
+    depends_on:
+      - zzpj-mysql
+    networks:
+      - zzpj
+
+  zzpj-frontend:
+    container_name: zzpj-frontend
+    build: ./frontend/
+    ports:
+      - "8080:80"
+    depends_on:
+      - zzpj-backend
+    networks:
+      - zzpj
+
+
+  zzpj-mysql:
+    container_name: zzpj-mysql
+    hostname: zzpj.pl
+    image: mysql:5
+    ports:
+      - "3308:3306"
+    restart: always
+    volumes:
+      - zzpj-mysql:/var/lib/mysql
+    networks:
+      zzpj:
+        aliases:
+          - zzpj
+          - zzpj.pl
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=zzpjschema
+      - MYSQL_USER=zzpj
+      - MYSQL_PASSWORD=password

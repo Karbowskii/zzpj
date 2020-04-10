@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.2.6.RELEASE</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+	<groupId>pl.zzpj</groupId>
+	<artifactId>esportbetting</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>esportbetting</name>
+	<description>Web Spring application - Bet on esport</description>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<java.version>1.8</java.version>
+		<javax.inject.version>1</javax.inject.version>
+		<maven.compiler.plugin.version>3.8.0</maven.compiler.plugin.version>
+		<spring.boot.version>2.1.5.RELEASE</spring.boot.version>
+		<openapi-generator.version>3.3.4</openapi-generator.version>
+		<apache.commons-lang3.version>3.7</apache.commons-lang3.version>
+		<apache.commons-io.version>2.6</apache.commons-io.version>
+		<jaxb-api.version>2.3.1</jaxb-api.version>
+		<jaxb-impl.version>2.3.2</jaxb-impl.version>
+		<jaxb2-maven-plugin.version>2.4</jaxb2-maven-plugin.version>
+		<jackson-datatype-jsr310.version>2.9.8</jackson-datatype-jsr310.version>
+		<swagger-annotations.version>1.5.21</swagger-annotations.version>
+		<maven-surefire-report-plugin.version>3.0.0-M3</maven-surefire-report-plugin.version>
+		<maven-checkstyle-plugin.version>3.1.0</maven-checkstyle-plugin.version>
+		<cxf.version>3.3.0</cxf.version>
+		<liquibase.version>3.6.3</liquibase.version>
+		<mysql.connector.version>8.0.12</mysql.connector.version>
+		<jasperreports.version>6.8.0</jasperreports.version>
+		<assertj-core.version>3.11.1</assertj-core.version>
+		<javax.transaction-api.version>1.2</javax.transaction-api.version>
+		<io.swagger-parser.version>2.0.18</io.swagger-parser.version>
+		<json.version>20190722</json.version>
+		<jakson-databind.version>2.9.8</jakson-databind.version>
+		<mockito-junit-jupiter.version>2.27.5</mockito-junit-jupiter.version>
+		<puppycrawl.tools.checkstyle>8.17</puppycrawl.tools.checkstyle>
+		<mysql.connector.version>8.0.14</mysql.connector.version>
+		<junit-jupiter-engine.version>5.2.0</junit-jupiter-engine.version>
+		<jacoco-maven-plugin.version>0.8.4</jacoco-maven-plugin.version>
+		<spring-security-jwt.version>1.1.0.RELEASE</spring-security-jwt.version>
+		<spring-security-oauth2.version>2.4.0.RELEASE</spring-security-oauth2.version>
+		<io.jswonwebtoken.jjwt.version>0.9.1</io.jswonwebtoken.jjwt.version>
+		<git-commit-id-plugin.version>2.2.4</git-commit-id-plugin.version>
+		<maven-site-plugin.version>3.7.1</maven-site-plugin.version>
+		<jacoco.version>0.8.1</jacoco.version>
+	</properties>
+
+	<dependencies>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-tomcat</artifactId>
+		</dependency>
+
+<!--		<dependency>-->
+<!--			<groupId>org.springframework.boot</groupId>-->
+<!--			<artifactId>spring-boot-starter-data-jpa</artifactId>-->
+<!--		</dependency>-->
+
+<!--		<dependency>-->
+<!--			<groupId>mysql</groupId>-->
+<!--			<artifactId>mysql-connector-java</artifactId>-->
+<!--			<version>${mysql.connector.version}</version>-->
+<!--		</dependency>-->
+
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<optional>true</optional>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-junit-jupiter</artifactId>
+			<version>${mockito-junit-jupiter.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.jacoco</groupId>
+			<artifactId>jacoco-maven-plugin</artifactId>
+			<version>${jacoco-maven-plugin.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>${hibernate.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.puppycrawl.tools</groupId>
+			<artifactId>checkstyle</artifactId>
+			<version>${puppycrawl.tools.checkstyle}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.liquibase</groupId>
+			<artifactId>liquibase-core</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-jwt</artifactId>
+			<version>${spring-security-jwt.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.security.oauth</groupId>
+			<artifactId>spring-security-oauth2</artifactId>
+			<version>${spring-security-oauth2.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-core</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt</artifactId>
+			<version>${io.jswonwebtoken.jjwt.version}</version>
+		</dependency>
+
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+
+
+
+</project>
