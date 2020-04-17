@@ -1,12 +1,14 @@
 package RestApiConnector;
 
+import org.json.*;
+
 import java.io.IOException;
 
 public interface ESportRestApi {
-    String getAllLeagues() throws IOException, InterruptedException;
-    String getAllSeries() throws IOException, InterruptedException;
-    String getAllTournaments() throws IOException, InterruptedException;
-    String getAllMatches() throws IOException, InterruptedException;
-    String getAllTeams() throws IOException, InterruptedException;
-    String getAllPlayers() throws IOException, InterruptedException;
+    JSONArray getAllLeagues() throws IOException, InterruptedException;
+    JSONArray getAllSeries() throws IOException, InterruptedException;
+    JSONArray getAllTournaments() throws IOException, InterruptedException;
+    JSONArray getAllMatches() throws IOException, InterruptedException;
+    JSONArray getAllTeams() throws IOException, InterruptedException;
+    JSONArray getAllPlayers() throws IOException, InterruptedException;
 }

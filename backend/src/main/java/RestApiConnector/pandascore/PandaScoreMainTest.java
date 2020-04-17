@@ -1,12 +1,15 @@
 package RestApiConnector.pandascore;
 
 import RestApiConnector.ESportRestApi;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.*;
 
 public class PandaScoreMainTest {
 
-    public static void main(String args[]) throws IOException, InterruptedException {
+    public static void main(String args[]) throws IOException, InterruptedException, JSONException {
         File tokenFile = new File("backend", "token.txt");
         BufferedReader br = new BufferedReader(new FileReader(tokenFile));
 

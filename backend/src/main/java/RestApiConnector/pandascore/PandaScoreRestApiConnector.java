@@ -2,6 +2,8 @@ package RestApiConnector.pandascore;
 
 
 import RestApiConnector.ESportRestApi;
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.io.IOException;
 import java.net.URI;
@@ -48,39 +50,39 @@ public class PandaScoreRestApiConnector implements ESportRestApi {
     }
 
     @Override
-    public String getAllLeagues() throws IOException, InterruptedException {
+    public JSONArray getAllLeagues() throws IOException, InterruptedException {
         HttpRequest request = this.createRequest("/tournaments");
-        return this.getTextResponse(request);
+        return this.processRequest(request);
     }
 
     @Override
-    public String getAllSeries() throws IOException, InterruptedException {
+    public JSONArray getAllSeries() throws IOException, InterruptedException {
         HttpRequest request = this.createRequest("/series");
-        return this.getTextResponse(request);
+        return this.processRequest(request);
     }
 
     @Override
-    public String getAllTournaments() throws IOException, InterruptedException {
+    public JSONArray getAllTournaments() throws IOException, InterruptedException {
         HttpRequest request = this.createRequest("/tournaments");
-        return this.getTextResponse(request);
+        return this.processRequest(request);
     }
 
     @Override
-    public String getAllMatches() throws IOException, InterruptedException {
+    public JSONArray getAllMatches() throws IOException, InterruptedException {
         HttpRequest request = this.createRequest("/matches");
-        return this.getTextResponse(request);
+        return this.processRequest(request);
     }
 
     @Override
-    public String getAllTeams() throws IOException, InterruptedException {
+    public JSONArray getAllTeams() throws IOException, InterruptedException {
         HttpRequest request = this.createRequest("/teams");
-        return this.getTextResponse(request);
+        return this.processRequest(request);
     }
 
     @Override
-    public String getAllPlayers() throws IOException, InterruptedException {
+    public JSONArray getAllPlayers() throws IOException, InterruptedException {
         HttpRequest request = this.createRequest("/players");
-        return this.getTextResponse(request);
+        return this.processRequest(request);
     }
 
     private HttpRequest createRequest(String option) {
@@ -98,5 +100,18 @@ public class PandaScoreRestApiConnector implements ESportRestApi {
         }
         String res = response.body().toString();
         return res;
+    }
+
+    private JSONArray stringToJson(String jsonString) {
+        try {
+            return new JSONArray(jsonString);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private JSONArray processRequest(HttpRequest request) throws IOException, InterruptedException {
+        return this.stringToJson(this.getTextResponse(request));
     }
 }
