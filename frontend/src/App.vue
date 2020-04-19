@@ -1,14 +1,16 @@
 <template>
   <div id="app">
-    
+    <NavigationPanel></NavigationPanel>
     <router-view/>
   </div>
 </template>
 
 <script>
+import NavigationPanel from "./components/NavigationPanel";
 
 export default {
   name: 'App',
+  components: {NavigationPanel}
 }
 </script>
 
@@ -18,7 +20,5 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
 }
 </style>
