@@ -2,13 +2,14 @@
     <div id="matches">
         <ul>
             <li v-for="(match,index) in filteredMatches"
-                v-bind:key="index">
+                v-bind:key="index"
+                v-bind:last="isNotLast(index)">
                 <b-row>
                     <b-col class="leftTeam">
                         {{match.team1Name}}
                         <b-avatar v-bind:src="match.team1Logo"/>
                     </b-col>
-                    <b-col class="resp" cols="1">
+                    <b-col class="res" cols="1">
                         <a>{{match.result}}</a>
                     </b-col>
                     <b-col class="rightTeam">
@@ -32,6 +33,12 @@
         data: function () {
             return{
             }
+        },
+       methods:{
+            isNotLast: function (index) {
+                return !(index + 1 === this.filteredMatches.length);
+            }
+
         }
     }
 </script>
@@ -49,12 +56,17 @@
     li {
         padding-top: 15px;
         padding-bottom: 15px;
-        border-bottom: 1px solid black;
-        border-top: 1px solid black;
+        /*border-top: 1px solid #cfcfcf;*/
     }
 
-    .resp {
+    li[last="true"]{
+        border-bottom: 1px solid #cfcfcf;
+    }
+
+    .res {
         position: relative;
+        color: #cfcfcf;
+        font-size: 20px;
     }
 
     a {
@@ -69,10 +81,14 @@
 
     .leftTeam {
         text-align: right;
+        color: #cfcfcf;
+        font-size: 20px;
     }
 
     .rightTeam {
         text-align: left;
+        color: #cfcfcf;
+        font-size: 20px;
     }
 
 </style>

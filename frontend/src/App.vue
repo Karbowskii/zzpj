@@ -17,8 +17,13 @@ export default {
 <style>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
   text-align: center;
+  height: 100%;
+/*  background: #4e4f4e;*/
 }
+  html, body{
+    height: 100%;
+    background: url("assets/89503.jpg") no-repeat center center fixed;
+    background-size: cover;
+  }
 </style>

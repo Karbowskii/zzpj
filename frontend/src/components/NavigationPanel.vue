@@ -72,10 +72,12 @@
 
 <style scoped>
     nav{
-        background: #343237;
+        background: var(--colour2);
+        box-shadow: 0px 3px 13px 5px var(--colour4);
     }
     a.nav-link a{
-        color: #757675;
+       /* color: #757675;*/
+        color: var(--colour4);
         font-size: 24px;
         padding-bottom: 8px;
     }
@@ -84,14 +86,14 @@
         margin-left: 15px;
     }
     .navigationRouter li.nav-item a.nav-link a:hover{
-        color: #FFFFFF;
+        color: var(--colour5);
         text-decoration: none;
     }
     img{
         margin-left: 15px;
     }
     .profile a{
-        color: #a48030!important;
+        color: var(--colour4)!important;
     }
 
     .profile{
@@ -110,7 +112,7 @@
         margin-right: 15px;
         border-radius: 50%;
         border: 2px solid;
-        color: #a48030;
+        color: var(--colour3);
         margin-top: 5px;
     }
 
@@ -122,21 +124,25 @@
         margin-left: 0!important;
     }
     button{
-        border: 2px solid #a48030;
+        border: 2px solid var(--colour4);
         background: none;
         color: #b9b9b9;
     }
 
     button:hover{
-        border: 2px solid #a48030;
+        border: 2px solid var(--colour4);
         background: none;
         text-shadow: 0 0 5px #FFFFFF;
     }
 
     .navigationRouter .router-link-exact-active{
-        border-bottom: 3px solid #a48030;
-        color: #a48030;
+        border-bottom: 3px solid var(--colour3);
+        color: var(--colour3);
         font-weight: bold;
+    }
+
+    .navigationRouter .router-link-exact-active:hover{
+        border-bottom: 3px solid var(--colour5) !important;
     }
 
     .progress{
@@ -148,25 +154,25 @@
     }
 
     .progress .progress-bar{
-        background:  #a48030!important;
+        background:  var(--colour3)!important;
     }
 
     a.lvl{
-        color: #a48030;
+        color: var(--colour4);
         font-size: 25px;
         margin-top: 30px;
     }
     a.lvl:hover{
-        color: #a48030!important;
+        color: var(--colour4)!important;
     }
     .tokens a{
-        color: #a48030;
+        color: var(--colour4);
         vertical-align: top;
         font-size: 40px;
         margin-top: 5px;
     }
     .tokens a:hover{
-        color: #a48030;
+        color: var(--colour4);
     }
 
 </style>
