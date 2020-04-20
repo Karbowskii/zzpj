@@ -41,7 +41,7 @@
 		<json.version>20190722</json.version>
 		<jakson-databind.version>2.9.8</jakson-databind.version>
 		<mockito-junit-jupiter.version>2.27.5</mockito-junit-jupiter.version>
-		<puppycrawl.tools.checkstyle>8.17</puppycrawl.tools.checkstyle>
+		<puppycrawl.tools.checkstyle>8.29</puppycrawl.tools.checkstyle>
 		<mysql.connector.version>8.0.14</mysql.connector.version>
 		<junit-jupiter-engine.version>5.2.0</junit-jupiter-engine.version>
 		<jacoco-maven-plugin.version>0.8.4</jacoco-maven-plugin.version>
