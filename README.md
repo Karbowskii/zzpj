@@ -8,6 +8,12 @@ Przykład: frontend chce zrobić geta na zasób /users w backendzie.
 Źle: GET "localhost:9090/users"
 Dobrze: GET "zzpj-backend/users"
 
+Wszystkie kontenery teraz budujemy i uruchamiamy skryptem bashowym poprzez komende:
+./run.sh
+
+
+Manualnie:
+
 Budujemy wszystkie kontenery:
 docker-compose build
 
