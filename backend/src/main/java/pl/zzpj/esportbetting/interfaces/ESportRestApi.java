@@ -1,4 +1,4 @@
-package RestApiConnector;
+package pl.zzpj.esportbetting.interfaces;
 
 import org.json.*;
 

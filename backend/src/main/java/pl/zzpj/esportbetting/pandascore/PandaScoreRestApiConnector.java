@@ -1,7 +1,7 @@
-package RestApiConnector.pandascore;
+package pl.zzpj.esportbetting.pandascore;
 
 
-import RestApiConnector.ESportRestApi;
+import pl.zzpj.esportbetting.interfaces.ESportRestApi;
 import org.json.JSONArray;
 import org.json.JSONException;
 
