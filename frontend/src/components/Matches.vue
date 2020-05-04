@@ -1,22 +1,23 @@
 <template>
     <div id="matches">
         <ul>
-            <li v-for="(match,index) in filteredMatches"
-                v-bind:key="index"
-                v-bind:last="isNotLast(index)">
-                <b-row>
-                    <b-col class="leftTeam">
-                        {{match.team1Name}}
-                        <b-avatar v-bind:src="match.team1Logo"/>
-                    </b-col>
-                    <b-col class="res" cols="1">
-                        <a>{{match.result}}</a>
-                    </b-col>
-                    <b-col class="rightTeam">
-                        <b-avatar v-bind:src="match.team2Logo"/>
-                        {{match.team2Name}}
-                    </b-col>
-                </b-row>
+            <li v-for="(match, index) in filteredMatches"
+                v-bind:key="match.id"
+                v-bind:last="isNotLast(index)"
+                v-on:click="showMatch(match.id)">
+                    <b-row>
+                        <b-col class="leftTeam">
+                            {{match.team1Name}}
+                            <b-avatar v-bind:src="match.team1Logo"/>
+                        </b-col>
+                        <b-col class="res" cols="1">
+                            <a>{{match.result}}</a>
+                        </b-col>
+                        <b-col class="rightTeam">
+                            <b-avatar v-bind:src="match.team2Logo"/>
+                            {{match.team2Name}}
+                        </b-col>
+                    </b-row>
             </li>
         </ul>
     </div>
@@ -37,6 +38,9 @@
        methods:{
             isNotLast: function (index) {
                 return !(index + 1 === this.filteredMatches.length);
+            },
+            showMatch: function (matchId) {
+                this.$router.push({ path: `/match/${matchId}`})
             }
 
         }
@@ -57,6 +61,10 @@
         padding-top: 15px;
         padding-bottom: 15px;
         /*border-top: 1px solid #cfcfcf;*/
+    }
+    
+    li:hover{
+        cursor: pointer;
     }
 
     li[last="true"]{

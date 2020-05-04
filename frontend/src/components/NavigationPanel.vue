@@ -2,16 +2,16 @@
     <div id="NavigationPanel">
         <b-navbar sticky>
             <b-navbar-brand>
-                <b-link to="Home">
+                <b-link :to="{path:'/Home'}">
                     <b-img :src="require('../assets/appLogo.png')" width="43" height="54"></b-img>
                 </b-link>
             </b-navbar-brand>
             <b-navbar-nav class="navigationRouter">
                 <b-nav-item>
-                    <b-link to="schedule">Schedule</b-link>
+                    <b-link :to="{path:'/schedule'}">Schedule</b-link>
                 </b-nav-item>
                 <b-nav-item>
-                    <b-link to="ranking">Ranking</b-link>
+                    <b-link :to="{path:'/ranking'}">Ranking</b-link>
                 </b-nav-item>
             </b-navbar-nav>
             <b-navbar-nav class="ml-auto" v-if="logged===false">
@@ -26,13 +26,13 @@
             </b-navbar-nav>
             <b-navbar-nav class="ml-auto account" v-if="logged===true" right>
                 <b-nav-item >
-                    <b-link to="Profile" class="profile">
+                    <b-link :to="{path:'/Profile'}" class="profile">
                         <b-img :src="require('../assets/profileIcon.png')" width="50" height="50"></b-img>
                     </b-link>
                 </b-nav-item>
                 <a class="lvl">{{user.lvl}}</a>
                 <b-nav-item>
-                    <b-link to="Profile" class="profile">
+                    <b-link :to="{path:'/Profile'}" class="profile">
                         <a>{{user.nickname}}</a>
                         <b-progress>
                             <b-progress-bar :max="100" :value="user.expPrc"></b-progress-bar>
