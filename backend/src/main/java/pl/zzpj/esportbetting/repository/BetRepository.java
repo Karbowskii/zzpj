@@ -1,4 +1,4 @@
-package pl.zzpj.esportbetting.repos;
+package pl.zzpj.esportbetting.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

@@ -1,6 +1,7 @@
 package pl.zzpj.esportbetting.model;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -28,6 +29,7 @@ import javax.persistence.Table;
 @AllArgsConstructor
 @NoArgsConstructor
 @DynamicUpdate
+@Builder
 @Table(name = "authority")
 public class Authority {
 
@@ -40,6 +42,7 @@ public class Authority {
     @Column(name = "name")
     private AuthorityEnum name;
 
+    @EqualsAndHashCode.Exclude @ToString.Exclude
     @ManyToMany(mappedBy = "authorities",
             cascade = CascadeType.ALL,
             fetch = FetchType.EAGER)

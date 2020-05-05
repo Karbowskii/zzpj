@@ -3,11 +3,13 @@ package pl.zzpj.esportbetting.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.security.core.GrantedAuthority;
+import pl.zzpj.esportbetting.request.RegisterRequest;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -29,10 +31,12 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 
+
 @Data
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @DynamicUpdate
 @Table(name = "users")
 public class User {
@@ -42,14 +46,14 @@ public class User {
     @Column(name = "id", updatable = false, nullable = false)
     private long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String username;
 
     @JsonIgnore
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     @Email
     private String email;
 
@@ -67,7 +71,7 @@ public class User {
     private Set<Authority> authorities = new HashSet<>();
 
     @ColumnDefault("true")
-    private boolean isActive;
+    private Boolean isActive;
 
     @ColumnDefault("0")
     private int exp;
@@ -83,5 +87,14 @@ public class User {
             orphanRemoval = true,
             cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
+
+    public User(RegisterRequest registerRequest) {
+        this.setUsername(registerRequest.getUsername());
+        this.setPassword(registerRequest.getPassword());
+        this.setEmail(registerRequest.getEmail());
+        this.setFirstName(registerRequest.getFirstName());
+        this.setLastName(registerRequest.getLastName());
+        this.setIsActive(true);
+    }
 }
 
