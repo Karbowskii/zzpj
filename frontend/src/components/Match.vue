@@ -6,7 +6,7 @@
                     <div class="text-center">
                         <b-avatar v-bind:src="team1Logo"/>
                         <p>{{team1Name}}</p>
-                        <b-button v-b-modal.betting-modal>Bet</b-button>
+                        <b-button @click="calculateBetStake(betRatio)" v-b-modal.betting-modal>Bet</b-button>
                     </div>
                 </b-col>
                 <b-col class="res" cols="8">
@@ -21,12 +21,12 @@
                     <div class="text-center">
                         <b-avatar v-bind:src="team2Logo"/>
                         <p>{{team2Name}}</p>
-                        <b-button v-b-modal.betting-modal>Bet</b-button>
+                        <b-button  @click="calculateBetStake(100-betRatio)" v-b-modal.betting-modal>Bet</b-button>
                     </div>
                 </b-col>
             </b-row>
         </b-container>
-        <betting-modal></betting-modal>
+        <betting-modal v-bind:betStake="betStake"></betting-modal>
     </div>
 </template>
 
@@ -45,11 +45,17 @@
                 team2Logo: "https://gamepedia.cursecdn.com/lolesports_gamepedia_en/thumb/f/fc/Fnaticlogo_square.png/1200px-Fnaticlogo_square.png",
                 date: new Date("2020-04-19"),
                 status: "finished",
-                betRatio: 60
+                betRatio: 60,
+                betStake: null
             }
         },
         created() {
             this.id = this.$route.params.id
+        },
+        methods:{
+          calculateBetStake: function (teamBetRatio) {
+              this.betStake = 100/teamBetRatio
+          }
         }
     }
 </script>

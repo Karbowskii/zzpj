@@ -1,6 +1,6 @@
 <template>
     <div id="NavigationPanel">
-        <b-navbar sticky>
+        <b-navbar>
             <b-navbar-brand>
                 <b-link :to="{path:'/Home'}">
                     <b-img :src="require('../assets/appLogo.png')" width="43" height="54"></b-img>
@@ -55,12 +55,13 @@
         data: function () {
             return{
                 user: {nickname: "Michacy", tokensNumber: 69, lvl: 12, expPrc: 20},
-                logged:false
+                logged:true
             }
         },
         methods:{
             logIn: function () {
-                this.logged = true;
+                /*this.logged = true;*/
+                this.$router.push({ path: `/login`})
             },
             logOut: function () {
                 this.logged = false;
@@ -132,7 +133,8 @@
     button:hover{
         border: 2px solid var(--colour4);
         background: none;
-        text-shadow: 0 0 5px #FFFFFF;
+        /*color: var(--colour5);*/
+        text-shadow: 0 0 5px var(--colour5);
     }
 
     .navigationRouter .router-link-exact-active{
