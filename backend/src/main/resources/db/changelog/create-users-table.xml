@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="3" author="sd">
+        <createTable tableName="users">
+            <column name="id" type="bigint" autoIncrement="true" >
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="username" type="varchar(20)" >
+                <constraints  nullable="false" unique="true"/>
+            </column>
+            <column name="password" type="varchar(20)" >
+                <constraints  nullable="false" />
+            </column>
+            <column name="email" type="varchar(30)" >
+                <constraints  nullable="false" unique="true"/>
+            </column>
+            <column name="firstName" type="varchar(20)" >
+                <constraints  nullable="false" />
+            </column>
+            <column name="lastName" type="varchar(20)" >
+                <constraints  nullable="false" />
+            </column>
+            <column name="isActive" type="boolean" defaultValueBoolean="true" />
+            <column name="exp" type="int" defaultValue="0" />
+            <column name="level" type="bigint" >
+                <constraints  nullable="false" />
+            </column>
+            <column name="coins" type="int" defaultValue="100" />
+        </createTable>
+
+        <createTable tableName="user_authority">
+            <column name="authority_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="user_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint constraintName="fk_authority"
+                                 baseTableName="user_authority" baseColumnNames="authority_id"
+                                 referencedTableName="authority" referencedColumnNames="id" />
+        <addForeignKeyConstraint constraintName="fk_user"
+                                 baseTableName="user_authority" baseColumnNames="user_id"
+                                 referencedTableName="users" referencedColumnNames="id" />
+
+        <addForeignKeyConstraint constraintName="fk_level"
+                                 baseTableName="users" baseColumnNames="level"
+                                 referencedTableName="level" referencedColumnNames="id" />
+    </changeSet>
+
+</databaseChangeLog>
