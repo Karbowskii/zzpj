@@ -34,25 +34,9 @@
             <column name="coins" type="int" defaultValue="100" />
         </createTable>
 
-        <createTable tableName="user_authority">
-            <column name="authority_id" type="bigint">
-                <constraints nullable="false" />
-            </column>
-            <column name="user_id" type="bigint">
-                <constraints nullable="false" />
-            </column>
-        </createTable>
-
-        <addForeignKeyConstraint constraintName="fk_authority"
-                                 baseTableName="user_authority" baseColumnNames="authority_id"
-                                 referencedTableName="authority" referencedColumnNames="id" />
-        <addForeignKeyConstraint constraintName="fk_user"
-                                 baseTableName="user_authority" baseColumnNames="user_id"
-                                 referencedTableName="users" referencedColumnNames="id" />
-
         <addForeignKeyConstraint constraintName="fk_level"
                                  baseTableName="users" baseColumnNames="level"
-                                 referencedTableName="level" referencedColumnNames="id" />
+                                 referencedTableName="levels" referencedColumnNames="id" />
     </changeSet>
 
 </databaseChangeLog>

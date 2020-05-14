@@ -22,7 +22,7 @@ import javax.persistence.Table;
 @AllArgsConstructor
 @NoArgsConstructor
 @DynamicUpdate
-@Table(name = "level")
+@Table(name = "levels")
 public class Level {
 
     @Id

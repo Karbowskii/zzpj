@@ -6,15 +6,16 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
-    <include file="db/changelog/create-authority-table.xml"/>
-    <include file="db/changelog/create-level-table.xml"/>
-    <include file="db/changelog/create-users-table.xml"/>
-    <include file="db/changelog/create-teams-table.xml"/>
-    <include file="db/changelog/create-matches-table.xml"/>
-    <include file="db/changelog/create_comments-table.xml"/>
-    <include file="db/changelog/create-bets-table.xml"/>
+    <include file="db/changelog/version/create-authority-table.xml"/>
+    <include file="db/changelog/version/create-levels-table.xml"/>
+    <include file="db/changelog/version/create-users-table.xml"/>
+    <include file="db/changelog/version/create-user-authority-table.xml"/>
+    <include file="db/changelog/version/create-teams-table.xml"/>
+    <include file="db/changelog/version/create-matches-table.xml"/>
+    <include file="db/changelog/version/create_comments-table.xml"/>
+    <include file="db/changelog/version/create-bets-table.xml"/>
 
-    <include file="db/changelog/insert-data-authority.xml"/>
-    <include file="db/changelog/insert-data-level.xml"/>
+    <include file="db/changelog/version/insert-data-authority.xml"/>
+    <include file="db/changelog/version/insert-data-level.xml"/>
 
 </databaseChangeLog>
