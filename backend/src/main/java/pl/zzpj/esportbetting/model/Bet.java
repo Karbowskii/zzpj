@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -32,18 +33,19 @@ public class Bet {
     @Column(name = "id", updatable = false, nullable = false)
     private long id;
 
-    @ManyToMany(cascade = CascadeType.ALL,
+    @ManyToMany(mappedBy = "bets",
+            cascade = CascadeType.ALL,
             fetch = FetchType.EAGER)
-    private Set<User> users;
+    private Set<User> users = new HashSet<>();
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "match_id")
     private Match match;
 
-    @Column(nullable = false)
+    @Column(name = "score_A", nullable = false)
     private int scoreA;
 
-    @Column(nullable = false)
+    @Column(name = "score_B", nullable = false)
     private int scoreB;
 
     @Column(nullable = false)

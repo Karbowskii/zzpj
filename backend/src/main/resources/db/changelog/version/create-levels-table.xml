@@ -11,10 +11,10 @@
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false" />
             </column>
-            <column name="expToNextLevel" type="int" defaultValue="1">
+            <column name="exp_to_next_level" type="int" defaultValue="1">
                 <constraints  nullable="false" />
             </column>
-            <column name="maxBets" type="int" defaultValue="1">
+            <column name="max_bets" type="int" defaultValue="1">
                 <constraints  nullable="false" />
             </column>
         </createTable>

@@ -7,42 +7,47 @@
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
     <changeSet id="5" author="sd">
-        <createTable tableName="matches" >
+        <createTable tableName="matches">
             <column name="id" type="bigint" autoIncrement="true" >
                 <constraints primaryKey="true" nullable="false" />
             </column>
-            <column name="startDate" type="timestamp" >
+            <column name="start_date" type="timestamp" >
                 <constraints  nullable="false" />
             </column>
-            <column name="realId" type="int" >
+            <column name="real_id" type="int" >
                 <constraints  nullable="false" unique="true"/>
             </column>
-            <column name="isFinished" type="boolean" defaultValueBoolean="false" />
-            <column name="teamA" type="bigint" >
+            <column name="is_finished" type="boolean" defaultValueBoolean="false" />
+
+            <column name="real_score_A" type="int" defaultValue="0" >
                 <constraints  nullable="false" />
             </column>
-            <column name="teamB" type="bigint" >
+            <column name="real_score_B" type="int" defaultValue="0" >
                 <constraints  nullable="false" />
             </column>
-            <column name="realScoreA" type="int" defaultValue="0" >
+            <column name="team_id_A" type="bigint" >
                 <constraints  nullable="false" />
             </column>
-            <column name="realScoreB" type="int" defaultValue="0" >
+            <column name="team_id_B" type="bigint" >
                 <constraints  nullable="false" />
             </column>
-            <column name="stakeA" type="int" defaultValue="1" >
+            <column name="stake_A" type="int" defaultValue="1" >
                 <constraints  nullable="false" />
             </column>
-            <column name="stakeB" type="int" defaultValue="1" >
+            <column name="stake_B" type="int" defaultValue="1" >
                 <constraints  nullable="false" />
             </column>
         </createTable>
 
-        <addForeignKeyConstraint baseTableName="matches" baseColumnNames="teamA"
-                                 constraintName="fk_teamA" referencedTableName="teams"
+        <addForeignKeyConstraint constraintName="fk_team_id_A_5"
+                                 baseTableName="matches"
+                                 baseColumnNames="team_id_A"
+                                 referencedTableName="teams"
                                  referencedColumnNames="id"/>
-        <addForeignKeyConstraint baseTableName="matches" baseColumnNames="teamB"
-                                 constraintName="fk_teamB" referencedTableName="teams"
+        <addForeignKeyConstraint constraintName="fk_team_id_B_5"
+                                 baseTableName="matches"
+                                 baseColumnNames="team_id_B"
+                                 referencedTableName="teams"
                                  referencedColumnNames="id"/>
 
     </changeSet>

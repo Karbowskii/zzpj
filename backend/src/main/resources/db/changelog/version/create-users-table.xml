@@ -20,23 +20,25 @@
             <column name="email" type="varchar(30)" >
                 <constraints  nullable="false" unique="true"/>
             </column>
-            <column name="firstName" type="varchar(20)" >
+            <column name="first_name" type="varchar(20)" >
                 <constraints  nullable="false" />
             </column>
-            <column name="lastName" type="varchar(20)" >
+            <column name="last_name" type="varchar(20)" >
                 <constraints  nullable="false" />
             </column>
-            <column name="isActive" type="boolean" defaultValueBoolean="true" />
+            <column name="is_active" type="boolean" defaultValueBoolean="true" />
             <column name="exp" type="int" defaultValue="0" />
-            <column name="level" type="bigint" >
+            <column name="level_id" type="bigint" >
                 <constraints  nullable="false" />
             </column>
             <column name="coins" type="int" defaultValue="100" />
         </createTable>
 
-        <addForeignKeyConstraint constraintName="fk_level"
-                                 baseTableName="users" baseColumnNames="level"
-                                 referencedTableName="levels" referencedColumnNames="id" />
+        <addForeignKeyConstraint constraintName="fk_level_3"
+                                 baseTableName="users"
+                                 baseColumnNames="level_id"
+                                 referencedTableName="levels"
+                                 referencedColumnNames="id" />
     </changeSet>
 
 </databaseChangeLog>

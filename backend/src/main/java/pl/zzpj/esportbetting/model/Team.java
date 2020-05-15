@@ -28,10 +28,15 @@ public class Team {
     private String name;
 
     @Column(nullable = false)
-    private URL url;
+    private String url;
 
-    @OneToMany(mappedBy = "team",
+    @OneToMany(mappedBy = "teamA",
             orphanRemoval = true,
             cascade = CascadeType.ALL)
-    private List<Match> matches = new ArrayList<>();
+    private List<Match> matchesA = new ArrayList<>();
+
+    @OneToMany(mappedBy = "teamB",
+            orphanRemoval = true,
+            cascade = CascadeType.ALL)
+    private List<Match> matchesB = new ArrayList<>();
 }

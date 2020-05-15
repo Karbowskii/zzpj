@@ -9,28 +9,28 @@
     <changeSet id="9" author="ak">
         <insert tableName="levels">
             <column name="id" value="1"/>
-            <column name="expToNextLevel" value="500"/>
-            <column name="maxBets" value="1"/>
+            <column name="exp_to_next_level" value="500"/>
+            <column name="max_bets" value="1"/>
         </insert>
         <insert tableName="levels">
             <column name="id" value="2"/>
-            <column name="expToNextLevel" value="750"/>
-            <column name="maxBets" value="2"/>
+            <column name="exp_to_next_level" value="750"/>
+            <column name="max_bets" value="2"/>
         </insert>
         <insert tableName="levels">
             <column name="id" value="3"/>
-            <column name="expToNextLevel" value="1000"/>
-            <column name="maxBets" value="3"/>
+            <column name="exp_to_next_level" value="1000"/>
+            <column name="max_bets" value="3"/>
         </insert>
         <insert tableName="levels">
             <column name="id" value="4"/>
-            <column name="expToNextLevel" value="1500"/>
-            <column name="maxBets" value="4"/>
+            <column name="exp_to_next_level" value="1500"/>
+            <column name="max_bets" value="4"/>
         </insert>
         <insert tableName="levels">
             <column name="id" value="5"/>
-            <column name="expToNextLevel" value="2000"/>
-            <column name="maxBets" value="5"/>
+            <column name="exp_to_next_level" value="2000"/>
+            <column name="max_bets" value="5"/>
         </insert>
     </changeSet>
 

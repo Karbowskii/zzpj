@@ -11,13 +11,13 @@
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false" />
             </column>
-            <column name="match_id" type="long" >
+            <column name="match_id" type="bigint" >
                 <constraints  nullable="false" />
             </column>
-            <column name="scoreA" type="int" >
+            <column name="score_A" type="int" >
                 <constraints  nullable="false" />
             </column>
-            <column name="scoreB" type="int" >
+            <column name="score_B" type="int" >
                 <constraints  nullable="false" />
             </column>
             <column name="coins" type="int" >
@@ -25,25 +25,11 @@
             </column>
         </createTable>
 
-        <createTable tableName="bets_users">
-            <column name="user_id" type="bigint">
-                <constraints nullable="false" />
-            </column>
-            <column name="bet_id" type="bigint">
-                <constraints nullable="false" />
-            </column>
-        </createTable>
-
-        <addForeignKeyConstraint constraintName="fk_users"
-                                 baseTableName="bets_users" baseColumnNames="user_id"
-                                 referencedTableName="users" referencedColumnNames="id" />
-        <addForeignKeyConstraint constraintName="fk_bets"
-                                 baseTableName="bets_users" baseColumnNames="bet_id"
-                                 referencedTableName="bets" referencedColumnNames="id" />
-
-        <addForeignKeyConstraint constraintName="fk_match"
-                                 baseTableName="bets" baseColumnNames="match_id"
-                                 referencedTableName="match" referencedColumnNames="id" />
+        <addForeignKeyConstraint constraintName="fk_match_7"
+                                 baseTableName="bets"
+                                 baseColumnNames="match_id"
+                                 referencedTableName="matches"
+                                 referencedColumnNames="id" />
     </changeSet>
 
 </databaseChangeLog>

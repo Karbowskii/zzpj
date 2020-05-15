@@ -23,10 +23,16 @@
                        schemaName="zzpjschema"
                        constraintName="pk_u_a"/>
 
-        <addForeignKeyConstraint constraintName="fk_authority"
-                                 baseTableName="user_authority" baseColumnNames="authority_id"
-                                 referencedTableName="authority" referencedColumnNames="id" />
-        <addForeignKeyConstraint constraintName="fk_user"
-                                 baseTableName="user_authority" baseColumnNames="user_id"
-                                 referencedTableName="users" referencedColumnNames="id" />
+        <addForeignKeyConstraint constraintName="fk_authority_10"
+                                 baseTableName="user_authority"
+                                 baseColumnNames="authority_id"
+                                 referencedTableName="authority"
+                                 referencedColumnNames="id" />
+        <addForeignKeyConstraint constraintName="fk_user_10"
+                                 baseTableName="user_authority"
+                                 baseColumnNames="user_id"
+                                 referencedTableName="users"
+                                 referencedColumnNames="id" />
     </changeSet>
+
+</databaseChangeLog>
