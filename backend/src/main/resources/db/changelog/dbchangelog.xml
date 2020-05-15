@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <include file="db/changelog/version/create-authority-table.xml"/>
+    <include file="db/changelog/version/create-levels-table.xml"/>
+    <include file="db/changelog/version/create-users-table.xml"/>
+    <include file="db/changelog/version/create-user-authority-table.xml"/>
+    <include file="db/changelog/version/create-teams-table.xml"/>
+    <include file="db/changelog/version/create-matches-table.xml"/>
+    <include file="db/changelog/version/create-comments-table.xml"/>
+    <include file="db/changelog/version/create-bets-table.xml"/>
+    <include file="db/changelog/version/create-bets-users-table.xml"/>
+
+    <include file="db/changelog/version/insert-data-authority.xml"/>
+    <include file="db/changelog/version/insert-data-level.xml"/>
+
+</databaseChangeLog>
