@@ -66,6 +66,13 @@ public class User {
             inverseJoinColumns = {@JoinColumn(name = "authority_id")})
     private Set<Authority> authorities = new HashSet<>();
 
+    @ManyToMany(cascade = CascadeType.MERGE,
+            fetch = FetchType.EAGER)
+    @JoinTable(name = "bets_users",
+            joinColumns = {@JoinColumn(name = "user_id")},
+            inverseJoinColumns = {@JoinColumn(name = "bet_id")})
+    private Set<Bet> bets = new HashSet<>();
+
     @ColumnDefault("true")
     private boolean isActive;
 
