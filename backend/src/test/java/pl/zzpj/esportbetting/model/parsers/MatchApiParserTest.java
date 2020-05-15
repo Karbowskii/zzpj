@@ -10,7 +10,9 @@ import pl.zzpj.esportbetting.model.Match;
 import pl.zzpj.esportbetting.pandascore.MockedPandaScoreConnector;
 
 import java.io.IOException;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -24,9 +26,7 @@ public class MatchApiParserTest {
         ESportRestApi connector = new MockedPandaScoreConnector();
         try {
             jsonArray = connector.getAllMatches();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
     }
@@ -44,9 +44,10 @@ public class MatchApiParserTest {
         assertEquals(560452, match.getRealId());
         assertEquals(0, match.getRealScoreA());
         assertEquals(0, match.getRealScoreB());
-        LocalDateTime expectedStartDate = LocalDateTime.parse("2020-05-11T19:00:00");
+        LocalDateTime expectedStartDate = LocalDateTime.ofInstant(Instant.parse("2020-05-11T19:00:00Z"),
+                ZoneId.systemDefault());
         assertEquals(expectedStartDate, match.getStartDate());
-        assertEquals(false, match.isFinished());
+        assertFalse(match.isFinished());
 
     }
 
@@ -63,8 +64,8 @@ public class MatchApiParserTest {
         assertEquals(34512, match.getRealId());
         assertEquals(0, match.getRealScoreA());
         assertEquals(0, match.getRealScoreB());
-        assertEquals(null, match.getStartDate());
-        assertEquals(false, match.isFinished());
+        assertNull(match.getStartDate());
+        assertFalse(match.isFinished());
     }
 
     @Test
@@ -80,9 +81,12 @@ public class MatchApiParserTest {
         assertEquals(65474, match.getRealId());
         assertEquals(0, match.getRealScoreA());
         assertEquals(1, match.getRealScoreB());
-        LocalDateTime expectedStartDate = LocalDateTime.parse("2020-05-11T19:00:00");
+        assertNotNull(match.getTeamA());
+        assertNotNull(match.getTeamA());
+        LocalDateTime expectedStartDate = LocalDateTime.ofInstant(Instant.parse("2020-05-11T19:00:00Z"),
+                ZoneId.systemDefault());
         assertEquals(expectedStartDate, match.getStartDate());
-        assertEquals(true, match.isFinished());
+        assertTrue(match.isFinished());
     }
 
     @Test(expected = JSONException.class)

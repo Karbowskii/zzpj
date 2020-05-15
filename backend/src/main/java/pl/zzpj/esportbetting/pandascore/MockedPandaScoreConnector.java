@@ -9,22 +9,22 @@ import java.io.IOException;
 
 public class MockedPandaScoreConnector implements ESportRestApi {
     @Override
-    public JSONArray getAllLeagues() throws IOException, InterruptedException {
+    public JSONArray getAllLeagues() {
         return null;
     }
 
     @Override
-    public JSONArray getAllSeries() throws IOException, InterruptedException {
+    public JSONArray getAllSeries() {
         return null;
     }
 
     @Override
-    public JSONArray getAllTournaments() throws IOException, InterruptedException {
+    public JSONArray getAllTournaments() {
         return null;
     }
 
     @Override
-    public JSONArray getAllMatches() throws IOException, InterruptedException {
+    public JSONArray getAllMatches() {
         JSONArray jsonArray = new JSONArray();
         try {
             // not started
@@ -175,12 +175,27 @@ public class MockedPandaScoreConnector implements ESportRestApi {
     }
 
     @Override
-    public JSONArray getAllTeams() throws IOException, InterruptedException {
-        return null;
+    public JSONArray getAllTeams() {
+        JSONArray jsonArray = new JSONArray();
+        try {
+            jsonArray.put(new JSONObject("{\n" +
+                    "\"id\": 127397,\n" +
+                    "\"name\": \"OverPower Esports\",\n" +
+                    "\"image_url\": \"https:\\/\\/cdn.pandascore.co\\/images\\/team\\/image\\/127397\\/123px_over_power_esportslogo_square.png\"\n" +
+                    "}"));
+            jsonArray.put(new JSONObject("{\n" +
+                    "\"not_id\": 127397,\n" +
+                    "\"not_name\": \"OverPower Esports\",\n" +
+                    "\"not_image_url\": \"https:\\/\\/cdn.pandascore.co\\/images\\/team\\/image\\/127397\\/123px_over_power_esportslogo_square.png\"\n" +
+                    "}"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonArray;
     }
 
     @Override
-    public JSONArray getAllPlayers() throws IOException, InterruptedException {
+    public JSONArray getAllPlayers() {
         return null;
     }
 }

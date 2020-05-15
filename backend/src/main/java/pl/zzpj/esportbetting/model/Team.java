@@ -1,6 +1,7 @@
 package pl.zzpj.esportbetting.model;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
@@ -16,6 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @DynamicUpdate
+@Builder
 @Table(name = "teams")
 public class Team {
 
