@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import pl.zzpj.esportbetting.enumerate.AuthorityEnum;
 import pl.zzpj.esportbetting.impl.UserToUserResponseConverter;
 import pl.zzpj.esportbetting.interfaces.UserService;
 import pl.zzpj.esportbetting.model.User;

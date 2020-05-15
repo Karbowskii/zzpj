@@ -7,15 +7,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import pl.zzpj.esportbetting.enumerate.AuthorityEnum;
 import pl.zzpj.esportbetting.impl.UserToUserResponseConverter;
 import pl.zzpj.esportbetting.interfaces.AuthService;
 import pl.zzpj.esportbetting.model.User;
 import pl.zzpj.esportbetting.reponse.LoginResponse;
 import pl.zzpj.esportbetting.reponse.UserResponse;
 import pl.zzpj.esportbetting.request.LoginRequest;
-
-import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
