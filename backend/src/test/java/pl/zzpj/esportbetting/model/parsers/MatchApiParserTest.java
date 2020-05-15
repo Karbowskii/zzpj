@@ -7,7 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 import pl.zzpj.esportbetting.interfaces.ESportRestApi;
 import pl.zzpj.esportbetting.model.Match;
-import pl.zzpj.esportbetting.pandascore.MockedPandaScoreConnector;
+import pl.zzpj.esportbetting.mock.MockedPandaScoreConnector;
 
 import java.io.IOException;
 import java.time.Instant;
@@ -41,12 +41,20 @@ public class MatchApiParserTest {
         Match match = parser.parse(jsonMatchNotStarted);
 
         // test
-        assertEquals(560452, match.getRealId());
-        assertEquals(0, match.getRealScoreA());
-        assertEquals(0, match.getRealScoreB());
-        LocalDateTime expectedStartDate = LocalDateTime.ofInstant(Instant.parse("2020-05-11T19:00:00Z"),
-                ZoneId.systemDefault());
-        assertEquals(expectedStartDate, match.getStartDate());
+        Match expectedMatch = Match.builder()
+                .realId(560452)
+                .realScoreA(0)
+                .realScoreB(0)
+                .isFinished(false)
+                .startDate(LocalDateTime.ofInstant(Instant.parse("2020-05-11T19:00:00Z"), ZoneId.systemDefault()))
+                .build();
+
+        assertEquals(expectedMatch.getRealId(), match.getRealId());
+        assertEquals(expectedMatch.getRealScoreA(), match.getRealScoreA());
+        assertEquals(expectedMatch.getRealScoreB(), match.getRealScoreB());
+        assertNotNull(match.getTeamA());
+        assertNotNull(match.getTeamA());
+        assertEquals(expectedMatch.getStartDate(), match.getStartDate());
         assertFalse(match.isFinished());
 
     }
@@ -61,9 +69,19 @@ public class MatchApiParserTest {
         Match match = parser.parse(jsonMatchWithNoStartDate);
 
         // test
-        assertEquals(34512, match.getRealId());
-        assertEquals(0, match.getRealScoreA());
-        assertEquals(0, match.getRealScoreB());
+        Match expectedMatch = Match.builder()
+                .realId(34512)
+                .realScoreA(0)
+                .realScoreB(0)
+                .isFinished(false)
+                .startDate(null)
+                .build();
+
+        assertEquals(expectedMatch.getRealId(), match.getRealId());
+        assertEquals(expectedMatch.getRealScoreA(), match.getRealScoreA());
+        assertEquals(expectedMatch.getRealScoreB(), match.getRealScoreB());
+        assertNotNull(match.getTeamA());
+        assertNotNull(match.getTeamA());
         assertNull(match.getStartDate());
         assertFalse(match.isFinished());
     }
@@ -78,14 +96,21 @@ public class MatchApiParserTest {
         Match match = parser.parse(jsonMatchFinished);
 
         // test
-        assertEquals(65474, match.getRealId());
-        assertEquals(0, match.getRealScoreA());
-        assertEquals(1, match.getRealScoreB());
+        Match expectedMatch = Match.builder()
+                .realId(65474)
+                .realScoreA(0)
+                .realScoreB(1)
+                .isFinished(true)
+                .startDate(LocalDateTime.ofInstant(Instant.parse("2020-05-11T19:00:00Z"),
+                        ZoneId.systemDefault()))
+                .build();
+
+        assertEquals(expectedMatch.getRealId(), match.getRealId());
+        assertEquals(expectedMatch.getRealScoreA(), match.getRealScoreA());
+        assertEquals(expectedMatch.getRealScoreB(), match.getRealScoreB());
         assertNotNull(match.getTeamA());
         assertNotNull(match.getTeamA());
-        LocalDateTime expectedStartDate = LocalDateTime.ofInstant(Instant.parse("2020-05-11T19:00:00Z"),
-                ZoneId.systemDefault());
-        assertEquals(expectedStartDate, match.getStartDate());
+        assertEquals(expectedMatch.getStartDate(), match.getStartDate());
         assertTrue(match.isFinished());
     }
 

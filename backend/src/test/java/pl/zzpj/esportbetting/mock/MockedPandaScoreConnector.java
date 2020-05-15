@@ -1,4 +1,4 @@
-package pl.zzpj.esportbetting.pandascore;
+package pl.zzpj.esportbetting.mock;
 
 import org.json.JSONArray;
 import org.json.JSONException;
