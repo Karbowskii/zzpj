@@ -114,7 +114,8 @@ public class AuthRestControllerTest {
                             .stream()
                             .map(Authority::getName)
                             .findFirst().get()).name())))
-            .andExpect(jsonPath("$.user.active", Matchers.is(activeUser.getIsActive())));
+            .andExpect(jsonPath("$.user.active" +
+                    "", Matchers.is(activeUser.getIsActive())));
 
         Mockito.verify(authService, Mockito.times(1)).authenticate(
             ArgumentMatchers.anyString(), ArgumentMatchers.anyString());
