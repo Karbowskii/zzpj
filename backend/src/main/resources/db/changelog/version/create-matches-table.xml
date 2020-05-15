@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="5" author="sd">
+        <createTable tableName="matches">
+            <column name="id" type="bigint" autoIncrement="true" >
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="start_date" type="timestamp" >
+                <constraints  nullable="false" />
+            </column>
+            <column name="real_id" type="int" >
+                <constraints  nullable="false" unique="true"/>
+            </column>
+            <column name="is_finished" type="boolean" defaultValueBoolean="false" />
+
+            <column name="real_score_A" type="int" defaultValue="0" >
+                <constraints  nullable="false" />
+            </column>
+            <column name="real_score_B" type="int" defaultValue="0" >
+                <constraints  nullable="false" />
+            </column>
+            <column name="team_id_A" type="bigint" >
+                <constraints  nullable="false" />
+            </column>
+            <column name="team_id_B" type="bigint" >
+                <constraints  nullable="false" />
+            </column>
+            <column name="stake_A" type="int" defaultValue="1" >
+                <constraints  nullable="false" />
+            </column>
+            <column name="stake_B" type="int" defaultValue="1" >
+                <constraints  nullable="false" />
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint constraintName="fk_team_id_A_5"
+                                 baseTableName="matches"
+                                 baseColumnNames="team_id_A"
+                                 referencedTableName="teams"
+                                 referencedColumnNames="id"/>
+        <addForeignKeyConstraint constraintName="fk_team_id_B_5"
+                                 baseTableName="matches"
+                                 baseColumnNames="team_id_B"
+                                 referencedTableName="teams"
+                                 referencedColumnNames="id"/>
+
+    </changeSet>
+
+</databaseChangeLog>

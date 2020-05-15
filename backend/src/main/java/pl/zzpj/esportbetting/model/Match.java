@@ -18,6 +18,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -46,20 +48,28 @@ public class Match {
     private boolean isFinished;
 
     @ColumnDefault("0")
-    @Column(nullable = false)
+    @Column(name = "real_score_A", nullable = false)
     private int realScoreA;
 
     @ColumnDefault("0")
-    @Column(nullable = false)
+    @Column(name = "real_score_B", nullable = false)
     private int realScoreB;
 
-    @ColumnDefault("1")
-    @Column(nullable = false)
-    private int stake_A;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "team_id_A")
+    private Team teamA;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "team_id_B")
+    private Team teamB;
 
     @ColumnDefault("1")
-    @Column(nullable = false)
-    private int stake_B;
+    @Column(name = "stake_A", nullable = false)
+    private int stakeA;
+
+    @ColumnDefault("1")
+    @Column(name = "stake_B", nullable = false)
+    private int stakeB;
 
     @OneToMany(mappedBy = "match",
             cascade = CascadeType.ALL,

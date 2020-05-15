@@ -25,8 +25,12 @@ import javax.persistence.Table;
 @AllArgsConstructor
 @NoArgsConstructor
 @DynamicUpdate
+<<<<<<< HEAD
 @Builder
 @Table(name = "level")
+=======
+@Table(name = "levels")
+>>>>>>> develop
 public class Level {
 
     @Id
