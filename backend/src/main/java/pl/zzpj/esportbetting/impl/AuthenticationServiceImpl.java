@@ -11,8 +11,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 import pl.zzpj.esportbetting.enumerate.AuthorityEnum;
-import pl.zzpj.esportbetting.interfaces.AuthService;
-import pl.zzpj.esportbetting.interfaces.Jwt;
+import pl.zzpj.esportbetting.interfaces.AuthenticationService;
+import pl.zzpj.esportbetting.interfaces.JsonWebToken;
 import pl.zzpj.esportbetting.model.Authority;
 import pl.zzpj.esportbetting.model.User;
 import pl.zzpj.esportbetting.interfaces.AuthorityService;
@@ -22,21 +22,21 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Service("authService")
-public class AuthServiceImpl implements AuthService {
+public class AuthenticationServiceImpl implements AuthenticationService {
 
     private final AuthenticationManager authenticationManager;
-    private final Jwt jwtUtils;
+    private final JsonWebToken jsonWebTokenUtils;
     private final UserDetailsService userDetailsService;
     private final AuthorityService authorityService;
     private final UserService userService;
 
 
     @Autowired
-    public AuthServiceImpl(AuthenticationManager authenticationManager, Jwt jwtUtils,
-                           UserDetailsService userDetailsService,
-                           AuthorityService authorityService, UserService userService) {
+    public AuthenticationServiceImpl(AuthenticationManager authenticationManager, JsonWebToken jsonWebTokenUtils,
+                                     UserDetailsService userDetailsService,
+                                     AuthorityService authorityService, UserService userService) {
         this.authenticationManager = authenticationManager;
-        this.jwtUtils = jwtUtils;
+        this.jsonWebTokenUtils = jsonWebTokenUtils;
         this.userDetailsService = userDetailsService;
         this.authorityService = authorityService;
         this.userService = userService;
@@ -52,7 +52,7 @@ public class AuthServiceImpl implements AuthService {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        String jwtToken = jwtUtils.generateJwtToken(authentication);
+        String jwtToken = jsonWebTokenUtils.generateJwtToken(authentication);
 
         User user = userService.getUser(authentication);
 

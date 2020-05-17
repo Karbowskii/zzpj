@@ -102,5 +102,11 @@ public class User {
         this.setLastName(registerRequest.getLastName());
         this.setIsActive(true);
     }
+
+    public void addAuthority(Authority authority) {
+        if (authority != null) {
+            this.getAuthorities().add(authority);
+        }
+    }
 }
 

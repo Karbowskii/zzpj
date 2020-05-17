@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import pl.zzpj.esportbetting.impl.UserToUserResponseConverter;
 import pl.zzpj.esportbetting.interfaces.UserService;
 import pl.zzpj.esportbetting.model.User;
-import pl.zzpj.esportbetting.reponse.UserResponse;
+import pl.zzpj.esportbetting.response.UserResponse;
 import pl.zzpj.esportbetting.request.RegisterRequest;
 
 import java.util.List;

@@ -1,7 +1,6 @@
 package pl.zzpj.esportbetting.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -26,12 +25,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final AuthEntryPointJwt unauthorizedHandler;
     private final UserDetailsService userDetailsService;
-    private final JwtUtils jwtUtils;
+    private final JsonWebTokenUtils jwtUtils;
 
     @Autowired
     public SecurityConfig(AuthEntryPointJwt unauthorizedHandler,
                           UserDetailsService userDetailsService,
-                          JwtUtils jwtUtils) {
+                          JsonWebTokenUtils jwtUtils) {
         this.unauthorizedHandler = unauthorizedHandler;
         this.userDetailsService = userDetailsService;
         this.jwtUtils = jwtUtils;

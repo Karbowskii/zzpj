@@ -11,9 +11,9 @@ import pl.zzpj.esportbetting.interfaces.UserService;
 import pl.zzpj.esportbetting.model.Authority;
 import pl.zzpj.esportbetting.model.Level;
 import pl.zzpj.esportbetting.model.User;
-import pl.zzpj.esportbetting.repository.AuthorityRepository;
-import pl.zzpj.esportbetting.repository.LevelRepository;
-import pl.zzpj.esportbetting.repository.UserRepository;
+import pl.zzpj.esportbetting.repos.AuthorityRepository;
+import pl.zzpj.esportbetting.repos.LevelRepository;
+import pl.zzpj.esportbetting.repos.UserRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -38,17 +38,17 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
 
     @Override
     public UserDetailsImpl loadUserByUsername(String userName) {
-        Optional<User> user = this.userRepository.findByUsername(userName);
+        Optional<User> user = userRepository.findByUsername(userName);
         return user.map(UserDetailsImpl::new).orElseThrow(
                 () -> new ObjectNotFoundException("Not found user with username: " + userName));
     }
 
     public List<User> findAll() {
-        return this.userRepository.findAll();
+        return userRepository.findAll();
     }
 
     public User findById(long id) {
-        return this.userRepository.findById(id).orElseThrow(
+        return userRepository.findById(id).orElseThrow(
                 () -> new ObjectNotFoundException("Not found user with id: " + id));
     }
 
@@ -57,7 +57,7 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
     public User register(User user) {
         Optional<Authority> authority = authorityRepository.findByName(AuthorityEnum.ROLE_USER);
         if (authority.isPresent()) {
-            user.getAuthorities().add(authority.get());
+            user.addAuthority(authority.get());
         }
         if (Stream.of(user.getUsername(), user.getEmail(), user.getPassword(), user.getFirstName(),
                 user.getLastName()).anyMatch(""::equals)) {
@@ -67,13 +67,13 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
         } else if (existsByEmail(user.getEmail())) {
             throw new AlreadyTakenException("email");
         } else {
-            this.setUserToStartingUser(user);
+            setUserToStartingUser(user);
             return userRepository.save(user);
         }
     }
 
     private void setUserToStartingUser(User user) {
-        Optional<Level> firstLevel = this.levelRepository.findById(1L);
+        Optional<Level> firstLevel = levelRepository.findById(1L);
         if (!firstLevel.isPresent()) {
             throw new ObjectNotFoundException("Not found level: " + firstLevel.get().getId());
         }
