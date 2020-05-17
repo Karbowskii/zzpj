@@ -1,6 +1,7 @@
 package pl.zzpj.esportbetting.model;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
@@ -27,6 +28,7 @@ import javax.persistence.Table;
 @AllArgsConstructor
 @NoArgsConstructor
 @DynamicUpdate
+@Builder
 @Table(name = "matches")
 public class Match {
 
