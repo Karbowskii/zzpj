@@ -62,7 +62,7 @@
         padding-left: 25px;
         text-align: left;
         display: flex;
-        background: rgba(0, 0, 0, .2);
+        background: rgba(0, 0, 0, 0.4);
         border-radius: 15px;
     }
     .profile-icon{
@@ -71,7 +71,7 @@
         position: relative;
         height: 250px;
         width: 250px;
-        z-index: 10000000;
+        z-index: 10;
         border-radius: 30%;
     }
 
@@ -102,7 +102,7 @@
 
     .lvl{
         text-align: center;
-        color: var(--colour8);
+        color: #b600b9;
         font-size: 30px;
     }
 
@@ -117,8 +117,5 @@
     .progress .progress-bar{
         background: #b600b9 !important;
     }
-
-
-
 
 </style>

@@ -9,5 +9,8 @@
 </script>
 
 <style scoped>
+    h1 {
+        color: white;
+    }
 
 </style>

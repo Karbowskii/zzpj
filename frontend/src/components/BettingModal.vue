@@ -1,9 +1,9 @@
 <template>
     <div>
-        <b-modal id="betting-modal" centered title="Make your bet!" hide-footer="true">
+        <b-modal id="betting-modal" centered title="Make your bet!" :hide-footer=true>
             <form @submit="onSubmit" @submit.prevent>
                 <div class="bet">
-                    <div class="text-center stake">Stake is x{{betStake.toFixed(2)}}</div>
+<!--                    <div class="text-center stake">Stake is x{{betStake.toFixed(2)}}</div>-->
                     <label  for="bet-input" class="text-center">Your bet:</label>
                 </div>
                 <b-form-input :min="1" :max="100" id="bet-input" v-model="betValue" type="number">

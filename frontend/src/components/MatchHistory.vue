@@ -119,11 +119,11 @@
 <style scoped>
     .matchHistory {
         margin-top: 50px;
-        background: rgba(0, 0, 0, .2);
+        background: rgba(0, 0, 0, 0.4);
         border-radius: 15px;
     }
 
-    .history, .history:hover{
+    .history, .history:hover {
         font-size: 60px;
         color: var(--colour4);
     }
@@ -138,15 +138,11 @@
         padding-top: 25px;
         padding-bottom: 25px;
         border-top: 1px solid #cfcfcf;
-        /*border-top: 1px solid #cfcfcf;*/
     }
 
     li:hover {
-        cursor: pointer;
-        background: rgba(255, 255, 255, .15);
-
+        background: rgba(255, 255, 255, .1);
     }
-
 
     li[not-last="0"] {
         border-bottom-left-radius: 15px;
@@ -172,19 +168,19 @@
         font-size: 20px;
     }
 
-    .bet-result{
+    .bet-result {
         color: var(--colour4);
         text-align: center;
         margin-top: 10px;
         font-size: 20px;
     }
 
-    .win, .win:hover{
+    .win, .win:hover {
         color: var(--colour5);
     }
 
-    .lose, .lose:hover{
-        color: #e22b3e;
+    .lose, .lose:hover {
+        color: #e21f25;
     }
 
 </style>

@@ -6,19 +6,19 @@
                 v-bind:not-last="isNotLast(index)"
                 v-bind:first="isFirst(index)"
                 v-on:click="showMatch(match.id)">
-                    <b-row>
-                        <b-col class="leftTeam">
-                            {{match.team1Name}}
-                            <b-avatar v-bind:src="match.team1Logo"/>
-                        </b-col>
-                        <b-col class="res" cols="1">
-                            <a>{{match.result}}</a>
-                        </b-col>
-                        <b-col class="rightTeam">
-                            <b-avatar v-bind:src="match.team2Logo"/>
-                            {{match.team2Name}}
-                        </b-col>
-                    </b-row>
+                <b-row>
+                    <b-col class="leftTeam">
+                        {{match.team1Name}}
+                        <b-avatar v-bind:src="match.team1Logo"/>
+                    </b-col>
+                    <b-col class="res" cols="1">
+                        <a>{{match.result}}</a>
+                    </b-col>
+                    <b-col class="rightTeam">
+                        <b-avatar v-bind:src="match.team2Logo"/>
+                        {{match.team2Name}}
+                    </b-col>
+                </b-row>
             </li>
         </ul>
     </div>
@@ -27,24 +27,24 @@
 <script>
     export default {
         name: "Matches",
-        props: {filteredMatches: {
+        props: {
+            filteredMatches: {
                 type: Array,
                 required: true
             }
         },
         data: function () {
-            return{
-            }
+            return {}
         },
-       methods:{
+        methods: {
             isNotLast: function (index) {
-                return !(index + 1 === this.filteredMatches.length)? 1: 0;
+                return !(index + 1 === this.filteredMatches.length) ? 1 : 0;
             },
-           isFirst: function(index){
-                return index === 0? 1:0;
-           },
+            isFirst: function (index) {
+                return index === 0 ? 1 : 0;
+            },
             showMatch: function (matchId) {
-                this.$router.push({ path: `/match/${matchId}`})
+                this.$router.push({path: `/match/${matchId}`})
             }
 
         }
@@ -67,27 +67,25 @@
         padding-bottom: 25px;
         /*border-top: 1px solid #cfcfcf;*/
     }
-    
-    li:hover{
-        cursor: pointer;
-        background: rgba(255,255,255,.15);
 
+    li:hover {
+        cursor: pointer;
+        background: rgba(255, 255, 255, .1);
     }
 
-    li[not-last="1"]{
+    li[not-last="1"] {
         border-bottom: 1px solid #cfcfcf;
     }
 
-    li[not-last="0"]{
-        border-bottom-left-radius:15px;
-        border-bottom-right-radius:15px;
+    li[not-last="0"] {
+        border-bottom-left-radius: 15px;
+        border-bottom-right-radius: 15px;
     }
 
-    li[first="1"]{
-        border-top-left-radius:15px;
-        border-top-right-radius:15px;
+    li[first="1"] {
+        border-top-left-radius: 15px;
+        border-top-right-radius: 15px;
     }
-
 
     .res {
         position: relative;

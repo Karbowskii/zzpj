@@ -11,9 +11,11 @@
                             <label for="password-input">Password:</label>
                             <b-form-input id="password-input" type="password" required v-model="password">
                             </b-form-input>
-                            <div class="remind-password"><b-link :to="{path:'/Home'}" class="profile">Forgot a password?</b-link></div>
+                            <div class="remind-password">
+                                <b-link :to="{path:'/Home'}" class="profile">Forgot a password?</b-link>
+                            </div>
                             <b-button type="submit">Sign in</b-button>
-                            <b-button type="submit">New Account</b-button>
+                            <b-button @click="$router.replace({path:'/create-account'})">New Account</b-button>
                         </b-form>
                     </div>
                 </b-col>
@@ -23,17 +25,19 @@
 </template>
 
 <script>
+
     export default {
         name: "LoginView",
-        data: function(){
-            return{
+        data: function () {
+            return {
                 login: null,
                 password: null
             }
         },
-        methods:{
-            logIn(){
-                this.$router.push({ path: `/Home`})
+        methods: {
+            logIn() {
+                this.$store.commit('login', {user: this.login, token: '123qwe'});
+                this.$router.push({path: `/`});
             }
         }
     }
@@ -41,16 +45,16 @@
 
 <style scoped>
 
-    label{
+    label {
         color: white;
         font-size: 20px;
     }
 
-    input{
+    input {
         margin-bottom: 25px;
     }
 
-    button{
+    button {
         float: right;
         margin-left: 10px;
         margin-top: 20px;
@@ -59,32 +63,30 @@
         color: #b9b9b9;
     }
 
-    button:hover{
+    button:hover {
         border: 2px solid var(--colour4);
         background: none;
-        /*color: var(--colour5);*/
         text-shadow: 0 0 5px var(--colour5);
     }
 
-    .remind-password{
+    .remind-password {
         margin-top: -14px;
     }
 
-    .remind-password a{
+    .remind-password a {
         color: #78797a;
     }
 
-    .remind-password a:hover{
+    .remind-password a:hover {
         text-decoration: none;
         color: var(--colour4);
     }
 
-    .login-panel{
+    .login-panel {
         margin-top: 130px;
         background: var(--colour2);
-        box-shadow: 0px 0px 13px 9px var(--colour4);
+        box-shadow: 0 0 13px 9px var(--colour4);
         padding: 30px 30px 80px 30px;
     }
-
 
 </style>
