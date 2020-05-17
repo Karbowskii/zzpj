@@ -3,7 +3,7 @@ package pl.zzpj.esportbetting.rest;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -35,7 +35,7 @@ public class MatchRestControllerTest {
     private MatchService matchService;
 
     @InjectMocks
-    private MatchRestController matchRestController;
+    public MatchRestController matchRestController;
 
     public static MockMvc mockMvc;
     public static Team teamA;
@@ -64,7 +64,7 @@ public class MatchRestControllerTest {
 
         firstMatch = Match.builder()
                 .id(1)
-                .startDate(LocalDateTime.parse("2020-06-02"))
+                .startDate(LocalDateTime.parse("2020-06-02T00:00:00.00"))
                 .realId(1)
                 .isFinished(false)
                 .teamA(teamA)
@@ -78,7 +78,7 @@ public class MatchRestControllerTest {
 
         secondMatch = Match.builder()
                 .id(2)
-                .startDate(LocalDateTime.parse("2020-05-15"))
+                .startDate(LocalDateTime.parse("2020-05-15T00:00:00.00"))
                 .realId(1)
                 .isFinished(true)
                 .teamA(teamA)
@@ -102,28 +102,25 @@ public class MatchRestControllerTest {
     @Test
     public void findAllTest() throws Exception {
         Mockito.when(matchService.findAll()).thenReturn(matches);
-
         mockMvc.perform(get("/matches")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.[0].id", Matchers.is(matches.get(0).getId())))
-                .andExpect(jsonPath("$.[0].startDate", Matchers.is(matches.get(0).getStartDate())))
+                .andExpect(jsonPath("$.[0].id", Matchers.is((int)matches.get(0).getId())))
                 .andExpect(jsonPath("$.[0].realId", Matchers.is(matches.get(0).getRealId())))
-                .andExpect(jsonPath("$.[0].isFinished", Matchers.is(matches.get(0).isFinished())))
-                .andExpect(jsonPath("$.[0].teamA", Matchers.is(matches.get(0).getTeamA())))
-                .andExpect(jsonPath("$.[0].teamB", Matchers.is(matches.get(0).getTeamB())))
+                .andExpect(jsonPath("$.[0].finished", Matchers.is(matches.get(0).isFinished())))
+                .andExpect(jsonPath("$.[0].teamA.id", Matchers.is((int)matches.get(0).getTeamA().getId())))
+                .andExpect(jsonPath("$.[0].teamB.id", Matchers.is((int)matches.get(0).getTeamB().getId())))
                 .andExpect(jsonPath("$.[0].stakeA", Matchers.is(matches.get(0).getStakeA())))
                 .andExpect(jsonPath("$.[0].stakeB", Matchers.is(matches.get(0).getStakeB())))
                 .andExpect(jsonPath("$.[0].realScoreA", Matchers.is(matches.get(0).getRealScoreA())))
                 .andExpect(jsonPath("$.[0].realScoreB", Matchers.is(matches.get(0).getRealScoreB())))
                 .andExpect(jsonPath("$.[0].comments", Matchers.is(matches.get(0).getComments())))
 
-                .andExpect(jsonPath("$.[1].id", Matchers.is(matches.get(1).getId())))
-                .andExpect(jsonPath("$.[1].startDate", Matchers.is(matches.get(1).getStartDate())))
+                .andExpect(jsonPath("$.[1].id", Matchers.is((int)matches.get(1).getId())))
                 .andExpect(jsonPath("$.[1].realId", Matchers.is(matches.get(1).getRealId())))
-                .andExpect(jsonPath("$.[1].isFinished", Matchers.is(matches.get(1).isFinished())))
-                .andExpect(jsonPath("$.[1].teamA", Matchers.is(matches.get(1).getTeamA())))
-                .andExpect(jsonPath("$.[1].teamB", Matchers.is(matches.get(1).getTeamB())))
+                .andExpect(jsonPath("$.[1].finished", Matchers.is(matches.get(1).isFinished())))
+                .andExpect(jsonPath("$.[1].teamA.id", Matchers.is((int)matches.get(1).getTeamA().getId())))
+                .andExpect(jsonPath("$.[1].teamB.id", Matchers.is((int)matches.get(1).getTeamB().getId())))
                 .andExpect(jsonPath("$.[1].stakeA", Matchers.is(matches.get(1).getStakeA())))
                 .andExpect(jsonPath("$.[1].stakeB", Matchers.is(matches.get(1).getStakeB())))
                 .andExpect(jsonPath("$.[1].realScoreA", Matchers.is(matches.get(1).getRealScoreA())))
