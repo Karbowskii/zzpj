@@ -27,6 +27,7 @@ import javax.persistence.Table;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @DynamicUpdate
 @Builder
 @Table(name = "matches")
