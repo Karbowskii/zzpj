@@ -69,7 +69,7 @@ public class MatchApiParser {
 
         status = MatchStatusEnum.valueOf(json.getString("status").toUpperCase());
 
-        Match match = Match.builder()
+        return Match.builder()
                 .realId(id)
                 .realScoreA(scoreA)
                 .realScoreB(scoreB)
@@ -79,7 +79,5 @@ public class MatchApiParser {
                 .endDate(endTime)
                 .status(status)
                 .build();
-
-        return match;
     }
 }

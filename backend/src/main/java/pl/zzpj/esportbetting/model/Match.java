@@ -60,11 +60,11 @@ public class Match {
     @Column(name = "real_score_B", nullable = false)
     private int realScoreB;
 
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne
     @JoinColumn(name = "team_id_A")
     private Team teamA;
 
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne
     @JoinColumn(name = "team_id_B")
     private Team teamB;
 
@@ -77,7 +77,6 @@ public class Match {
     private int stakeB;
 
     @OneToMany(mappedBy = "match",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true)
+            cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
 }

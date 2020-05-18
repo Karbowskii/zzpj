@@ -33,12 +33,10 @@ public class TeamApiParserTest {
 
         // test
         Team expectedTeam = Team.builder()
-                .id(127397)
                 .name("OverPower Esports")
                 .url("https://cdn.pandascore.co/images/team/image/127397/123px_over_power_esportslogo_square.png")
                 .build();
 
-        assertEquals(expectedTeam.getId(), team.getId());
         assertEquals(expectedTeam.getName(), team.getName());
         assertEquals(expectedTeam.getUrl(), team.getUrl());
     }

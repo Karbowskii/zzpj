@@ -12,15 +12,18 @@ import pl.zzpj.esportbetting.enumerate.MatchStatusEnum;
 import pl.zzpj.esportbetting.exception.ObjectNotFoundException;
 import pl.zzpj.esportbetting.interfaces.ESportRestApi;
 import pl.zzpj.esportbetting.model.Match;
+import pl.zzpj.esportbetting.model.Team;
 import pl.zzpj.esportbetting.model.parsers.MatchApiParser;
 import pl.zzpj.esportbetting.repos.BetRepository;
 import pl.zzpj.esportbetting.repos.MatchRepository;
+import pl.zzpj.esportbetting.repos.TeamRepository;
 import pl.zzpj.esportbetting.repos.UserRepository;
 import pl.zzpj.esportbetting.interfaces.MatchService;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service("matchService")
@@ -31,16 +34,18 @@ public class MatchServiceImpl implements MatchService {
 
     private final MatchRepository matchRepository;
     private final BetRepository betRepository;
+    private final TeamRepository teamRepository;
     private final UserRepository userRepository;
     private final ESportRestApi eSportRestApi;
 
     @Autowired
     public MatchServiceImpl(MatchRepository matchRepository, ESportRestApi eSportRestApi,
-                            BetRepository betRepository, UserRepository userRepository) {
+                            BetRepository betRepository, UserRepository userRepository, TeamRepository teamRepository) {
         this.matchRepository = matchRepository;
         this.eSportRestApi = eSportRestApi;
         this.betRepository = betRepository;
         this.userRepository = userRepository;
+        this.teamRepository = teamRepository;
     }
 
     public List<Match> findAll() {
@@ -56,19 +61,31 @@ public class MatchServiceImpl implements MatchService {
 
     public void updateMatches(List<Match> matchesFromApi) {
         List<Match> matchesToChange = new ArrayList<>();
-        matchRepository.findAllByStatusNotLike(MatchStatusEnum.FINISHED).forEach(
+        List<Match> matchesWithStatusNotFinished = matchRepository.findAllByStatusNotLike(MatchStatusEnum.FINISHED);
+        matchesWithStatusNotFinished.forEach(
                 match -> matchesToChange.addAll(
                         matchesFromApi
                                 .stream()
                                 .filter(api -> api.getRealId() == match.getRealId()
                                         && !api.getStatus().equals(match.getStatus()))
+                                .map(api -> {
+                                    api.setId(match.getId());
+                                    api.setTeamA(match.getTeamA());
+                                    api.setTeamB(match.getTeamB());
+                                    return api;
+                                })
                                 .collect(Collectors.toList())));
+        matchRepository.saveAll(matchesToChange);
 
+        List<Match> matchesToDelete = new ArrayList<>();
         matchesToChange.stream().filter(m -> m.getStatus().equals(MatchStatusEnum.CANCELED))
                 .collect(Collectors.toList())
-                .forEach(this::returnCoinsIfMatchCanceled);
+                .forEach(match -> {
+                    returnCoinsIfMatchCanceled(match);
+                    matchesToDelete.add(match);
+                });
+        matchRepository.deleteAll(matchesToDelete);
 
-        matchRepository.saveAll(matchesToChange);
         LOGGER.info("Finished updating " + matchesToChange.size() + " matches");
     }
 
@@ -86,8 +103,21 @@ public class MatchServiceImpl implements MatchService {
     public void findNewMatchesAndAndToDB(List<Match> allMatchesFromApi) {
         List<Match> newMatches = allMatchesFromApi
                 .stream()
-                .filter(m -> matchRepository.findByRealId(m.getRealId()).isEmpty())
+                .filter(m -> matchRepository.findByRealId(m.getRealId()).isEmpty()
+                        && !m.getStatus().equals(MatchStatusEnum.CANCELED))
                 .collect(Collectors.toList());
+        newMatches.forEach(m -> {
+            Optional<Team> teamA = teamRepository.findByName(m.getTeamA().getName());
+            Optional<Team> teamB = teamRepository.findByName(m.getTeamB().getName());
+            if (teamA.isEmpty()) {
+                teamRepository.save(m.getTeamA());
+            }
+            if (teamB.isEmpty()) {
+                teamRepository.save(m.getTeamB());
+            }
+            teamRepository.findByName(m.getTeamA().getName()).ifPresent(m::setTeamA);
+            teamRepository.findByName(m.getTeamB().getName()).ifPresent(m::setTeamB);
+        });
         if (newMatches.size() > 0) {
             matchRepository.saveAll(newMatches);
             LOGGER.info("Added new " + newMatches.size() + " matches");
