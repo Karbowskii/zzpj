@@ -34,11 +34,11 @@ public class Team {
 
     @OneToMany(mappedBy = "teamA",
             orphanRemoval = true,
-            cascade = CascadeType.ALL)
+            cascade = CascadeType.MERGE)
     private List<Match> matchesA = new ArrayList<>();
 
     @OneToMany(mappedBy = "teamB",
             orphanRemoval = true,
-            cascade = CascadeType.ALL)
+            cascade = CascadeType.MERGE)
     private List<Match> matchesB = new ArrayList<>();
 }

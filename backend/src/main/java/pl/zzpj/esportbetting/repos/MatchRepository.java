@@ -11,5 +11,5 @@ import java.util.Optional;
 @Repository
 public interface MatchRepository extends JpaRepository<Match, Long> {
     List<Match> findAllByStatusNotLike(MatchStatusEnum status);
-    Optional<Match> findByRealId(long realId);
+    Optional<Match> findByRealId(int realId);
 }

@@ -60,11 +60,11 @@ public class Match {
     @Column(name = "real_score_B", nullable = false)
     private int realScoreB;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "team_id_A")
     private Team teamA;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "team_id_B")
     private Team teamB;
 
