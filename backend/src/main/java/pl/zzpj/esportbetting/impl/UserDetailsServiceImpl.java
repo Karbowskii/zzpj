@@ -11,9 +11,9 @@ import pl.zzpj.esportbetting.interfaces.UserService;
 import pl.zzpj.esportbetting.model.Authority;
 import pl.zzpj.esportbetting.model.Level;
 import pl.zzpj.esportbetting.model.User;
-import pl.zzpj.esportbetting.repository.AuthorityRepository;
-import pl.zzpj.esportbetting.repository.LevelRepository;
-import pl.zzpj.esportbetting.repository.UserRepository;
+import pl.zzpj.esportbetting.repos.AuthorityRepository;
+import pl.zzpj.esportbetting.repos.LevelRepository;
+import pl.zzpj.esportbetting.repos.UserRepository;
 
 import java.util.List;
 import java.util.Optional;

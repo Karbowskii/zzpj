@@ -6,7 +6,7 @@ import pl.zzpj.esportbetting.enumerate.AuthorityEnum;
 import pl.zzpj.esportbetting.exception.ObjectNotFoundException;
 import pl.zzpj.esportbetting.interfaces.AuthorityService;
 import pl.zzpj.esportbetting.model.Authority;
-import pl.zzpj.esportbetting.repository.AuthorityRepository;
+import pl.zzpj.esportbetting.repos.AuthorityRepository;
 
 @Service("authorityService")
 class AuthorityServiceImpl implements AuthorityService {
