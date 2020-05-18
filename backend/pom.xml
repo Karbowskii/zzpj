@@ -17,7 +17,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<java.version>1.8</java.version>
+		<java.version>11</java.version>
 		<javax.inject.version>1</javax.inject.version>
 		<maven.compiler.plugin.version>3.8.0</maven.compiler.plugin.version>
 		<spring.boot.version>2.1.5.RELEASE</spring.boot.version>
@@ -41,7 +41,7 @@
 		<json.version>20190722</json.version>
 		<jakson-databind.version>2.9.8</jakson-databind.version>
 		<mockito-junit-jupiter.version>2.27.5</mockito-junit-jupiter.version>
-		<puppycrawl.tools.checkstyle>8.17</puppycrawl.tools.checkstyle>
+		<puppycrawl.tools.checkstyle>8.29</puppycrawl.tools.checkstyle>
 		<mysql.connector.version>8.0.14</mysql.connector.version>
 		<junit-jupiter-engine.version>5.2.0</junit-jupiter-engine.version>
 		<jacoco-maven-plugin.version>0.8.4</jacoco-maven-plugin.version>
@@ -60,16 +60,16 @@
 			<artifactId>spring-boot-starter-tomcat</artifactId>
 		</dependency>
 
-<!--		<dependency>-->
-<!--			<groupId>org.springframework.boot</groupId>-->
-<!--			<artifactId>spring-boot-starter-data-jpa</artifactId>-->
-<!--		</dependency>-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
 
-<!--		<dependency>-->
-<!--			<groupId>mysql</groupId>-->
-<!--			<artifactId>mysql-connector-java</artifactId>-->
-<!--			<version>${mysql.connector.version}</version>-->
-<!--		</dependency>-->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>${mysql.connector.version}</version>
+		</dependency>
 
 		<dependency>
 			<groupId>com.h2database</groupId>
@@ -151,14 +151,39 @@
 			<version>${io.jswonwebtoken.jjwt.version}</version>
 		</dependency>
 
-	</dependencies>
+		<dependency>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
+			<version>20180130</version>
+		</dependency>
+		<dependency>
+			<groupId>jakarta.validation</groupId>
+			<artifactId>jakarta.validation-api</artifactId>
+			<version>2.0.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.10</version>
+		</dependency>
 
+	</dependencies>
 	<build>
+
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <source>11</source>
+                    <target>11</target>
+                </configuration>
+            </plugin>
 		</plugins>
 	</build>
 

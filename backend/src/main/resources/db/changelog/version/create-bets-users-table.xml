@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="11" author="ak">
+
+        <createTable tableName="bets_users">
+            <column name="user_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="bet_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+
+        <addPrimaryKey tableName="bets_users"
+                       columnNames="user_id, bet_id"
+                       schemaName="zzpjschema"
+                       constraintName="pk_b_u"/>
+
+        <addForeignKeyConstraint constraintName="fk_users_11"
+                                 baseTableName="bets_users"
+                                 baseColumnNames="user_id"
+                                 referencedTableName="users"
+                                 referencedColumnNames="id" />
+
+        <addForeignKeyConstraint constraintName="fk_bets_11"
+                                 baseTableName="bets_users"
+                                 baseColumnNames="bet_id"
+                                 referencedTableName="bets"
+                                 referencedColumnNames="id" />
+
+    </changeSet>
+
+</databaseChangeLog>
