@@ -14,6 +14,9 @@
             <column name="match_id" type="bigint" >
                 <constraints  nullable="false" />
             </column>
+            <column name="user_id" type="bigint" >
+                <constraints  nullable="false" />
+            </column>
             <column name="score_A" type="int" >
                 <constraints  nullable="false" />
             </column>
@@ -29,6 +32,12 @@
                                  baseTableName="bets"
                                  baseColumnNames="match_id"
                                  referencedTableName="matches"
+                                 referencedColumnNames="id" />
+
+        <addForeignKeyConstraint constraintName="fk_user_7"
+                                 baseTableName="bets"
+                                 baseColumnNames="user_id"
+                                 referencedTableName="users"
                                  referencedColumnNames="id" />
     </changeSet>
 

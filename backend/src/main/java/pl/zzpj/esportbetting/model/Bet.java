@@ -35,10 +35,9 @@ public class Bet {
     @Column(name = "id", updatable = false, nullable = false)
     private long id;
 
-    @ManyToMany(mappedBy = "bets",
-            cascade = CascadeType.ALL,
-            fetch = FetchType.EAGER)
-    private Set<User> users = new HashSet<>();
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "match_id")

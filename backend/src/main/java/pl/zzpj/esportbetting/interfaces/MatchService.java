@@ -1,4 +1,4 @@
-package pl.zzpj.esportbetting.services;
+package pl.zzpj.esportbetting.interfaces;
 
 import pl.zzpj.esportbetting.model.Match;
 

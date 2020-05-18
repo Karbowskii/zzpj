@@ -69,13 +69,6 @@ public class User {
             inverseJoinColumns = {@JoinColumn(name = "authority_id")})
     private Set<Authority> authorities = new HashSet<>();
 
-    @ManyToMany(cascade = CascadeType.MERGE,
-            fetch = FetchType.EAGER)
-    @JoinTable(name = "bets_users",
-            joinColumns = {@JoinColumn(name = "user_id")},
-            inverseJoinColumns = {@JoinColumn(name = "bet_id")})
-    private Set<Bet> bets = new HashSet<>();
-
     @ColumnDefault("true")
     private Boolean isActive;
 
@@ -94,6 +87,11 @@ public class User {
             cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user",
+            orphanRemoval = true,
+            cascade = CascadeType.ALL)
+    private List<Bet> bets = new ArrayList<>();
+
     public User(RegisterRequest registerRequest) {
         this.setUsername(registerRequest.getUsername());
         this.setPassword(registerRequest.getPassword());
@@ -106,6 +104,18 @@ public class User {
     public void addAuthority(Authority authority) {
         if (authority != null) {
             this.getAuthorities().add(authority);
+        }
+    }
+
+    public void addCoins(int coinsToAdd) {
+        setCoins(getCoins() + coinsToAdd);
+    }
+
+    public void removeCoins(int coinsToRemove) {
+        if (coinsToRemove > getCoins()) {
+            setCoins(0);
+        } else {
+            setCoins(getCoins() - coinsToRemove);
         }
     }
 }

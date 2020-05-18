@@ -17,7 +17,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import pl.zzpj.esportbetting.enumerate.MatchStatusEnum;
 import pl.zzpj.esportbetting.model.Match;
 import pl.zzpj.esportbetting.model.Team;
-import pl.zzpj.esportbetting.services.MatchService;
+import pl.zzpj.esportbetting.interfaces.MatchService;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
