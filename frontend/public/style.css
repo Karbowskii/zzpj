@@ -1,0 +1,22 @@
+:root{
+    --colour1:#0B0C10;
+    --colour2:#1F2833;
+    --colour4:#C5C6C7;
+    --colour5:#66FCF1;
+    --colour3:#45A29E;
+    --colour6:#fcae66;
+    --colour7:#64f2e6;
+    --colour8:#fc00ff;
+}
+#betting-modal .modal-content{
+    background: var(--colour2)!important;
+    color:  var(--colour5);
+}
+
+#betting-modal .modal-header{
+    border:none;
+}
+
+#betting-modal button.close{
+    color: white;
+}
