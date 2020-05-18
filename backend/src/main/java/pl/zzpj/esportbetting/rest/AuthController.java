@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pl.zzpj.esportbetting.impl.UserToUserResponseConverter;
-import pl.zzpj.esportbetting.interfaces.AuthService;
+import pl.zzpj.esportbetting.interfaces.AuthenticationService;
 import pl.zzpj.esportbetting.model.User;
-import pl.zzpj.esportbetting.reponse.LoginResponse;
-import pl.zzpj.esportbetting.reponse.UserResponse;
+import pl.zzpj.esportbetting.response.LoginResponse;
+import pl.zzpj.esportbetting.response.UserResponse;
 import pl.zzpj.esportbetting.request.LoginRequest;
 
 import javax.validation.Valid;
@@ -20,16 +20,16 @@ import javax.validation.Valid;
 @RequestMapping(path = "/auth")
 public class AuthController {
 
-    private final AuthService authService;
+    private final AuthenticationService authenticationService;
 
     @Autowired
-    public AuthController(AuthService authService) {
-        this.authService = authService;
+    public AuthController(AuthenticationService authenticationService) {
+        this.authenticationService = authenticationService;
     }
 
     @PostMapping(path = "/login", produces = "application/json")
     public ResponseEntity<LoginResponse> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
-        Pair<User, String> data = authService.authenticate(loginRequest.getUsername(), loginRequest.getPassword());
+        Pair<User, String> data = authenticationService.authenticate(loginRequest.getUsername(), loginRequest.getPassword());
 
         UserResponse userResponse = UserToUserResponseConverter.convert(data.getKey());
 

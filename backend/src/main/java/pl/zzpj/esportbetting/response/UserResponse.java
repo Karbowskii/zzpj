@@ -1,4 +1,4 @@
-package pl.zzpj.esportbetting.reponse;
+package pl.zzpj.esportbetting.response;
 
 import lombok.Builder;
 import lombok.Data;

@@ -12,13 +12,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
-import pl.zzpj.esportbetting.interfaces.Jwt;
+import pl.zzpj.esportbetting.interfaces.JsonWebToken;
 
 import java.util.Date;
 
 @Component
-public class JwtUtils implements Jwt {
-    private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
+public class JsonWebTokenUtils implements JsonWebToken {
+    private static final Logger logger = LoggerFactory.getLogger(JsonWebTokenUtils.class);
 
     @Value("${esportbetting.app.jwtSecret}")
     private String jwtSecret;

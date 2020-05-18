@@ -19,7 +19,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import pl.zzpj.esportbetting.enumerate.AuthorityEnum;
-import pl.zzpj.esportbetting.interfaces.AuthService;
+import pl.zzpj.esportbetting.interfaces.AuthenticationService;
 import pl.zzpj.esportbetting.model.Authority;
 import pl.zzpj.esportbetting.model.Level;
 import pl.zzpj.esportbetting.model.User;
@@ -37,7 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class AuthRestControllerTest {
 
     @Mock
-    private AuthService authService;
+    private AuthenticationService authenticationService;
 
     @InjectMocks
     private AuthController authController;
@@ -78,14 +78,14 @@ public class AuthRestControllerTest {
 
     @Before
     public void setUp() {
-        authController = new AuthController(authService);
+        authController = new AuthController(authenticationService);
         mockMvc = MockMvcBuilders.standaloneSetup(authController).build();
         objectMapper = new ObjectMapper();
     }
 
     @Test
     public void whenAuthenticateUserThenUserAuthenticated() throws Exception {
-        Mockito.when(authService.authenticate(loginRequest.getUsername(), loginRequest.getPassword()))
+        Mockito.when(authenticationService.authenticate(loginRequest.getUsername(), loginRequest.getPassword()))
             .thenReturn(Pair.of(activeUser, token));
 
         ObjectWriter objectWriter = objectMapper.writer().withDefaultPrettyPrinter();
@@ -116,7 +116,7 @@ public class AuthRestControllerTest {
             .andExpect(jsonPath("$.user.active" +
                     "", Matchers.is(activeUser.getIsActive())));
 
-        Mockito.verify(authService, Mockito.times(1)).authenticate(
+        Mockito.verify(authenticationService, Mockito.times(1)).authenticate(
             ArgumentMatchers.anyString(), ArgumentMatchers.anyString());
     }
 }

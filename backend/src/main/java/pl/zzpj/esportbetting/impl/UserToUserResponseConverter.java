@@ -2,7 +2,7 @@ package pl.zzpj.esportbetting.impl;
 
 import pl.zzpj.esportbetting.enumerate.AuthorityEnum;
 import pl.zzpj.esportbetting.model.User;
-import pl.zzpj.esportbetting.reponse.UserResponse;
+import pl.zzpj.esportbetting.response.UserResponse;
 
 import java.util.stream.Collectors;
 

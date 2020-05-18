@@ -1,5 +1,4 @@
-package pl.zzpj.esportbetting.reponse;
-
+package pl.zzpj.esportbetting.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,7 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class GeneralError {
-    private String code;
-    private String message;
+public class LoginResponse {
+    private String token;
+    private String type;
+    private UserResponse user;
 }

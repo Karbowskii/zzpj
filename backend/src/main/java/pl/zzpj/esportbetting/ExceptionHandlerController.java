@@ -18,7 +18,7 @@ import pl.zzpj.esportbetting.exception.ValidationException;
 import pl.zzpj.esportbetting.exception.WrongArgumentException;
 import pl.zzpj.esportbetting.exception.WrongStateException;
 
-import pl.zzpj.esportbetting.reponse.GeneralError;
+import pl.zzpj.esportbetting.response.GeneralError;
 
 import java.sql.SQLException;
 
