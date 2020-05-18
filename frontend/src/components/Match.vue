@@ -6,7 +6,8 @@
                     <div class="text-center">
                         <b-avatar v-bind:src="team1Logo"/>
                         <p>{{team1Name}}</p>
-                        <b-button v-if="status!=='finished'" @click="calculateBetStake(betRatio)" v-b-modal.betting-modal>Bet</b-button>
+                        <b-button v-if="status!=='finished'" @click="calculateBetStake(betRatio)">Bet
+                        </b-button>
                     </div>
                 </b-col>
                 <b-col class="res" cols="6">
@@ -23,8 +24,7 @@
                     <div class="text-center">
                         <b-avatar v-bind:src="team2Logo"/>
                         <p>{{team2Name}}</p>
-                        <b-button v-if="status!=='finished'" @click="calculateBetStake(100-betRatio)"
-                                  v-b-modal.betting-modal>Bet
+                        <b-button v-if="status!=='finished'" @click="calculateBetStake(100-betRatio)">Bet
                         </b-button>
                     </div>
                 </b-col>
@@ -59,7 +59,15 @@
         },
         methods: {
             calculateBetStake: function (teamBetRatio) {
-                this.betStake = 100 / teamBetRatio
+                this.betStake = 100 / teamBetRatio;
+                if (this.$store.getters.isAuthorized) {
+                    this.showModal();
+                } else {
+                    this.$router.push('/login');
+                }
+            },
+            showModal: function () {
+                this.$bvModal.show('betting-modal');
             }
         }
     }

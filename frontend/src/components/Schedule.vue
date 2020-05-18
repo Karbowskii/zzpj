@@ -122,7 +122,7 @@
 </script>
 
 <style scoped>
-    #matches {
+    .matches {
         background: rgba(0, 0, 0, 0.4);
         border-radius: 15px;
     }

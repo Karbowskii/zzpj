@@ -11,7 +11,7 @@
                     <b-link :to="{path:'/schedule'}">Schedule</b-link>
                 </b-nav-item>
                 <b-nav-item>
-                    <b-link :to="{path:'/ranking'}">Ranking</b-link>
+                    <b-link :to="{path:'/users-ranking'}">Ranking</b-link>
                 </b-nav-item>
             </b-navbar-nav>
             <b-navbar-nav class="ml-auto" v-if="isLogged===false">
@@ -70,7 +70,7 @@
                 return this.$store.getters.isAuthorized;
             },
             user() {
-                return {nickname: this.$store.state.user, tokensNumber: 69, lvl: 12, expPrc: 20};
+                return {nickname: this.$store.state.user, tokensNumber: 21, lvl: 12, expPrc: 20};
             }
         },
     }
@@ -89,7 +89,6 @@
     }
 
     a.nav-link a {
-        /* color: #757675;*/
         color: var(--colour4);
         font-size: 24px;
         padding-bottom: 8px;
@@ -116,10 +115,6 @@
     .profile {
         display: block;
     }
-
-    /*    div.exp{
-            display: block;
-        }*/
 
     a.profile {
         text-decoration: none !important;
@@ -150,7 +145,6 @@
     button:hover {
         border: 2px solid var(--colour4);
         background: none;
-        /*color: var(--colour5);*/
         text-shadow: 0 0 5px var(--colour5);
     }
 
@@ -166,7 +160,6 @@
 
     .progress {
         height: 10px;
-        /*margin-top: 20px;*/
         background-color: #d6d8db !important;
         margin-right: 0;
         min-width: 80px;

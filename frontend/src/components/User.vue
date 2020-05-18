@@ -1,5 +1,5 @@
 <template>
-    <div class="profile">
+    <div class="user">
         <b-container>
             <b-row align-h="center">
                 <b-col cols=8>
@@ -18,15 +18,8 @@
 
                         <div class="nick-name">
                             <p>{{profile.nick}}</p>
-                            <p class="name">{{profile.firstName}} {{profile.lastName}}</p>
-                            <p class="name">{{profile.email}}</p>
                         </div>
                     </div>
-                </b-col>
-            </b-row>
-            <b-row align-h="center">
-                <b-col cols=8>
-                    <match-history></match-history>
                 </b-col>
             </b-row>
         </b-container>
@@ -34,26 +27,18 @@
 </template>
 
 <script>
-
-    import MatchHistory from "./MatchHistory";
-
     export default {
-        name: "Profile",
-        components: {MatchHistory},
-        computed: {
-            profile: function () {
-                return {
-                    nick: this.$store.state.user,
-                    firstName: 'Artur',
-                    lastName: 'Karbonara',
-                    email: 'Arr@gamil.com',
-                    lvl: 12,
-                    exp: 5,
-                    expToNextLvl: 20,
-                    tokens: 21,
-                    icon: require('../assets/profileIcon.png'),
-                    description: ''
-                }
+        name: "User",
+        data: function () {
+            return {
+                profile:
+                    {
+                        nick: 'Arturito',
+                        lvl: 12,
+                        exp: 5,
+                        expToNextLvl: 20,
+                        icon: require('../assets/profileIcon.png'),
+                    }
             }
         }
     }
@@ -122,5 +107,4 @@
     .progress .progress-bar {
         background: #b600b9 !important;
     }
-
 </style>

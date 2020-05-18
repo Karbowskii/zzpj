@@ -1,5 +1,5 @@
 <template>
-    <div id="matches">
+    <div class="matches">
         <ul>
             <li v-for="(match, index) in filteredMatches"
                 v-bind:key="index"
@@ -33,9 +33,6 @@
                 required: true
             }
         },
-        data: function () {
-            return {}
-        },
         methods: {
             isNotLast: function (index) {
                 return !(index + 1 === this.filteredMatches.length) ? 1 : 0;
@@ -44,7 +41,7 @@
                 return index === 0 ? 1 : 0;
             },
             showMatch: function (matchId) {
-                this.$router.push({path: `/match/${matchId}`})
+                this.$router.push({path: `/match/${matchId}`});
             }
 
         }
@@ -52,8 +49,8 @@
 </script>
 
 <style scoped>
-    #matches {
-        margin-top: 20px;
+    .matches {
+        margin-top: 60px;
     }
 
     ul {
@@ -65,7 +62,6 @@
     li {
         padding-top: 25px;
         padding-bottom: 25px;
-        /*border-top: 1px solid #cfcfcf;*/
     }
 
     li:hover {

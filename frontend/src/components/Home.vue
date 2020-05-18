@@ -1,5 +1,5 @@
 <template>
-    <div><h1>HOME</h1></div>
+    <div><h1>E-sport betting</h1></div>
 </template>
 
 <script>
@@ -10,6 +10,7 @@
 
 <style scoped>
     h1 {
+        margin-top: 60px;
         color: white;
     }
 
