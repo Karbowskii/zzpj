@@ -1,11 +1,13 @@
 package pl.zzpj.esportbetting.model;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicUpdate;
-import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -22,6 +24,7 @@ import javax.persistence.Table;
 @AllArgsConstructor
 @NoArgsConstructor
 @DynamicUpdate
+@Builder
 @Table(name = "levels")
 public class Level {
 
@@ -37,6 +40,7 @@ public class Level {
     @Column(nullable = false)
     private int maxBets;
 
+    @EqualsAndHashCode.Exclude @ToString.Exclude
     @OneToMany(mappedBy = "level",
             orphanRemoval = true,
             cascade = CascadeType.ALL)
