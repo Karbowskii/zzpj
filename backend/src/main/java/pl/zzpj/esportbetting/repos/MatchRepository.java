@@ -6,8 +6,10 @@ import pl.zzpj.esportbetting.enumerate.MatchStatusEnum;
 import pl.zzpj.esportbetting.model.Match;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface MatchRepository extends JpaRepository<Match, Long> {
     List<Match> findAllByStatusNotLike(MatchStatusEnum status);
+    Optional<Match> findByRealId(long realId);
 }

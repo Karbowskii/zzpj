@@ -49,22 +49,27 @@ public class MatchServiceImpl implements MatchService {
 
     @Scheduled(cron = "1 * * * * ?")
     public void checkAndUpdateMatches() throws IOException, InterruptedException, JSONException {
-        LOGGER.info("Checking and updating matches");
         List<Match> matchesFromApi = MatchApiParser.parse(eSportRestApi.getAllMatches(GAME_NAME));
-        List<Match> matchesToChange = new ArrayList<>();
+        findNewMatchesAndAndToDB(matchesFromApi);
+        updateMatches(matchesFromApi);
+    }
 
+    public void updateMatches(List<Match> matchesFromApi) {
+        List<Match> matchesToChange = new ArrayList<>();
         matchRepository.findAllByStatusNotLike(MatchStatusEnum.FINISHED).forEach(
                 match -> matchesToChange.addAll(
                         matchesFromApi
-                            .stream()
-                            .filter(api -> api.getId() == match.getId() && !api.getStatus().equals(match.getStatus()))
-                            .collect(Collectors.toList())));
+                                .stream()
+                                .filter(api -> api.getRealId() == match.getRealId()
+                                        && !api.getStatus().equals(match.getStatus()))
+                                .collect(Collectors.toList())));
 
-        matchesToChange.stream().filter(m -> m.getStatus().equals(MatchStatusEnum.CANCELED)).collect(Collectors.toList())
+        matchesToChange.stream().filter(m -> m.getStatus().equals(MatchStatusEnum.CANCELED))
+                .collect(Collectors.toList())
                 .forEach(this::returnCoinsIfMatchCanceled);
 
         matchRepository.saveAll(matchesToChange);
-        LOGGER.info("Finished checking and updating matches");
+        LOGGER.info("Finished updating " + matchesToChange.size() + " matches");
     }
 
     public void returnCoinsIfMatchCanceled(Match match) {
@@ -72,8 +77,20 @@ public class MatchServiceImpl implements MatchService {
             LOGGER.info("Canceled match - Returning bet coins of user with username: " + b.getUser().getUsername());
             userRepository.findById(b.getUser().getId())
                     .orElseThrow(() ->
-                            new ObjectNotFoundException("User with id: " + b.getUser().getId() + "not exists!"))
+                            new ObjectNotFoundException("User with id: " + b.getUser().getId() + " not exists!"))
                     .addCoins(b.getCoins());
+            LOGGER.info("Returned " + b.getCoins() + " coins to user with username " + b.getUser().getUsername());
         });
+    }
+
+    public void findNewMatchesAndAndToDB(List<Match> allMatchesFromApi) {
+        List<Match> newMatches = allMatchesFromApi
+                .stream()
+                .filter(m -> matchRepository.findByRealId(m.getRealId()).isEmpty())
+                .collect(Collectors.toList());
+        if (newMatches.size() > 0) {
+            matchRepository.saveAll(newMatches);
+            LOGGER.info("Added new " + newMatches.size() + " matches");
+        }
     }
 }
