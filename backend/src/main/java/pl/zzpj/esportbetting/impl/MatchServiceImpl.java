@@ -8,6 +8,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import pl.zzpj.esportbetting.enumerate.GameEnum;
+import pl.zzpj.esportbetting.enumerate.MatchStatusEnum;
 import pl.zzpj.esportbetting.interfaces.ESportRestApi;
 import pl.zzpj.esportbetting.model.Match;
 import pl.zzpj.esportbetting.model.parsers.MatchApiParser;
@@ -22,10 +23,10 @@ import java.util.stream.Collectors;
 @Service("matchService")
 @EnableScheduling
 public class MatchServiceImpl implements MatchService {
-    private static final Logger logger = LoggerFactory.getLogger(MatchServiceImpl.class);
+    private static final GameEnum GAME_NAME = GameEnum.LEAGUE_OF_LEGENDS;
+    private static final Logger LOGGER = LoggerFactory.getLogger(MatchServiceImpl.class);
 
     private final MatchRepository matchRepository;
-
     private final ESportRestApi eSportRestApi;
 
     @Autowired
@@ -39,18 +40,20 @@ public class MatchServiceImpl implements MatchService {
     }
 
     @Scheduled(cron = "1 * * * * ?")
-    public void checkAndUpdateStartedMatches() throws IOException, InterruptedException, JSONException {
-        logger.info("Checking and updating not finished matches");
-        List<Match> matchesFromApi = MatchApiParser.parse(eSportRestApi.getAllMatches(GameEnum.LEAGUE_OF_LEGENDS));
-
+    public void checkAndUpdateMatches() throws IOException, InterruptedException, JSONException {
+        LOGGER.info("Checking and updating matches");
+        List<Match> matchesFromApi = MatchApiParser.parse(eSportRestApi.getAllMatches(GAME_NAME));
         List<Match> matchesToChange = new ArrayList<>();
-        matchRepository.findAllByIsFinishedIsFalse().forEach(match -> {
-            matchesToChange.addAll(matchesFromApi
-                    .stream()
-                    .filter(api -> api.getId() == match.getId() && api.isFinished())
-                    .collect(Collectors.toList()));
-        });
+
+        matchRepository.findAllByStatusNotLike(MatchStatusEnum.FINISHED).forEach(match -> matchesToChange.addAll(
+                matchesFromApi
+                        .stream()
+                        .filter(api -> api.getId() == match.getId() && !api.getStatus().equals(match.getStatus()))
+                        .collect(Collectors.toList())));
+
+        //TODO: jezeli zmienil sie na canceled znajdz wszystkie betsy i oddaj ludziom zetony
 
         matchRepository.saveAll(matchesToChange);
+        LOGGER.info("Finished checking and updating matches");
     }
 }

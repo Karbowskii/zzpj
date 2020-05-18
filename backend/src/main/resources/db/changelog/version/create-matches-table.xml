@@ -14,11 +14,15 @@
             <column name="start_date" type="timestamp" >
                 <constraints  nullable="false" />
             </column>
+            <column name="end_date" type="timestamp" >
+                <constraints nullable="true" />
+            </column>
+            <column name="status" type="varchar(20)">
+                <constraints nullable="false"/>
+            </column>
             <column name="real_id" type="int" >
                 <constraints  nullable="false" unique="true"/>
             </column>
-            <column name="is_finished" type="boolean" defaultValueBoolean="false" />
-
             <column name="real_score_A" type="int" defaultValue="0" >
                 <constraints  nullable="false" />
             </column>

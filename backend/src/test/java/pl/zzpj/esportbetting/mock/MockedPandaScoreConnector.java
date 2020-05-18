@@ -72,7 +72,7 @@ public class MockedPandaScoreConnector implements ESportRestApi {
                     "\t\"draw\": false,\n" +
                     "\t\"winner\": null,\n" +
                     "\t\"name\": \"Semifinal 2: TheDice vs LDLC\",\n" +
-                    "\t\"status\": \"not_started\"\n" +
+                    "\t\"status\": \"running\"\n" +
                     "}"));
 
             // no start date
@@ -119,7 +119,7 @@ public class MockedPandaScoreConnector implements ESportRestApi {
                     "\t\"draw\": false,\n" +
                     "\t\"winner\": null,\n" +
                     "\t\"name\": \"Semifinal 2: TheDice vs LDLC\",\n" +
-                    "\t\"status\": \"not_started\"\n" +
+                    "\t\"status\": \"canceled\"\n" +
                     "}"));
 
             // finished
@@ -166,7 +166,7 @@ public class MockedPandaScoreConnector implements ESportRestApi {
                     "\t\"draw\": false,\n" +
                     "\t\"winner\": null,\n" +
                     "\t\"name\": \"Semifinal 2: TheDice vs LDLC\",\n" +
-                    "\t\"status\": \"not_started\"\n" +
+                    "\t\"status\": \"finished\"\n" +
                     "}"));
         } catch (JSONException e) {
             e.printStackTrace();

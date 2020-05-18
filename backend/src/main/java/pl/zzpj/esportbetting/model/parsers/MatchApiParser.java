@@ -3,6 +3,8 @@ package pl.zzpj.esportbetting.model.parsers;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import pl.zzpj.esportbetting.enumerate.GameEnum;
+import pl.zzpj.esportbetting.enumerate.MatchStatusEnum;
 import pl.zzpj.esportbetting.model.Match;
 import pl.zzpj.esportbetting.model.Team;
 
@@ -31,6 +33,8 @@ public class MatchApiParser {
         int scoreB = 0;
         boolean isFinished;
         LocalDateTime startTime = null;
+        LocalDateTime endTime = null;
+        MatchStatusEnum status;
 
         JSONArray results = json.getJSONArray("results");
         if (results.length() == 2) {
@@ -55,7 +59,15 @@ public class MatchApiParser {
         }
 
         String endAt = json.getString("end_at");
-        isFinished = !endAt.equals("null");
+        if (endAt != null && !endAt.equals("null")) {
+            try {
+                endTime = LocalDateTime.ofInstant(Instant.parse(endAt), ZoneId.systemDefault());
+            } catch (DateTimeParseException e) {
+                endTime = null;
+            }
+        }
+
+        status = MatchStatusEnum.valueOf(json.getString("status").toUpperCase());
 
         Match match = Match.builder()
                 .realId(id)
@@ -64,7 +76,8 @@ public class MatchApiParser {
                 .teamA(teamA)
                 .teamB(teamB)
                 .startDate(startTime)
-                .isFinished(isFinished)
+                .endDate(endTime)
+                .status(status)
                 .build();
 
         return match;
