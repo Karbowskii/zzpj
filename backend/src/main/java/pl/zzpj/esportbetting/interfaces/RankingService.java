@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface RankingService {
     List<RankedUserResponse> getRanking();
+    RankedUserResponse getUserRank(String username);
 }
