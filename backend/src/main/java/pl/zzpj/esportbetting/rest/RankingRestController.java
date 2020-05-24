@@ -6,25 +6,22 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import pl.zzpj.esportbetting.impl.UserToUserResponseConverter;
 import pl.zzpj.esportbetting.interfaces.RankingService;
 import pl.zzpj.esportbetting.interfaces.UserContextService;
 import pl.zzpj.esportbetting.model.User;
 import pl.zzpj.esportbetting.response.RankedUserResponse;
-import pl.zzpj.esportbetting.response.UserResponse;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path = "ranking")
-public class RankingController {
+public class RankingRestController {
 
     private final RankingService rankingService;
     private final UserContextService userContextService;
 
     @Autowired
-    public RankingController(RankingService rankingService, UserContextService userContextService) {
+    public RankingRestController(RankingService rankingService, UserContextService userContextService) {
         this.rankingService = rankingService;
         this.userContextService = userContextService;
     }

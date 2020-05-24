@@ -14,10 +14,12 @@ import java.util.stream.Collectors;
 @Service
 public class RankingImpl implements RankingService {
 
-    UserRepository userRepository;
+    private UserRepository userRepository;
+    private int topUsers;
 
     public RankingImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
+        topUsers = 10;
     }
 
     @Override
@@ -27,7 +29,7 @@ public class RankingImpl implements RankingService {
         for (int i = 0; i< users.size(); i++) {
             rankedUserResponses.add(UserToRankedUserResponseConverter.convert(i + 1, users.get(i)));
         }
-        return rankedUserResponses;
+        return rankedUserResponses.stream().limit(topUsers).collect(Collectors.toList());
     }
 
     @Override
