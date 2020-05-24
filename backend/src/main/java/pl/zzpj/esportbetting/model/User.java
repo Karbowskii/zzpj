@@ -28,6 +28,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.Email;
 
 
@@ -39,6 +40,11 @@ import javax.validation.constraints.Email;
 @DynamicUpdate
 @Table(name = "users")
 public class User {
+
+    @Transient
+    private static final int EXP_AFTER_WINNING_BET = 200;
+    @Transient
+    private static final int EXP_AFTER_LOOSING_BET = 50;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -117,6 +123,19 @@ public class User {
         } else {
             setCoins(getCoins() - coinsToRemove);
         }
+    }
+
+    public void addExpAfterBet(boolean userWon) {
+        if (userWon) {
+            setExp(getExp() + EXP_AFTER_WINNING_BET);
+        } else {
+            setExp(getExp() + EXP_AFTER_LOOSING_BET);
+        }
+        checkIfReachedNextLevel();
+    }
+
+    public void checkIfReachedNextLevel() {
+        //TODO: implement checking if exp>0 level++, exp set to 0
     }
 }
 

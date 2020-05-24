@@ -3,7 +3,9 @@ package pl.zzpj.esportbetting.model;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicUpdate;
 
 import java.util.HashSet;
@@ -43,11 +45,9 @@ public class Bet {
     @JoinColumn(name = "match_id")
     private Match match;
 
-    @Column(name = "score_A", nullable = false)
-    private int scoreA;
-
-    @Column(name = "score_B", nullable = false)
-    private int scoreB;
+    @ColumnDefault("true")
+    @Column(name = "selected_A", nullable = false)
+    private boolean selectedA;
 
     @Column(nullable = false)
     private int coins;

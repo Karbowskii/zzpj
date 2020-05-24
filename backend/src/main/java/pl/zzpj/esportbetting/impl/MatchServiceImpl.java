@@ -10,9 +10,12 @@ import org.springframework.stereotype.Service;
 import pl.zzpj.esportbetting.enumerate.GameEnum;
 import pl.zzpj.esportbetting.enumerate.MatchStatusEnum;
 import pl.zzpj.esportbetting.exception.ObjectNotFoundException;
+import pl.zzpj.esportbetting.interfaces.BetService;
 import pl.zzpj.esportbetting.interfaces.ESportRestApi;
+import pl.zzpj.esportbetting.model.Bet;
 import pl.zzpj.esportbetting.model.Match;
 import pl.zzpj.esportbetting.model.Team;
+import pl.zzpj.esportbetting.model.User;
 import pl.zzpj.esportbetting.model.parsers.MatchApiParser;
 import pl.zzpj.esportbetting.repos.BetRepository;
 import pl.zzpj.esportbetting.repos.MatchRepository;
@@ -30,28 +33,28 @@ import java.util.stream.Collectors;
 @EnableScheduling
 public class MatchServiceImpl implements MatchService {
     private static final GameEnum GAME_NAME = GameEnum.LEAGUE_OF_LEGENDS;
-    private static final Logger LOGGER = LoggerFactory.getLogger(MatchServiceImpl.class);
 
+    private static final Logger logger = LoggerFactory.getLogger(MatchServiceImpl.class);
     private final MatchRepository matchRepository;
-    private final BetRepository betRepository;
     private final TeamRepository teamRepository;
-    private final UserRepository userRepository;
     private final ESportRestApi eSportRestApi;
+    private final BetService betService;
 
     @Autowired
     public MatchServiceImpl(MatchRepository matchRepository, ESportRestApi eSportRestApi,
-                            BetRepository betRepository, UserRepository userRepository, TeamRepository teamRepository) {
+                            TeamRepository teamRepository, BetService betService) {
         this.matchRepository = matchRepository;
         this.eSportRestApi = eSportRestApi;
-        this.betRepository = betRepository;
-        this.userRepository = userRepository;
         this.teamRepository = teamRepository;
+        this.betService = betService;
     }
 
+    @Override
     public List<Match> findAll() {
         return matchRepository.findAll();
     }
 
+    @Override
     @Scheduled(cron = "1 * * * * ?")
     public void checkAndUpdateMatches() throws IOException, InterruptedException, JSONException {
         List<Match> matchesFromApi = MatchApiParser.parse(eSportRestApi.getAllMatches(GAME_NAME));
@@ -75,29 +78,23 @@ public class MatchServiceImpl implements MatchService {
                                     return api;
                                 })
                                 .collect(Collectors.toList())));
+        matchesToChange.forEach(m -> {
+            if (m.getStatus().equals(MatchStatusEnum.FINISHED)) {
+                betService.withdrawBetMoneyAndExpForMatch(m);
+            }
+        });
         matchRepository.saveAll(matchesToChange);
 
         List<Match> matchesToDelete = new ArrayList<>();
         matchesToChange.stream().filter(m -> m.getStatus().equals(MatchStatusEnum.CANCELED))
                 .collect(Collectors.toList())
                 .forEach(match -> {
-                    returnCoinsIfMatchCanceled(match);
+                    betService.returnCoinsIfMatchCanceled(match);
                     matchesToDelete.add(match);
                 });
         matchRepository.deleteAll(matchesToDelete);
 
-        LOGGER.info("Finished updating " + matchesToChange.size() + " matches");
-    }
-
-    public void returnCoinsIfMatchCanceled(Match match) {
-        betRepository.findAllByMatch(match).forEach(b -> {
-            LOGGER.info("Canceled match - Returning bet coins of user with username: " + b.getUser().getUsername());
-            userRepository.findById(b.getUser().getId())
-                    .orElseThrow(() ->
-                            new ObjectNotFoundException("User with id: " + b.getUser().getId() + " not exists!"))
-                    .addCoins(b.getCoins());
-            LOGGER.info("Returned " + b.getCoins() + " coins to user with username " + b.getUser().getUsername());
-        });
+        logger.info("Finished updating " + matchesToChange.size() + " matches");
     }
 
     public void findNewMatchesAndAndToDB(List<Match> allMatchesFromApi) {
@@ -120,7 +117,7 @@ public class MatchServiceImpl implements MatchService {
         });
         if (newMatches.size() > 0) {
             matchRepository.saveAll(newMatches);
-            LOGGER.info("Added new " + newMatches.size() + " matches");
+            logger.info("Added new " + newMatches.size() + " matches");
         }
     }
 }

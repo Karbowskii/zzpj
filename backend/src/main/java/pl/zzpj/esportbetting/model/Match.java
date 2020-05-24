@@ -79,4 +79,15 @@ public class Match {
     @OneToMany(mappedBy = "match",
             cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
+
+    /*
+        Returns 1 when A wins
+        Returns 0 when A = B
+        Returns -1 when B wins
+     */
+    public int getWhichTeamWon() {
+        if (realScoreA > realScoreB) return 1;
+        else if (realScoreA == realScoreB) return 0;
+        else return -1;
+    }
 }

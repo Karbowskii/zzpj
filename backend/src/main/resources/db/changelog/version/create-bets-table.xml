@@ -17,11 +17,8 @@
             <column name="user_id" type="bigint" >
                 <constraints  nullable="false" />
             </column>
-            <column name="score_A" type="int" >
-                <constraints  nullable="false" />
-            </column>
-            <column name="score_B" type="int" >
-                <constraints  nullable="false" />
+            <column name="selected_A" type="boolean" defaultValueBoolean="true">
+                <constraints  nullable="false"/>
             </column>
             <column name="coins" type="int" >
                 <constraints  nullable="false" />
