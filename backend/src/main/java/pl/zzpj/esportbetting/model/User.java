@@ -125,17 +125,21 @@ public class User {
         }
     }
 
-    public void addExpAfterBet(boolean userWon) {
+    public User addExpAfterBet(boolean userWon, Level nextLevel) {
         if (userWon) {
             setExp(getExp() + EXP_AFTER_WINNING_BET);
         } else {
             setExp(getExp() + EXP_AFTER_LOOSING_BET);
         }
-        checkIfReachedNextLevel();
+        levelUpIfReachedNextLevel(nextLevel);
+        return this;
     }
 
-    public void checkIfReachedNextLevel() {
-        //TODO: implement checking if exp>0 level++, exp set to 0
+    public void levelUpIfReachedNextLevel(Level nextLevel) {
+        if (getExp() >= getLevel().getExpToNextLevel()) {
+            setExp(0);
+            setLevel(nextLevel);
+        }
     }
 }
 

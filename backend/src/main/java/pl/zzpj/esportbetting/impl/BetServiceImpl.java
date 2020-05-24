@@ -3,7 +3,6 @@ package pl.zzpj.esportbetting.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import pl.zzpj.esportbetting.exception.ObjectNotFoundException;
 import pl.zzpj.esportbetting.interfaces.BetService;
@@ -11,6 +10,7 @@ import pl.zzpj.esportbetting.model.Bet;
 import pl.zzpj.esportbetting.model.Match;
 import pl.zzpj.esportbetting.model.User;
 import pl.zzpj.esportbetting.repos.BetRepository;
+import pl.zzpj.esportbetting.repos.LevelRepository;
 import pl.zzpj.esportbetting.repos.UserRepository;
 
 import java.util.List;
@@ -20,12 +20,14 @@ public class BetServiceImpl implements BetService {
 
     private final UserRepository userRepository;
     private final BetRepository betRepository;
+    private final LevelRepository levelRepository;
     private static final Logger logger = LoggerFactory.getLogger(BetServiceImpl.class);
 
     @Autowired
-    public BetServiceImpl(UserRepository userRepository, BetRepository betRepository) {
+    public BetServiceImpl(UserRepository userRepository, BetRepository betRepository, LevelRepository levelRepository) {
         this.userRepository = userRepository;
         this.betRepository = betRepository;
+        this.levelRepository = levelRepository;
     }
 
     @Override
@@ -38,7 +40,8 @@ public class BetServiceImpl implements BetService {
             if (userWon) {
                 user.addCoins(b.getCoins() * userStake);
             }
-            user.addExpAfterBet(userWon);
+           levelRepository.findById(user.getLevel().getId() + 1)
+                   .ifPresent(level -> userRepository.saveAndFlush(user.addExpAfterBet(userWon, level)));
         });
     }
 
