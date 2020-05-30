@@ -20,7 +20,7 @@ public class MatchRestController {
         this.matchService = matchService;
     }
 
-    @GetMapping("")
+    @GetMapping()
     public ResponseEntity<List<Match>> findAll(){
         return ResponseEntity.ok(matchService.findAll());
     }
