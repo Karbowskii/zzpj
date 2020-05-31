@@ -1,5 +1,6 @@
 package pl.zzpj.esportbetting.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -35,10 +36,12 @@ public class Team {
     @OneToMany(mappedBy = "teamA",
             orphanRemoval = true,
             cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Match> matchesA = new ArrayList<>();
 
     @OneToMany(mappedBy = "teamB",
             orphanRemoval = true,
             cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Match> matchesB = new ArrayList<>();
 }
