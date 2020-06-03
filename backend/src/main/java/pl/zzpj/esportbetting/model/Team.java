@@ -33,17 +33,15 @@ public class Team {
     @Column(nullable = false)
     private String url;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "teamA",
             orphanRemoval = true,
-            cascade = CascadeType.ALL,
-            fetch = FetchType.EAGER)
+            cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Match> matchesA = new ArrayList<>();
 
-    @JsonIgnore
     @OneToMany(mappedBy = "teamB",
             orphanRemoval = true,
-            cascade = CascadeType.ALL,
-            fetch = FetchType.EAGER)
+            cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Match> matchesB = new ArrayList<>();
 }
