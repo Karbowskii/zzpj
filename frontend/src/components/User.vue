@@ -20,8 +20,6 @@
                             <p>{{profile.nick}}</p>
                         </div>
                     </div>
-                    <b-button @click="getInfo()">Click me
-                    </b-button>
                 </b-col>
             </b-row>
         </b-container>
@@ -47,16 +45,15 @@
                     }
             }
         },
-        methods: {
-            getInfo: function() {
-                publicUsersService.getUser(this.$route.params.id).then(
-                    response => {
-                        this.profile.nick = response.username;
-                        this.profile.lvl = response.levelId;
-                        this.profile.exp = response.exp;
-                    }
-                )
-            }
+        mounted(){
+            publicUsersService.getUser(this.$route.params.id).then(
+                response => {
+                    this.profile.nick = response.username;
+                    this.profile.lvl = response.level.id;
+                    this.profile.exp = response.exp;
+                    this.profile.expToNextLvl = response.level.expToNextLevel;
+                }
+            )
         }
     }
 </script>
