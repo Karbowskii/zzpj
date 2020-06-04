@@ -20,6 +20,8 @@
                             <p>{{profile.nick}}</p>
                         </div>
                     </div>
+                    <b-button @click="getInfo()">Click me
+                    </b-button>
                 </b-col>
             </b-row>
         </b-container>
@@ -30,7 +32,7 @@
     import PublicUsersService from "../Core/service/PublicUsersService";
     import HttpRequest from "../Core/HttpRequest";
 
-    const publicUsersService = new PublicUsersService(new HttpRequest('zzpj-backend'))
+    const publicUsersService = new PublicUsersService(new HttpRequest('http://localhost:8080'))
     export default {
         name: "User",
         data: function () {
@@ -45,14 +47,16 @@
                     }
             }
         },
-        mounted() {
-            publicUsersService.getUser(this.$route.params.id).then(
-                response => {
-                    this.profile.nick = response.username;
-                    this.profile.lvl = response.levelId;
-                    this.profile.exp = response.exp;
-                }
-            )
+        methods: {
+            getInfo: function() {
+                publicUsersService.getUser(this.$route.params.id).then(
+                    response => {
+                        this.profile.nick = response.username;
+                        this.profile.lvl = response.levelId;
+                        this.profile.exp = response.exp;
+                    }
+                )
+            }
         }
     }
 </script>
