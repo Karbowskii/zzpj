@@ -70,7 +70,10 @@
                 return this.$store.getters.isAuthorized;
             },
             user() {
-                return {nickname: this.$store.state.user, tokensNumber: 21, lvl: 12, expPrc: 20};
+                return {nickname: this.$store.state.user.username,
+                    tokensNumber: this.$store.state.user.coins,
+                    lvl: this.$store.state.user.level.id,
+                    expPrc: this.$store.state.user.exp * 100 / this.$store.state.user.level.expToNextLevel};
             }
         },
     }

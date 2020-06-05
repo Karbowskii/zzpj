@@ -31,10 +31,20 @@
 </template>
 
 <script>
+    import {authorizationService} from "../App";
+
     export default {
         name: "CreateAccount",
         methods: {
             createAccount: function () {
+                if(this.password!==this.confirmPassword){
+                    alert("be");
+                }else {
+                    authorizationService.register(this.login,this.password,this.email, this.firstName, this.lastName)
+                    .then(res => {
+                        alert(JSON.stringify(res));
+                    })
+                }
 
             }
         },

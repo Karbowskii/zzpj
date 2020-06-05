@@ -1,5 +1,6 @@
 package pl.zzpj.esportbetting.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -40,6 +41,7 @@ public class Level {
     @Column(nullable = false)
     private int maxBets;
 
+    @JsonIgnore
     @EqualsAndHashCode.Exclude @ToString.Exclude
     @OneToMany(mappedBy = "level",
             orphanRemoval = true,

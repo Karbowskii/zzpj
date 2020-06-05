@@ -25,7 +25,7 @@
                 </b-col>
             </b-row>
             <b-row align-h="center">
-                <b-col cols=8>
+                <b-col cols=10>
                     <match-history></match-history>
                 </b-col>
             </b-row>
@@ -43,14 +43,14 @@
         computed: {
             profile: function () {
                 return {
-                    nick: this.$store.state.user,
-                    firstName: 'Artur',
-                    lastName: 'Karbonara',
-                    email: 'Arr@gamil.com',
-                    lvl: 12,
-                    exp: 5,
-                    expToNextLvl: 20,
-                    tokens: 21,
+                    nick: this.$store.state.user.username,
+                    firstName: this.$store.state.user.firstName,
+                    lastName: this.$store.state.user.lastName,
+                    email: this.$store.state.user.email,
+                    lvl: this.$store.state.user.level.id,
+                    exp: this.$store.state.user.exp,
+                    expToNextLvl: this.$store.state.user.level.expToNextLevel,
+                    tokens: this.$store.state.user.coins,
                     icon: require('../assets/profileIcon.png'),
                     description: ''
                 }

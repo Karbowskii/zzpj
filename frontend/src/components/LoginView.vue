@@ -26,18 +26,30 @@
 
 <script>
 
+    import {authorizationService} from "../App";
+
     export default {
         name: "LoginView",
         data: function () {
             return {
-                login: null,
-                password: null
+                login: '',
+                password: ''
             }
         },
         methods: {
             logIn() {
-                this.$store.commit('login', {user: this.login, token: '123qwe'});
-                this.$router.push({path: `/`});
+                authorizationService.login(this.login, this.password)
+                    .then((response) => {
+                        if(response.errors){
+                            alert("BLAD LOGOWANIA");
+                            this.login = '';
+                            this.password = '';
+                        } else {
+                            this.$store.commit('login', {user: response.user, token: response.token});
+                            this.$router.push({path: `/`});
+                        }
+                    }
+                )
             }
         }
     }
