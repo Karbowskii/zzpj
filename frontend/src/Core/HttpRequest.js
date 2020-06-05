@@ -22,11 +22,14 @@ export default class HttpRequest{
     }
 
     execute(url, method, data){
+        let headers = new Headers({'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*',
+            'Access-Control-Request-Headers': '*'});
+        if (this.authorizationStorage.isAuthorized()){
+            headers.append('Authorization', 'Bearer ' + this.authorizationStorage.getAuthorization()?.token);
+        }
         return fetch(`${this.baseUrl}/${url}`, {
             method: method,
-            headers: new Headers({'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*',
-                Authorization: 'Bearer ' + this.authorizationStorage.getAuthorization()?.token,
-                'Access-Control-Request-Headers': '*'}),
+            headers: headers,
             cache: 'no-cache',
             body: JSON.stringify(data)
         })
@@ -36,8 +39,8 @@ export default class HttpRequest{
                 }
                 return response.json();
             })
-            .catch(e => {
-                return {errors: [e]}
+            .catch(err => {
+                return {errors: [err]}
             })
     }
 }

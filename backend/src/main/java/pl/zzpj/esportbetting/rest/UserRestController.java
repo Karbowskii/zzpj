@@ -50,14 +50,14 @@ public class UserRestController {
     }
 
     @PostMapping
-    public ResponseEntity<String> createUser(@Valid @RequestBody RegisterRequest registerRequest) {
+    public ResponseEntity<UserResponse> createUser(@Valid @RequestBody RegisterRequest registerRequest) {
 
         registerRequest.setPassword(encoder.encode(registerRequest.getPassword()));
 
         User user = new User(registerRequest);
 
-        userService.register(user);
-        return ResponseEntity.ok("User successfully created");
+        UserResponse userResponse = UserToUserResponseConverter.convert(userService.register(user));
+        return ResponseEntity.ok(userResponse);
     }
 
 }

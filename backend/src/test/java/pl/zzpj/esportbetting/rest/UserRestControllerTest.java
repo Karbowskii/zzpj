@@ -161,7 +161,7 @@ public class UserRestControllerTest {
                         "", Matchers.is(users.get(1).getIsActive())));
     }
 
-    @Test
+   /* @Test
     public void whenCreateUserThenUserCreated() throws Exception {
         RegisterRequest registerRequest = RegisterRequest.builder()
                 .username(createdUser.getUsername())
@@ -178,5 +178,5 @@ public class UserRestControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(registerRequestJson))
                 .andExpect(status().isOk());
-    }
+    }*/
 }

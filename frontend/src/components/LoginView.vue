@@ -4,7 +4,7 @@
             <b-row align-h="center">
                 <b-col cols="5">
                     <div class="login-panel">
-                        <b-form class="text-left" @submit="logIn">
+                        <b-form class="text-left" @submit.prevent="logIn">
                             <label for="login-input">Login:</label>
                             <b-form-input id="login-input" type="text" required v-model="login">
                             </b-form-input>
