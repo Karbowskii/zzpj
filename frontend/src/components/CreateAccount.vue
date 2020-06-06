@@ -37,17 +37,17 @@
         name: "CreateAccount",
         methods: {
             createAccount: function () {
-                if(this.password!==this.confirmPassword){
+                if (this.password !== this.confirmPassword) {
                     alert("be");
-                }else {
-                    authorizationService.register(this.login,this.password,this.email, this.firstName, this.lastName)
-                    .then(res => {
-                        if (res.errors){
-                            alert("BLAD");
-                        }else{
-                            this.$router.push('/login');
-                        }
-                    })
+                } else {
+                    authorizationService.register(this.login, this.password, this.email, this.firstName, this.lastName)
+                        .then(res => {
+                            if (res.errors) {
+                                alert("Register error!");
+                            } else {
+                                this.$router.push('/login');
+                            }
+                        })
                 }
 
             }

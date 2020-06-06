@@ -18,7 +18,6 @@ Vue.use(Vuex);
 Vue.use(cors);
 
 
-
 const router = new VueRouter({routes});
 
 const store = new Vuex.Store({

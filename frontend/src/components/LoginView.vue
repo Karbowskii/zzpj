@@ -40,16 +40,16 @@
             logIn() {
                 authorizationService.login(this.login, this.password)
                     .then((response) => {
-                        if(response.errors){
-                            alert("BLAD LOGOWANIA");
-                            this.login = '';
-                            this.password = '';
-                        } else {
-                            this.$store.commit('login', {user: response.user, token: response.token});
-                            this.$router.push({path: `/`});
+                            if (response.errors) {
+                                alert("Logging error!");
+                                this.login = '';
+                                this.password = '';
+                            } else {
+                                this.$store.commit('login', {user: response.user, token: response.token});
+                                this.$router.push({path: `/`});
+                            }
                         }
-                    }
-                )
+                    )
             }
         }
     }

@@ -43,7 +43,7 @@ public class UserRestControllerTest {
 
     @Mock
     private PasswordEncoder encoder;
-    
+
     @InjectMocks
     public UserRestController userRestController;
 
@@ -84,7 +84,7 @@ public class UserRestControllerTest {
                 .build();
         users = Arrays.asList(user, createdUser);
     }
-    
+
     @Before
     public void setUp() {
         userRestController = new UserRestController(userService, encoder);
@@ -143,7 +143,7 @@ public class UserRestControllerTest {
                         "", Matchers.is(users.get(0).getIsActive())))
 
                 .andExpect(jsonPath("$.[1].id",
-                Matchers.is((Integer.parseInt(Long.toString(users.get(1).getId()))))))
+                        Matchers.is((Integer.parseInt(Long.toString(users.get(1).getId()))))))
                 .andExpect(jsonPath("$.[1].username", Matchers.is(users.get(1).getUsername())))
                 .andExpect(jsonPath("$.[1].email", Matchers.is(users.get(1).getEmail())))
                 .andExpect(jsonPath("$.[1].firstName", Matchers.is(users.get(1).getFirstName())))
@@ -161,7 +161,7 @@ public class UserRestControllerTest {
                         "", Matchers.is(users.get(1).getIsActive())));
     }
 
-   /* @Test
+    @Test
     public void whenCreateUserThenUserCreated() throws Exception {
         RegisterRequest registerRequest = RegisterRequest.builder()
                 .username(createdUser.getUsername())
@@ -178,5 +178,5 @@ public class UserRestControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(registerRequestJson))
                 .andExpect(status().isOk());
-    }*/
+    }
 }
