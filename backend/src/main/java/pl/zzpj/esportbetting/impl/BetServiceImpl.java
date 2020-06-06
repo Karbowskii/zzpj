@@ -58,10 +58,11 @@ public class BetServiceImpl implements BetService {
     public void returnCoinsIfMatchCanceled(Match match) {
         betRepository.findAllByMatch(match).forEach(b -> {
             logger.info("Canceled match - Returning bet coins of user with username: " + b.getUser().getUsername());
-            userRepository.findById(b.getUser().getId())
+            User user = userRepository.findById(b.getUser().getId())
                     .orElseThrow(() ->
-                            new ObjectNotFoundException("User with id: " + b.getUser().getId() + " not exists!"))
-                    .addCoins(b.getCoins());
+                            new ObjectNotFoundException("User with id: " + b.getUser().getId() + " not exists!"));
+            user.addCoins(b.getCoins());
+            userRepository.saveAndFlush(user);
             logger.info("Returned " + b.getCoins() + " coins to user with username " + b.getUser().getUsername());
         });
     }

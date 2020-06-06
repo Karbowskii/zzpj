@@ -52,13 +52,14 @@ public class UserLevelServiceImpl implements UserLevelService {
             levelRepository.findById(user.getLevel().getId() + 1)
                     .ifPresent(user::levelUp);
         }
+        userRepository.saveAndFlush(user);
     }
 
-    public boolean checkIfReachedNextLevel(User user) {
+    private boolean checkIfReachedNextLevel(User user) {
         return user.getExp() >= user.getLevel().getExpToNextLevel();
     }
 
-    public boolean checkIfHappyHourNow() {
+    private boolean checkIfHappyHourNow() {
         LocalTime timeNow = LocalTime.now();
         return timeNow.isAfter(happyHoursFrom) && timeNow.isBefore(happyHoursTo);
     }
