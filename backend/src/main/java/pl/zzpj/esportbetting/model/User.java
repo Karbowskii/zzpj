@@ -2,10 +2,12 @@ package pl.zzpj.esportbetting.model;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicUpdate;
 import pl.zzpj.esportbetting.request.RegisterRequest;
@@ -28,7 +30,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import javax.validation.constraints.Email;
 
 
@@ -40,11 +41,6 @@ import javax.validation.constraints.Email;
 @DynamicUpdate
 @Table(name = "users")
 public class User {
-
-    @Transient
-    private static final int EXP_AFTER_WINNING_BET = 200;
-    @Transient
-    private static final int EXP_AFTER_LOOSING_BET = 50;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -79,7 +75,7 @@ public class User {
     private Boolean isActive;
 
     @ColumnDefault("0")
-    private int exp;
+    @Setter(AccessLevel.NONE) private int exp;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "level_id")
@@ -125,21 +121,23 @@ public class User {
         }
     }
 
-    public User addExpAfterBet(boolean userWon, Level nextLevel) {
-        if (userWon) {
-            setExp(getExp() + EXP_AFTER_WINNING_BET);
-        } else {
-            setExp(getExp() + EXP_AFTER_LOOSING_BET);
-        }
-        levelUpIfReachedNextLevel(nextLevel);
-        return this;
+    public void levelUp(Level nextLevel) {
+        setExp(getExp() - getLevel().getExpToNextLevel());
+        setLevel(nextLevel);
     }
 
-    public void levelUpIfReachedNextLevel(Level nextLevel) {
-        if (getExp() >= getLevel().getExpToNextLevel()) {
+    public void setExp(int newExp) {
+        if (newExp <= 0) {
             setExp(0);
-            setLevel(nextLevel);
+        } else {
+            setExp(newExp);
         }
     }
+    public void addExp(int expToAdd) {
+        if (expToAdd > 0) {
+            setExp(getExp() + expToAdd);
+        }
+    }
+
 }
 

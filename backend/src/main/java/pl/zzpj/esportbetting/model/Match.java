@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicUpdate;
+import pl.zzpj.esportbetting.enumerate.DetailedFinishedStatusEnum;
 import pl.zzpj.esportbetting.enumerate.MatchStatusEnum;
 
 import java.time.LocalDateTime;
@@ -80,14 +81,9 @@ public class Match {
             cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
 
-    /*
-        Returns 1 when A wins
-        Returns 0 when A = B
-        Returns -1 when B wins
-     */
-    public int getWhichTeamWon() {
-        if (realScoreA > realScoreB) return 1;
-        else if (realScoreA == realScoreB) return 0;
-        else return -1;
+    public DetailedFinishedStatusEnum getWhichTeamWon() {
+        if (realScoreA > realScoreB) return DetailedFinishedStatusEnum.A_WIN;
+        else if (realScoreA == realScoreB) return DetailedFinishedStatusEnum.DRAW;
+        else return DetailedFinishedStatusEnum.B_WIN;
     }
 }

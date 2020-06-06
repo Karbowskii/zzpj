@@ -4,13 +4,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pl.zzpj.esportbetting.enumerate.DetailedFinishedStatusEnum;
 import pl.zzpj.esportbetting.exception.ObjectNotFoundException;
 import pl.zzpj.esportbetting.interfaces.BetService;
+import pl.zzpj.esportbetting.interfaces.UserLevelService;
 import pl.zzpj.esportbetting.model.Bet;
 import pl.zzpj.esportbetting.model.Match;
 import pl.zzpj.esportbetting.model.User;
 import pl.zzpj.esportbetting.repos.BetRepository;
-import pl.zzpj.esportbetting.repos.LevelRepository;
 import pl.zzpj.esportbetting.repos.UserRepository;
 
 import java.util.List;
@@ -20,14 +21,15 @@ public class BetServiceImpl implements BetService {
 
     private final UserRepository userRepository;
     private final BetRepository betRepository;
-    private final LevelRepository levelRepository;
     private static final Logger logger = LoggerFactory.getLogger(BetServiceImpl.class);
+    private final UserLevelService userLevelService;
 
     @Autowired
-    public BetServiceImpl(UserRepository userRepository, BetRepository betRepository, LevelRepository levelRepository) {
+    public BetServiceImpl(UserRepository userRepository, BetRepository betRepository,
+                          UserLevelService userLevelService) {
         this.userRepository = userRepository;
         this.betRepository = betRepository;
-        this.levelRepository = levelRepository;
+        this.userLevelService = userLevelService;
     }
 
     @Override
@@ -40,17 +42,16 @@ public class BetServiceImpl implements BetService {
             if (userWon) {
                 user.addCoins(b.getCoins() * userStake);
             }
-           levelRepository.findById(user.getLevel().getId() + 1)
-                   .ifPresent(level -> userRepository.saveAndFlush(user.addExpAfterBet(userWon, level)));
+            userLevelService.addExpAfterBet(user, userWon);
         });
     }
 
     public boolean checkIfUserWon(Bet bet) {
         boolean userSelectedA = bet.isSelectedA();
         Match match = bet.getMatch();
-        return match.getWhichTeamWon() == 1 && userSelectedA    // A won
-            || match.getWhichTeamWon() == 0                     // draw
-            || match.getWhichTeamWon() == -1 && !userSelectedA; // B won
+        return match.getWhichTeamWon() == DetailedFinishedStatusEnum.A_WIN && userSelectedA
+            || match.getWhichTeamWon() == DetailedFinishedStatusEnum.DRAW
+            || match.getWhichTeamWon() == DetailedFinishedStatusEnum.B_WIN && !userSelectedA;
     }
 
     @Override

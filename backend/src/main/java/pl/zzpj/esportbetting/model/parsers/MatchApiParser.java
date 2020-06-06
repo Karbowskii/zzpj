@@ -3,7 +3,6 @@ package pl.zzpj.esportbetting.model.parsers;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import pl.zzpj.esportbetting.enumerate.GameEnum;
 import pl.zzpj.esportbetting.enumerate.MatchStatusEnum;
 import pl.zzpj.esportbetting.model.Match;
 import pl.zzpj.esportbetting.model.Team;

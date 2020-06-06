@@ -9,19 +9,14 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import pl.zzpj.esportbetting.enumerate.GameEnum;
 import pl.zzpj.esportbetting.enumerate.MatchStatusEnum;
-import pl.zzpj.esportbetting.exception.ObjectNotFoundException;
 import pl.zzpj.esportbetting.interfaces.BetService;
 import pl.zzpj.esportbetting.interfaces.ESportRestApi;
-import pl.zzpj.esportbetting.model.Bet;
+import pl.zzpj.esportbetting.interfaces.MatchService;
 import pl.zzpj.esportbetting.model.Match;
 import pl.zzpj.esportbetting.model.Team;
-import pl.zzpj.esportbetting.model.User;
 import pl.zzpj.esportbetting.model.parsers.MatchApiParser;
-import pl.zzpj.esportbetting.repos.BetRepository;
 import pl.zzpj.esportbetting.repos.MatchRepository;
 import pl.zzpj.esportbetting.repos.TeamRepository;
-import pl.zzpj.esportbetting.repos.UserRepository;
-import pl.zzpj.esportbetting.interfaces.MatchService;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -58,7 +53,7 @@ public class MatchServiceImpl implements MatchService {
     @Scheduled(cron = "1 * * * * ?")
     public void checkAndUpdateMatches() throws IOException, InterruptedException, JSONException {
         List<Match> matchesFromApi = MatchApiParser.parse(eSportRestApi.getAllMatches(GAME_NAME));
-        findNewMatchesAndAndToDB(matchesFromApi);
+        addNewMatchesToDB(matchesFromApi);
         updateMatches(matchesFromApi);
     }
 
@@ -97,7 +92,7 @@ public class MatchServiceImpl implements MatchService {
         logger.info("Finished updating " + matchesToChange.size() + " matches");
     }
 
-    public void findNewMatchesAndAndToDB(List<Match> allMatchesFromApi) {
+    public void addNewMatchesToDB(List<Match> allMatchesFromApi) {
         List<Match> newMatches = allMatchesFromApi
                 .stream()
                 .filter(m -> matchRepository.findByRealId(m.getRealId()).isEmpty()
