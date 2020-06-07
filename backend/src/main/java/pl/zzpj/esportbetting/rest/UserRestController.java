@@ -9,7 +9,6 @@ import pl.zzpj.esportbetting.impl.UserToUserResponseConverter;
 import pl.zzpj.esportbetting.interfaces.UserContextService;
 import pl.zzpj.esportbetting.interfaces.UserService;
 import pl.zzpj.esportbetting.model.User;
-import pl.zzpj.esportbetting.repos.UserRepository;
 import pl.zzpj.esportbetting.response.UserResponse;
 import pl.zzpj.esportbetting.request.RegisterRequest;
 
@@ -63,24 +62,31 @@ public class UserRestController {
     public ResponseEntity<User> changeFirstName(@RequestParam String newFirstName) {
         User loggedUser = userContextService.getAuthenticatedUser();
         loggedUser.setFirstName(newFirstName);
-        userService.update(loggedUser);
-        return ResponseEntity.ok(loggedUser);
+        User updatedUser = userService.update(loggedUser);
+        return ResponseEntity.ok(updatedUser);
     }
 
     @PutMapping(path = "/me/lastname", produces = "application/json")
     public ResponseEntity<User> changeLastName(@RequestParam String newLastName) {
         User loggedUser = userContextService.getAuthenticatedUser();
         loggedUser.setLastName(newLastName);
-        userService.update(loggedUser);
-        return ResponseEntity.ok(loggedUser);
+        User updatedUser = userService.update(loggedUser);
+        return ResponseEntity.ok(updatedUser);
     }
 
     @PutMapping(path = "/me/email", produces = "application/json")
     public ResponseEntity<User> changeEmail(@RequestParam String newEmail) {
         User loggedUser = userContextService.getAuthenticatedUser();
         loggedUser.setEmail(newEmail);
-        userService.update(loggedUser);
-        return ResponseEntity.ok(loggedUser);
+        User updatedUser = userService.update(loggedUser);
+        return ResponseEntity.ok(updatedUser);
+    }
+
+    @PutMapping(path = "/me/password", produces = "application/json")
+    public ResponseEntity<User> changePassword(@RequestParam String oldPassword, @RequestParam String newPassword) {
+        User loggedUser = userContextService.getAuthenticatedUser();
+        User updatedUser = userService.changePassword(loggedUser, oldPassword, newPassword, encoder);
+        return ResponseEntity.ok(updatedUser);
     }
 
 }

@@ -67,6 +67,7 @@ public class User {
     @JoinTable(name = "user_authority",
             joinColumns = {@JoinColumn(name = "user_id")},
             inverseJoinColumns = {@JoinColumn(name = "authority_id")})
+    @JsonIgnore
     private Set<Authority> authorities = new HashSet<>();
 
     @ManyToMany(cascade = CascadeType.MERGE,
