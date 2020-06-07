@@ -18,10 +18,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import pl.zzpj.esportbetting.enumerate.AuthorityEnum;
+import pl.zzpj.esportbetting.interfaces.UserContextService;
 import pl.zzpj.esportbetting.interfaces.UserService;
 import pl.zzpj.esportbetting.model.Authority;
 import pl.zzpj.esportbetting.model.Level;
 import pl.zzpj.esportbetting.model.User;
+import pl.zzpj.esportbetting.repos.UserRepository;
 import pl.zzpj.esportbetting.request.RegisterRequest;
 
 import java.util.Arrays;
@@ -43,6 +45,9 @@ public class UserRestControllerTest {
 
     @Mock
     private PasswordEncoder encoder;
+
+    @Mock
+    private UserContextService userContextService;
     
     @InjectMocks
     public UserRestController userRestController;
@@ -87,7 +92,7 @@ public class UserRestControllerTest {
     
     @Before
     public void setUp() {
-        userRestController = new UserRestController(userService, encoder);
+        userRestController = new UserRestController(userService, userContextService, encoder);
         mockMvc = MockMvcBuilders.standaloneSetup(userRestController).build();
     }
 

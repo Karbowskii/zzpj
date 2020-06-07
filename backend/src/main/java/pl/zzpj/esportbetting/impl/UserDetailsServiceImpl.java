@@ -84,7 +84,7 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
 
     @Override
     public User update(User user) {
-        Optional<User> userFound = userRepository.findById(user.getId());
+        Optional<User> userFound = Optional.of(userRepository.getOne(user.getId()));
         if (!userFound.isPresent()) {
             throw new ObjectNotFoundException("Not found user with id: " + user.getId());
         }

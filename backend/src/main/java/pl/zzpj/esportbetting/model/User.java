@@ -82,7 +82,7 @@ public class User {
     @ColumnDefault("0")
     private int exp;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "level_id")
     private Level level;
 
@@ -91,7 +91,8 @@ public class User {
 
     @OneToMany(mappedBy = "user",
             orphanRemoval = true,
-            cascade = CascadeType.ALL)
+            cascade = CascadeType.ALL,
+            fetch = FetchType.EAGER)
     private List<Comment> comments = new ArrayList<>();
 
     public User(RegisterRequest registerRequest) {
