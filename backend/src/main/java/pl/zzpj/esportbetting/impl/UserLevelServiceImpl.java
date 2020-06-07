@@ -1,17 +1,15 @@
 package pl.zzpj.esportbetting.impl;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import pl.zzpj.esportbetting.interfaces.UserLevelService;
 import pl.zzpj.esportbetting.model.User;
 import pl.zzpj.esportbetting.repos.LevelRepository;
 import pl.zzpj.esportbetting.repos.UserRepository;
 import pl.zzpj.esportbetting.strategies.ExpGiverStrategy;
-import pl.zzpj.esportbetting.strategies.HappyHoursStrategy;
 import pl.zzpj.esportbetting.strategies.NormalStrategy;
-
-import java.time.LocalTime;
 
 @Service("userLevelService")
 public class UserLevelServiceImpl implements UserLevelService {
@@ -19,15 +17,10 @@ public class UserLevelServiceImpl implements UserLevelService {
     private static final int EXP_AFTER_WINNING_BET = 200;
     private static final int EXP_AFTER_LOOSING_BET = 50;
 
-    @Value("#{T(java.time.LocalTime).parse('${esportbetting.app.happy-hours.from}')}")
-    private LocalTime happyHoursFrom;
-
-    @Value("#{T(java.time.LocalTime).parse('${esportbetting.app.happy-hours.to}')}")
-    private LocalTime happyHoursTo;
-
     private final LevelRepository levelRepository;
     private final UserRepository userRepository;
-    private ExpGiverStrategy expGiverStrategy;
+    @Setter @Getter
+    private ExpGiverStrategy expGiverStrategy = new NormalStrategy();
 
     @Autowired
     UserLevelServiceImpl(LevelRepository levelRepository, UserRepository userRepository) {
@@ -43,11 +36,7 @@ public class UserLevelServiceImpl implements UserLevelService {
         } else {
             expToAdd = EXP_AFTER_LOOSING_BET;
         }
-        if (checkIfHappyHourNow()) {
-            user.addExp(new HappyHoursStrategy().calcExp(expToAdd));
-        } else {
-            user.addExp(new NormalStrategy().calcExp(expToAdd));
-        }
+        user.addExp(expGiverStrategy.calcExp(expToAdd));
         while (checkIfReachedNextLevel(user)) {
             levelRepository.findById(user.getLevel().getId() + 1)
                     .ifPresent(user::levelUp);
@@ -57,10 +46,5 @@ public class UserLevelServiceImpl implements UserLevelService {
 
     private boolean checkIfReachedNextLevel(User user) {
         return user.getExp() >= user.getLevel().getExpToNextLevel();
-    }
-
-    private boolean checkIfHappyHourNow() {
-        LocalTime timeNow = LocalTime.now();
-        return timeNow.isAfter(happyHoursFrom) && timeNow.isBefore(happyHoursTo);
     }
 }

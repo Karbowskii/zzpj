@@ -3,6 +3,7 @@ package pl.zzpj.esportbetting.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import pl.zzpj.esportbetting.enumerate.DetailedFinishedStatusEnum;
 import pl.zzpj.esportbetting.exception.ObjectNotFoundException;
@@ -13,11 +14,20 @@ import pl.zzpj.esportbetting.model.Match;
 import pl.zzpj.esportbetting.model.User;
 import pl.zzpj.esportbetting.repos.BetRepository;
 import pl.zzpj.esportbetting.repos.UserRepository;
+import pl.zzpj.esportbetting.strategies.HappyHoursStrategy;
+import pl.zzpj.esportbetting.strategies.NormalStrategy;
 
+import java.time.LocalTime;
 import java.util.List;
 
 @Service("betService")
 public class BetServiceImpl implements BetService {
+
+    @Value("#{T(java.time.LocalTime).parse('${esportbetting.app.happy-hours.from}')}")
+    private LocalTime happyHoursFrom;
+
+    @Value("#{T(java.time.LocalTime).parse('${esportbetting.app.happy-hours.to}')}")
+    private LocalTime happyHoursTo;
 
     private final UserRepository userRepository;
     private final BetRepository betRepository;
@@ -42,6 +52,11 @@ public class BetServiceImpl implements BetService {
             if (userWon) {
                 user.addCoins(b.getCoins() * userStake);
             }
+            if (checkIfHappyHourNow()) {
+                userLevelService.setExpGiverStrategy(new HappyHoursStrategy());
+            } else {
+                userLevelService.setExpGiverStrategy(new NormalStrategy());
+            }
             userLevelService.addExpAfterBet(user, userWon);
         });
     }
@@ -52,6 +67,11 @@ public class BetServiceImpl implements BetService {
         return match.getWhichTeamWon() == DetailedFinishedStatusEnum.A_WIN && userSelectedA
             || match.getWhichTeamWon() == DetailedFinishedStatusEnum.DRAW
             || match.getWhichTeamWon() == DetailedFinishedStatusEnum.B_WIN && !userSelectedA;
+    }
+
+    private boolean checkIfHappyHourNow() {
+        LocalTime timeNow = LocalTime.now();
+        return timeNow.isAfter(happyHoursFrom) && timeNow.isBefore(happyHoursTo);
     }
 
     @Override
