@@ -17,7 +17,7 @@ import pl.zzpj.esportbetting.request.CreateBetRequest;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "bet")
+@RequestMapping(path = "bets")
 public class BetRestController {
 
     private final BetService betService;
@@ -43,7 +43,7 @@ public class BetRestController {
         return ResponseEntity.ok(createdBet);
     }
 
-    @GetMapping("/me")
+    @GetMapping
     public ResponseEntity<List<Bet>> getAllBetsForUser() {
         User user = userContextService.getAuthenticatedUser();
         return ResponseEntity.ok(betService.getAllBetsForUser(user));

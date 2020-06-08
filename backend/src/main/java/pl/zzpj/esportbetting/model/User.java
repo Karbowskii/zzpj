@@ -127,11 +127,7 @@ public class User {
     }
 
     public void setExp(int newExp) {
-        if (newExp <= 0) {
-            exp = 0;
-        } else {
-            exp = newExp;
-        }
+        exp = Math.max(newExp, 0);
     }
     public void addExp(int expToAdd) {
         if (expToAdd > 0) {
