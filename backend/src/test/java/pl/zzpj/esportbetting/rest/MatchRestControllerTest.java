@@ -14,9 +14,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import pl.zzpj.esportbetting.enumerate.MatchStatusEnum;
 import pl.zzpj.esportbetting.model.Match;
 import pl.zzpj.esportbetting.model.Team;
-import pl.zzpj.esportbetting.services.MatchService;
+import pl.zzpj.esportbetting.interfaces.MatchService;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -65,8 +66,9 @@ public class MatchRestControllerTest {
         firstMatch = Match.builder()
                 .id(1)
                 .startDate(LocalDateTime.parse("2020-06-02T00:00:00.00"))
+                .endDate(null)
                 .realId(1)
-                .isFinished(false)
+                .status(MatchStatusEnum.RUNNING)
                 .teamA(teamA)
                 .teamB(teamB)
                 .stakeA(2)
@@ -79,8 +81,9 @@ public class MatchRestControllerTest {
         secondMatch = Match.builder()
                 .id(2)
                 .startDate(LocalDateTime.parse("2020-05-15T00:00:00.00"))
+                .endDate(LocalDateTime.parse("2020-05-17T00:00:00.00"))
                 .realId(1)
-                .isFinished(true)
+                .status(MatchStatusEnum.FINISHED)
                 .teamA(teamA)
                 .teamB(teamB)
                 .stakeA(2)
@@ -107,7 +110,7 @@ public class MatchRestControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.[0].id", Matchers.is((int)matches.get(0).getId())))
                 .andExpect(jsonPath("$.[0].realId", Matchers.is(matches.get(0).getRealId())))
-                .andExpect(jsonPath("$.[0].finished", Matchers.is(matches.get(0).isFinished())))
+                .andExpect(jsonPath("$.[0].status", Matchers.is(matches.get(0).getStatus().toString())))
                 .andExpect(jsonPath("$.[0].teamA.id", Matchers.is((int)matches.get(0).getTeamA().getId())))
                 .andExpect(jsonPath("$.[0].teamB.id", Matchers.is((int)matches.get(0).getTeamB().getId())))
                 .andExpect(jsonPath("$.[0].stakeA", Matchers.is(matches.get(0).getStakeA())))
@@ -118,7 +121,7 @@ public class MatchRestControllerTest {
 
                 .andExpect(jsonPath("$.[1].id", Matchers.is((int)matches.get(1).getId())))
                 .andExpect(jsonPath("$.[1].realId", Matchers.is(matches.get(1).getRealId())))
-                .andExpect(jsonPath("$.[1].finished", Matchers.is(matches.get(1).isFinished())))
+                .andExpect(jsonPath("$.[1].status", Matchers.is(matches.get(1).getStatus().toString())))
                 .andExpect(jsonPath("$.[1].teamA.id", Matchers.is((int)matches.get(1).getTeamA().getId())))
                 .andExpect(jsonPath("$.[1].teamB.id", Matchers.is((int)matches.get(1).getTeamB().getId())))
                 .andExpect(jsonPath("$.[1].stakeA", Matchers.is(matches.get(1).getStakeA())))

@@ -1,5 +1,6 @@
 package pl.zzpj.esportbetting.model;
 
+import jdk.jfr.Timestamp;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -7,6 +8,8 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicUpdate;
+import pl.zzpj.esportbetting.enumerate.DetailedFinishedStatusEnum;
+import pl.zzpj.esportbetting.enumerate.MatchStatusEnum;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -41,11 +44,14 @@ public class Match {
     @Column(nullable = false)
     private LocalDateTime startDate = LocalDateTime.now();
 
+    @Timestamp
+    private LocalDateTime endDate;
+
+    @Column(nullable = false)
+    private MatchStatusEnum status = MatchStatusEnum.NOT_STARTED;
+
     @Column(nullable = false, unique = true)
     private int realId;
-
-    @ColumnDefault("false")
-    private boolean isFinished;
 
     @ColumnDefault("0")
     @Column(name = "real_score_A", nullable = false)
@@ -55,11 +61,11 @@ public class Match {
     @Column(name = "real_score_B", nullable = false)
     private int realScoreB;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "team_id_A")
     private Team teamA;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "team_id_B")
     private Team teamB;
 
@@ -72,7 +78,12 @@ public class Match {
     private int stakeB;
 
     @OneToMany(mappedBy = "match",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true)
+            cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
+
+    public DetailedFinishedStatusEnum getWhichTeamWon() {
+        if (realScoreA > realScoreB) return DetailedFinishedStatusEnum.A_WIN;
+        else if (realScoreA == realScoreB) return DetailedFinishedStatusEnum.DRAW;
+        else return DetailedFinishedStatusEnum.B_WIN;
+    }
 }

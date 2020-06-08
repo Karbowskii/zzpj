@@ -2,10 +2,12 @@ package pl.zzpj.esportbetting.model;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicUpdate;
 import pl.zzpj.esportbetting.request.RegisterRequest;
@@ -69,18 +71,11 @@ public class User {
             inverseJoinColumns = {@JoinColumn(name = "authority_id")})
     private Set<Authority> authorities = new HashSet<>();
 
-    @ManyToMany(cascade = CascadeType.MERGE,
-            fetch = FetchType.EAGER)
-    @JoinTable(name = "bets_users",
-            joinColumns = {@JoinColumn(name = "user_id")},
-            inverseJoinColumns = {@JoinColumn(name = "bet_id")})
-    private Set<Bet> bets = new HashSet<>();
-
     @ColumnDefault("true")
     private Boolean isActive;
 
     @ColumnDefault("0")
-    private int exp;
+    @Setter(AccessLevel.NONE) private int exp;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "level_id")
@@ -93,6 +88,11 @@ public class User {
             orphanRemoval = true,
             cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user",
+            orphanRemoval = true,
+            cascade = CascadeType.ALL)
+    private List<Bet> bets = new ArrayList<>();
 
     public User(RegisterRequest registerRequest) {
         this.setUsername(registerRequest.getUsername());
@@ -108,5 +108,36 @@ public class User {
             this.getAuthorities().add(authority);
         }
     }
+
+    public void addCoins(int coinsToAdd) {
+        setCoins(getCoins() + coinsToAdd);
+    }
+
+    public void removeCoins(int coinsToRemove) {
+        if (coinsToRemove > getCoins()) {
+            setCoins(0);
+        } else {
+            setCoins(getCoins() - coinsToRemove);
+        }
+    }
+
+    public void levelUp(Level nextLevel) {
+        setExp(getExp() - getLevel().getExpToNextLevel());
+        setLevel(nextLevel);
+    }
+
+    public void setExp(int newExp) {
+        if (newExp <= 0) {
+            setExp(0);
+        } else {
+            setExp(newExp);
+        }
+    }
+    public void addExp(int expToAdd) {
+        if (expToAdd > 0) {
+            setExp(getExp() + expToAdd);
+        }
+    }
+
 }
 

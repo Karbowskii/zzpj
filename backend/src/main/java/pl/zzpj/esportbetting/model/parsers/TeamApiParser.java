@@ -6,16 +6,13 @@ import pl.zzpj.esportbetting.model.Team;
 
 public class TeamApiParser {
 
-    public Team parse(JSONObject json) throws JSONException {
-        int id = json.getInt("id");
+    public static Team parse(JSONObject json) throws JSONException {
         String name = json.getString("name");
         String image_url = json.getString("image_url");
 
-        Team team = Team.builder()
-                .id(id)
+        return Team.builder()
                 .name(name)
                 .url(image_url)
                 .build();
-        return team;
     }
 }
