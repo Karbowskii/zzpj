@@ -1,5 +1,10 @@
 package pl.zzpj.esportbetting.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.fge.jsonpatch.JsonPatch;
+import com.github.fge.jsonpatch.JsonPatchException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -137,5 +142,13 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
         userFound.get().setPassword(passwordEncoder.encode(newPassword));
 
         return userRepository.saveAndFlush(userFound.get());
+    }
+
+    @Override
+    public User applyPatchToCustomer (JsonPatch patch, User targetCustomer) throws JsonPatchException,
+            JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode patched = patch.apply(objectMapper.convertValue(targetCustomer, JsonNode.class));
+        return objectMapper.treeToValue(patched, User.class);
     }
 }

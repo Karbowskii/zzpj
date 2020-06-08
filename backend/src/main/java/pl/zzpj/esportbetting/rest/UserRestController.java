@@ -1,6 +1,9 @@
 package pl.zzpj.esportbetting.rest;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.github.fge.jsonpatch.JsonPatch;
+import com.github.fge.jsonpatch.JsonPatchException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -9,6 +12,7 @@ import pl.zzpj.esportbetting.impl.UserToUserResponseConverter;
 import pl.zzpj.esportbetting.interfaces.UserContextService;
 import pl.zzpj.esportbetting.interfaces.UserService;
 import pl.zzpj.esportbetting.model.User;
+import pl.zzpj.esportbetting.request.ChangePasswordRequest;
 import pl.zzpj.esportbetting.response.UserResponse;
 import pl.zzpj.esportbetting.request.RegisterRequest;
 
@@ -58,34 +62,20 @@ public class UserRestController {
         return ResponseEntity.ok("User successfully created");
     }
 
-    @PutMapping(path = "/me/firstname", produces = "application/json")
-    public ResponseEntity<User> changeFirstName(@RequestParam String newFirstName) {
+    @PatchMapping(path = "/me/update", consumes = "application/json-patch+json", produces = "application/json")
+    public ResponseEntity<User> updateUser(@RequestBody JsonPatch patch) throws JsonPatchException,
+                                                                                JsonProcessingException {
         User loggedUser = userContextService.getAuthenticatedUser();
-        loggedUser.setFirstName(newFirstName);
-        User updatedUser = userService.update(loggedUser);
-        return ResponseEntity.ok(updatedUser);
-    }
-
-    @PutMapping(path = "/me/lastname", produces = "application/json")
-    public ResponseEntity<User> changeLastName(@RequestParam String newLastName) {
-        User loggedUser = userContextService.getAuthenticatedUser();
-        loggedUser.setLastName(newLastName);
-        User updatedUser = userService.update(loggedUser);
-        return ResponseEntity.ok(updatedUser);
-    }
-
-    @PutMapping(path = "/me/email", produces = "application/json")
-    public ResponseEntity<User> changeEmail(@RequestParam String newEmail) {
-        User loggedUser = userContextService.getAuthenticatedUser();
-        loggedUser.setEmail(newEmail);
-        User updatedUser = userService.update(loggedUser);
+        User updatedUser = userService.applyPatchToCustomer(patch, loggedUser);
+        updatedUser = userService.update(updatedUser);
         return ResponseEntity.ok(updatedUser);
     }
 
     @PutMapping(path = "/me/password", produces = "application/json")
-    public ResponseEntity<User> changePassword(@RequestParam String oldPassword, @RequestParam String newPassword) {
+    public ResponseEntity<User> changePassword(@RequestBody ChangePasswordRequest changePasswordRequest) {
         User loggedUser = userContextService.getAuthenticatedUser();
-        User updatedUser = userService.changePassword(loggedUser, oldPassword, newPassword, encoder);
+        User updatedUser = userService.changePassword(loggedUser, changePasswordRequest.getOldPassword(),
+                                                      changePasswordRequest.getNewPassword(), encoder);
         return ResponseEntity.ok(updatedUser);
     }
 
