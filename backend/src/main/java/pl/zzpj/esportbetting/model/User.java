@@ -128,9 +128,9 @@ public class User {
 
     public void setExp(int newExp) {
         if (newExp <= 0) {
-            setExp(0);
+            exp = 0;
         } else {
-            setExp(newExp);
+            exp = newExp;
         }
     }
     public void addExp(int expToAdd) {
