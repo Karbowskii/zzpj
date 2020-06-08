@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import pl.zzpj.esportbetting.enumerate.DetailedFinishedStatusEnum;
+import pl.zzpj.esportbetting.enumerate.MatchStatusEnum;
+import pl.zzpj.esportbetting.exception.AlreadyTakenException;
+import pl.zzpj.esportbetting.exception.IllegalActionException;
 import pl.zzpj.esportbetting.exception.ObjectNotFoundException;
 import pl.zzpj.esportbetting.interfaces.BetService;
 import pl.zzpj.esportbetting.interfaces.UserLevelService;
@@ -13,6 +16,7 @@ import pl.zzpj.esportbetting.model.Bet;
 import pl.zzpj.esportbetting.model.Match;
 import pl.zzpj.esportbetting.model.User;
 import pl.zzpj.esportbetting.repos.BetRepository;
+import pl.zzpj.esportbetting.repos.MatchRepository;
 import pl.zzpj.esportbetting.repos.UserRepository;
 import pl.zzpj.esportbetting.strategies.HappyHoursStrategy;
 import pl.zzpj.esportbetting.strategies.NormalStrategy;
@@ -33,13 +37,14 @@ public class BetServiceImpl implements BetService {
     private final BetRepository betRepository;
     private static final Logger logger = LoggerFactory.getLogger(BetServiceImpl.class);
     private final UserLevelService userLevelService;
+    private final MatchRepository matchRepository;
 
     @Autowired
-    public BetServiceImpl(UserRepository userRepository, BetRepository betRepository,
-                          UserLevelService userLevelService) {
+    public BetServiceImpl(UserRepository userRepository, BetRepository betRepository, UserLevelService userLevelService, MatchRepository matchRepository) {
         this.userRepository = userRepository;
         this.betRepository = betRepository;
         this.userLevelService = userLevelService;
+        this.matchRepository = matchRepository;
     }
 
     @Override
@@ -47,10 +52,10 @@ public class BetServiceImpl implements BetService {
         List<Bet> bets = betRepository.findAllByMatch(match);
         bets.forEach(b -> {
             User user = b.getUser();
-            int userStake = b.isSelectedA() ? match.getStakeA() : match.getStakeB();
+            float userStake = b.isSelectedA() ? match.getStakeA() : match.getStakeB();
             boolean userWon = checkIfUserWon(b);
             if (userWon) {
-                user.addCoins(b.getCoins() * userStake);
+                user.addCoins((int) (b.getCoins() * userStake));
             }
             if (checkIfHappyHourNow()) {
                 userLevelService.setExpGiverStrategy(new HappyHoursStrategy());
@@ -85,5 +90,52 @@ public class BetServiceImpl implements BetService {
             userRepository.saveAndFlush(user);
             logger.info("Returned " + b.getCoins() + " coins to user with username " + b.getUser().getUsername());
         });
+    }
+
+    @Override
+    public Bet createBetForUser(User userFromContext, Bet bet) {
+        User fullUser = getFullUser(userFromContext);
+        Match match = matchRepository.findById(bet.getMatch().getId())
+                .orElseThrow(() -> new ObjectNotFoundException("Not found match with id: " + bet.getMatch().getId()));
+        if (match.getStatus().equals(MatchStatusEnum.FINISHED)) {
+            throw new IllegalActionException("Cannot create bet for finished match!!!");
+        }
+        List<Bet> allUserBets = betRepository.findAllByUser(fullUser);
+        if (allUserBets.stream().anyMatch(b -> b.getMatch().getId() == bet.getMatch().getId())) {
+            throw new AlreadyTakenException("User can only have one bet per match!!!");
+        }
+        if (countUserRunningMatches(allUserBets) >= fullUser.getLevel().getMaxBets()) {
+            throw new IllegalActionException("User reached maximum number of active bets!!!");
+        }
+        if (bet.getCoins() > fullUser.getCoins()) {
+            throw new IllegalActionException("Not enough coins to make bet!!!");
+        }
+        Bet betToSave = Bet.builder()
+                .user(fullUser)
+                .match(match)
+                .coins(bet.getCoins())
+                .selectedA(bet.isSelectedA())
+                .build();
+        fullUser.removeCoins(betToSave.getCoins());
+        userRepository.saveAndFlush(fullUser);
+        return betRepository.saveAndFlush(betToSave);
+    }
+
+    private User getFullUser(User user) {
+        return userRepository.findByUsername(user.getUsername())
+                    .orElseThrow(() -> new ObjectNotFoundException("Not found user with username: "
+                            + user.getUsername()));
+    }
+
+    private long countUserRunningMatches(List<Bet> allUserBets) {
+        return allUserBets.stream()
+                .filter(b -> !b.getMatch().getStatus().equals(MatchStatusEnum.FINISHED))
+                .count();
+    }
+
+    @Override
+    public List<Bet> getAllBetsForUser(User user) {
+        User fullUser = getFullUser(user);
+        return betRepository.findAllByUser(fullUser);
     }
 }

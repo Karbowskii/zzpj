@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 @Service("matchService")
@@ -66,11 +67,10 @@ public class MatchServiceImpl implements MatchService {
                                 .stream()
                                 .filter(api -> api.getRealId() == match.getRealId()
                                         && !api.getStatus().equals(match.getStatus()))
-                                .map(api -> {
+                                .peek(api -> {
                                     api.setId(match.getId());
                                     api.setTeamA(match.getTeamA());
                                     api.setTeamB(match.getTeamB());
-                                    return api;
                                 })
                                 .collect(Collectors.toList())));
         matchesToChange.forEach(m -> {
@@ -109,10 +109,18 @@ public class MatchServiceImpl implements MatchService {
             }
             teamRepository.findByName(m.getTeamA().getName()).ifPresent(m::setTeamA);
             teamRepository.findByName(m.getTeamB().getName()).ifPresent(m::setTeamB);
+            setMatchStakesToRandom(m);
         });
         if (newMatches.size() > 0) {
             matchRepository.saveAll(newMatches);
             logger.info("Added new " + newMatches.size() + " matches");
         }
+    }
+
+    private void setMatchStakesToRandom(Match match) {
+        float randomNum = new Random().nextFloat()
+                * (Match.getMAX_STAKE() - Match.getMIN_STAKE()) + Match.getMIN_STAKE();
+        match.setStakeA(randomNum);
+        match.setStakeB(Match.getMAX_STAKE() - randomNum + Match.getMIN_STAKE());
     }
 }

@@ -18,12 +18,12 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping(path = "/auth")
-public class AuthController {
+public class AuthRestController {
 
     private final AuthenticationService authenticationService;
 
     @Autowired
-    public AuthController(AuthenticationService authenticationService) {
+    public AuthRestController(AuthenticationService authenticationService) {
         this.authenticationService = authenticationService;
     }
 

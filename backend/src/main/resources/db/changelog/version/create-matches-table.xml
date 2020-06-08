@@ -35,10 +35,10 @@
             <column name="team_id_B" type="bigint" >
                 <constraints  nullable="false" />
             </column>
-            <column name="stake_A" type="int" defaultValue="1" >
+            <column name="stake_A" type="float" defaultValue="1" >
                 <constraints  nullable="false" />
             </column>
-            <column name="stake_B" type="int" defaultValue="1" >
+            <column name="stake_B" type="float" defaultValue="1" >
                 <constraints  nullable="false" />
             </column>
         </createTable>

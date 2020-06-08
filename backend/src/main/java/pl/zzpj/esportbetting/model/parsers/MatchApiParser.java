@@ -30,7 +30,6 @@ public class MatchApiParser {
         int id = json.getInt("id");
         int scoreA = 0;
         int scoreB = 0;
-        boolean isFinished;
         LocalDateTime startTime = null;
         LocalDateTime endTime = null;
         MatchStatusEnum status;

@@ -40,7 +40,7 @@ public class AuthRestControllerTest {
     private AuthenticationService authenticationService;
 
     @InjectMocks
-    private AuthController authController;
+    private AuthRestController authController;
 
 
     private static User activeUser;
@@ -78,7 +78,7 @@ public class AuthRestControllerTest {
 
     @Before
     public void setUp() {
-        authController = new AuthController(authenticationService);
+        authController = new AuthRestController(authenticationService);
         mockMvc = MockMvcBuilders.standaloneSetup(authController).build();
         objectMapper = new ObjectMapper();
     }
