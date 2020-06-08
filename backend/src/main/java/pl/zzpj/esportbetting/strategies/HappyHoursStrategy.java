@@ -6,7 +6,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class HappyHoursStrategy implements ExpGiverStrategy{
 
     private static final int RANDOM_MIN = 2;
-    private static final int RANDOM_MAX = 4;
+    private static final int RANDOM_MAX = 3;
 
     @Override
     public int calcExp(int normalExp) {

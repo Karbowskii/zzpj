@@ -2,6 +2,8 @@ package pl.zzpj.esportbetting.impl;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.zzpj.esportbetting.interfaces.UserLevelService;
@@ -17,6 +19,7 @@ public class UserLevelServiceImpl implements UserLevelService {
     private static final int EXP_AFTER_WINNING_BET = 200;
     private static final int EXP_AFTER_LOOSING_BET = 50;
 
+    private static final Logger logger = LoggerFactory.getLogger(UserLevelServiceImpl.class);
     private final LevelRepository levelRepository;
     private final UserRepository userRepository;
     @Setter @Getter
@@ -36,10 +39,15 @@ public class UserLevelServiceImpl implements UserLevelService {
         } else {
             expToAdd = EXP_AFTER_LOOSING_BET;
         }
-        user.addExp(expGiverStrategy.calcExp(expToAdd));
+        int expAfterStrategy = expGiverStrategy.calcExp(expToAdd);
+        user.addExp(expAfterStrategy);
+        logger.info("Withdraw " + expAfterStrategy + " exp for user " + user.getUsername());
         while (checkIfReachedNextLevel(user)) {
             levelRepository.findById(user.getLevel().getId() + 1)
-                    .ifPresent(user::levelUp);
+                    .ifPresent((level) -> {
+                        user.levelUp(level);
+                        logger.info("Level up user " + user.getUsername() + " to level " + level.getId());
+                    });
         }
         userRepository.saveAndFlush(user);
     }

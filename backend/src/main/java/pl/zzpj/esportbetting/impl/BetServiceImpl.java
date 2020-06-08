@@ -55,7 +55,9 @@ public class BetServiceImpl implements BetService {
             float userStake = b.isSelectedA() ? match.getStakeA() : match.getStakeB();
             boolean userWon = checkIfUserWon(b);
             if (userWon) {
-                user.addCoins((int) (b.getCoins() * userStake));
+                int coinsToAdd = (int) (b.getCoins() * userStake);
+                user.addCoins(coinsToAdd);
+                logger.info("Withdraw " + coinsToAdd + " coins for user " + user.getUsername());
             }
             if (checkIfHappyHourNow()) {
                 userLevelService.setExpGiverStrategy(new HappyHoursStrategy());
