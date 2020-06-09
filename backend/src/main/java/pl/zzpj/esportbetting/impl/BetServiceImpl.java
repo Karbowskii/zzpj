@@ -10,6 +10,7 @@ import pl.zzpj.esportbetting.enumerate.MatchStatusEnum;
 import pl.zzpj.esportbetting.exception.AlreadyTakenException;
 import pl.zzpj.esportbetting.exception.IllegalActionException;
 import pl.zzpj.esportbetting.exception.ObjectNotFoundException;
+import pl.zzpj.esportbetting.exception.ValidationException;
 import pl.zzpj.esportbetting.interfaces.BetService;
 import pl.zzpj.esportbetting.interfaces.UserLevelService;
 import pl.zzpj.esportbetting.model.Bet;
@@ -55,7 +56,7 @@ public class BetServiceImpl implements BetService {
             float userStake = b.isSelectedA() ? match.getStakeA() : match.getStakeB();
             boolean userWon = checkIfUserWon(b);
             if (userWon) {
-                int coinsToAdd = (int) (b.getCoins() * userStake);
+                int coinsToAdd = Math.round(b.getCoins() * userStake);
                 user.addCoins(coinsToAdd);
                 logger.info("Withdraw " + coinsToAdd + " coins for user " + user.getUsername());
             }
@@ -99,8 +100,12 @@ public class BetServiceImpl implements BetService {
         User fullUser = getFullUser(userFromContext);
         Match match = matchRepository.findById(bet.getMatch().getId())
                 .orElseThrow(() -> new ObjectNotFoundException("Not found match with id: " + bet.getMatch().getId()));
-        if (match.getStatus().equals(MatchStatusEnum.FINISHED)) {
-            throw new IllegalActionException("Cannot create bet for finished match!!!");
+        if (!match.getStatus().equals(MatchStatusEnum.NOT_STARTED)
+                && !match.getStatus().equals(MatchStatusEnum.POSTPONED)){
+            throw new IllegalActionException("Cannot create bet for " + match.getStatus().toString() + " match!!!");
+        }
+        if (bet.getCoins() <= 0) {
+            throw new ValidationException("Bet coins must be greater than zero!!!");
         }
         List<Bet> allUserBets = betRepository.findAllByUser(fullUser);
         if (allUserBets.stream().anyMatch(b -> b.getMatch().getId() == bet.getMatch().getId())) {
