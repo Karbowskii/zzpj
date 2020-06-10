@@ -12,7 +12,7 @@
                 <constraints primaryKey="true" nullable="false" />
             </column>
             <column name="start_date" type="timestamp" >
-                <constraints  nullable="false" />
+                <constraints nullable="true" />
             </column>
             <column name="end_date" type="timestamp" >
                 <constraints nullable="true" />

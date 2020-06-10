@@ -1,13 +1,11 @@
 package pl.zzpj.esportbetting.model;
 
-import jdk.jfr.Timestamp;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicUpdate;
 import pl.zzpj.esportbetting.enumerate.DetailedFinishedStatusEnum;
 import pl.zzpj.esportbetting.enumerate.MatchStatusEnum;
@@ -50,11 +48,8 @@ public class Match {
     @Column(name = "id", updatable = false, nullable = false)
     private long id;
 
-    @CreationTimestamp
-    @Column(nullable = false)
-    private LocalDateTime startDate = LocalDateTime.now();
+    private LocalDateTime startDate;
 
-    @Timestamp
     private LocalDateTime endDate;
 
     @Column(nullable = false)
