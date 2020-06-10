@@ -1,6 +1,7 @@
 package pl.zzpj.esportbetting.interfaces;
 
 import org.springframework.security.core.Authentication;
+import pl.zzpj.esportbetting.model.Statistics;
 import pl.zzpj.esportbetting.model.User;
 
 import java.util.List;
@@ -20,4 +21,6 @@ public interface UserService {
     Boolean existsByEmail(String email);
 
     User getUser(Authentication principal);
+
+    Statistics getUserStats(User user);
 }

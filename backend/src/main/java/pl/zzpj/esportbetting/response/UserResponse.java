@@ -3,6 +3,7 @@ package pl.zzpj.esportbetting.response;
 import lombok.Builder;
 import lombok.Data;
 import pl.zzpj.esportbetting.enumerate.AuthorityEnum;
+import pl.zzpj.esportbetting.model.Statistics;
 
 import java.util.List;
 
@@ -19,4 +20,5 @@ public class UserResponse {
     private int coins;
     private List<AuthorityEnum> authorities;
     private boolean isActive;
+    private Statistics statistics;
 }
