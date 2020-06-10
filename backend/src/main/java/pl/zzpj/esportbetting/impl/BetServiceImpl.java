@@ -98,8 +98,7 @@ public class BetServiceImpl implements BetService {
     @Override
     public Bet createBetForUser(User userFromContext, Bet bet) {
         User fullUser = getFullUser(userFromContext);
-        Match match = matchRepository.findById(bet.getMatch().getId())
-                .orElseThrow(() -> new ObjectNotFoundException("Not found match with id: " + bet.getMatch().getId()));
+        Match match = bet.getMatch();
         if (!match.getStatus().equals(MatchStatusEnum.NOT_STARTED)
                 && !match.getStatus().equals(MatchStatusEnum.POSTPONED)){
             throw new IllegalActionException("Cannot create bet for " + match.getStatus().toString() + " match!!!");

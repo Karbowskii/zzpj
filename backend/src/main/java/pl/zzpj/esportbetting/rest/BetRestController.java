@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pl.zzpj.esportbetting.interfaces.BetService;
+import pl.zzpj.esportbetting.interfaces.MatchService;
 import pl.zzpj.esportbetting.interfaces.UserContextService;
 import pl.zzpj.esportbetting.model.Bet;
 import pl.zzpj.esportbetting.model.Match;
@@ -21,21 +22,22 @@ import java.util.List;
 public class BetRestController {
 
     private final BetService betService;
+    private final MatchService matchService;
     private final UserContextService userContextService;
 
     @Autowired
-    public BetRestController(BetService betService, UserContextService userContextService) {
+    public BetRestController(BetService betService, MatchService matchService, UserContextService userContextService) {
         this.betService = betService;
+        this.matchService = matchService;
         this.userContextService = userContextService;
     }
 
     @PostMapping
     public ResponseEntity<Bet> makeBet(@RequestBody CreateBetRequest createBetRequest) {
         User user = userContextService.getAuthenticatedUser();
+        Match match = matchService.findById(createBetRequest.getMatchId());
         Bet bet = Bet.builder()
-                .match(Match.builder()
-                        .id(createBetRequest.getMatchId())
-                        .build())
+                .match(match)
                 .selectedA(createBetRequest.isSelectedA())
                 .coins(createBetRequest.getCoins())
                 .build();

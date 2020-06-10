@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class CreateBetRequest {
-    private int matchId;
+    private long matchId;
     private boolean selectedA;
     private int coins;
 }

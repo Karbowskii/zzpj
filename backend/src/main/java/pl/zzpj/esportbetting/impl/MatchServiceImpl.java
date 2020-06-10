@@ -9,6 +9,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import pl.zzpj.esportbetting.enumerate.GameEnum;
 import pl.zzpj.esportbetting.enumerate.MatchStatusEnum;
+import pl.zzpj.esportbetting.exception.ObjectNotFoundException;
 import pl.zzpj.esportbetting.interfaces.BetService;
 import pl.zzpj.esportbetting.interfaces.ESportRestApi;
 import pl.zzpj.esportbetting.interfaces.MatchService;
@@ -122,5 +123,11 @@ public class MatchServiceImpl implements MatchService {
                 * (Match.getMAX_STAKE() - Match.getMIN_STAKE()) + Match.getMIN_STAKE();
         match.setStakeA(randomNum);
         match.setStakeB(Match.getMAX_STAKE() - randomNum + Match.getMIN_STAKE());
+    }
+
+    @Override
+    public Match findById(long matchId) {
+        return matchRepository.findById(matchId)
+                .orElseThrow(() -> new ObjectNotFoundException("Not found match with id: " + matchId));
     }
 }
