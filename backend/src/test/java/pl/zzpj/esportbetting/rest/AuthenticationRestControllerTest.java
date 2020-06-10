@@ -34,13 +34,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(MockitoExtension.class)
 @RunWith(MockitoJUnitRunner.class)
-public class AuthRestControllerTest {
+public class AuthenticationRestControllerTest {
 
     @Mock
     private AuthenticationService authenticationService;
 
     @InjectMocks
-    private AuthController authController;
+    private AuthenticationRestController authController;
 
 
     private static User activeUser;
@@ -78,7 +78,7 @@ public class AuthRestControllerTest {
 
     @Before
     public void setUp() {
-        authController = new AuthController(authenticationService);
+        authController = new AuthenticationRestController(authenticationService);
         mockMvc = MockMvcBuilders.standaloneSetup(authController).build();
         objectMapper = new ObjectMapper();
     }

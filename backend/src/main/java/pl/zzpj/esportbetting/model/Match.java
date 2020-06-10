@@ -1,12 +1,11 @@
 package pl.zzpj.esportbetting.model;
 
-import jdk.jfr.Timestamp;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicUpdate;
 import pl.zzpj.esportbetting.enumerate.DetailedFinishedStatusEnum;
 import pl.zzpj.esportbetting.enumerate.MatchStatusEnum;
@@ -25,6 +24,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Data
 @Entity
@@ -35,16 +35,21 @@ import javax.persistence.Table;
 @Table(name = "matches")
 public class Match {
 
+    @Getter
+    @Transient
+    private static final float MIN_STAKE = 1.1f;
+
+    @Getter
+    @Transient
+    private static final float MAX_STAKE = 4.9f;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", updatable = false, nullable = false)
     private long id;
 
-    @CreationTimestamp
-    @Column(nullable = false)
-    private LocalDateTime startDate = LocalDateTime.now();
+    private LocalDateTime startDate;
 
-    @Timestamp
     private LocalDateTime endDate;
 
     @Column(nullable = false)
@@ -69,13 +74,13 @@ public class Match {
     @JoinColumn(name = "team_id_B")
     private Team teamB;
 
-    @ColumnDefault("1")
     @Column(name = "stake_A", nullable = false)
-    private int stakeA;
+    @Builder.Default
+    private float stakeA = MIN_STAKE;
 
-    @ColumnDefault("1")
     @Column(name = "stake_B", nullable = false)
-    private int stakeB;
+    @Builder.Default
+    private float stakeB = MIN_STAKE;
 
     @OneToMany(mappedBy = "match",
             cascade = CascadeType.ALL)

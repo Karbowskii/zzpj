@@ -10,4 +10,6 @@ public interface MatchService {
     List<Match> findAll();
 
     void checkAndUpdateMatches() throws IOException, InterruptedException, JSONException;
+
+    Match findById(long matchId);
 }
