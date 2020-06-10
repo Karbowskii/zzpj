@@ -143,6 +143,7 @@ public class BetServiceImpl implements BetService {
     public List<Bet> getAllBetsForUser(User user) {
         User fullUser = getFullUser(user);
         return betRepository.findAllByUser(fullUser);
+    }
 
     public List<Bet> findAllByUserId(long userId) {
         return this.betRepository.findAllByUserId(userId);

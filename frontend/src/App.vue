@@ -13,7 +13,7 @@
     import BetService from "./Core/service/BetService";
 
     export const authorizationStorage = new AuthorizationStorage();
-    export const httpRequest = new HttpRequest("http://localhost:8080", authorizationStorage);
+    export const httpRequest = new HttpRequest(process.env.VUE_APP_URL, authorizationStorage);
     export const authorizationService = new AuthorizationService(httpRequest);
     export const betService = new BetService(httpRequest);
 
