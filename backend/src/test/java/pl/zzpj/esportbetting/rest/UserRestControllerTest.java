@@ -63,7 +63,7 @@ public class UserRestControllerTest {
                 .email("email@email")
                 .firstName("Jan")
                 .lastName("Kowalski")
-                .level(Level.builder().id(1).build())
+                .level(Level.builder().id(1).expToNextLevel(10).maxBets(1).build())
                 .exp(1)
                 .coins(100)
                 .isActive(true)
@@ -76,7 +76,7 @@ public class UserRestControllerTest {
                 .email("email2@email")
                 .firstName("Tomek")
                 .lastName("Jankowksi")
-                .level(Level.builder().id(1).build())
+                .level(Level.builder().id(1).expToNextLevel(10).maxBets(1).build())
                 .exp(1)
                 .coins(100)
                 .isActive(true)
@@ -106,6 +106,8 @@ public class UserRestControllerTest {
                 .andExpect(jsonPath("$.lastName", Matchers.is(user.getLastName())))
                 .andExpect(jsonPath("$.level.id",
                         Matchers.is(Integer.parseInt(Long.toString(user.getLevel().getId())))))
+                .andExpect(jsonPath("$.level.maxBets", Matchers.is((user.getLevel().getMaxBets()))))
+                .andExpect(jsonPath("$.level.expToNextLevel", Matchers.is((user.getLevel().getExpToNextLevel()))))
                 .andExpect(jsonPath("$.exp", Matchers.is(user.getExp())))
                 .andExpect(jsonPath("$.coins", Matchers.is(user.getCoins())))
                 .andExpect(jsonPath("$.authorities.[0]",
@@ -132,6 +134,8 @@ public class UserRestControllerTest {
                 .andExpect(jsonPath("$.[0].lastName", Matchers.is(users.get(0).getLastName())))
                 .andExpect(jsonPath("$.[0].level.id",
                         Matchers.is(Integer.parseInt(Long.toString(users.get(0).getLevel().getId())))))
+                .andExpect(jsonPath("$.[0].level.maxBets", Matchers.is((user.getLevel().getMaxBets()))))
+                .andExpect(jsonPath("$.[0].level.expToNextLevel", Matchers.is((user.getLevel().getExpToNextLevel()))))
                 .andExpect(jsonPath("$.[0].exp", Matchers.is(users.get(0).getExp())))
                 .andExpect(jsonPath("$.[0].coins", Matchers.is(users.get(0).getCoins())))
                 .andExpect(jsonPath("$.[0].authorities.[0]",
