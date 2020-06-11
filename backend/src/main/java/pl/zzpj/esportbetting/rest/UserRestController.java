@@ -62,7 +62,7 @@ public class UserRestController {
         return ResponseEntity.ok("\"User successfully created!\"");
     }
 
-    @PatchMapping(path = "/me/update", consumes = "application/json-patch+json", produces = "application/json")
+    @PatchMapping(path = "/me", consumes = "application/json-patch+json", produces = "application/json")
     public ResponseEntity<User> updateUser(@RequestBody JsonPatch patch) throws JsonPatchException,
                                                                                 JsonProcessingException {
         User loggedUser = userContextService.getAuthenticatedUser();
