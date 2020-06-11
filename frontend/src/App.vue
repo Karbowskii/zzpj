@@ -11,11 +11,13 @@
     import AuthorizationService from "./Core/service/AuthorizationService";
     import HttpRequest from "./Core/HttpRequest";
     import BetService from "./Core/service/BetService";
+    import UsersRankingService from "./Core/service/UsersRankingService";
 
     export const authorizationStorage = new AuthorizationStorage();
     export const httpRequest = new HttpRequest(process.env.VUE_APP_URL, authorizationStorage);
     export const authorizationService = new AuthorizationService(httpRequest);
     export const betService = new BetService(httpRequest);
+    export const usersRankingService = new UsersRankingService(httpRequest);
 
 
     export default {

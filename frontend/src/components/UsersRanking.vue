@@ -6,20 +6,20 @@
                 <b-col cols="9">
                     <div class="users">
                         <ul>
-                            <li v-for="(user, index) in users"
+                            <li v-for="(user, place) in users"
                                 v-bind:key="user.id"
-                                v-bind:not-last="isNotLast(index)"
-                                v-bind:first="isFirst(index)"
+                                v-bind:not-last="isNotLast(place)"
+                                v-bind:first="isFirst(place)"
                                 v-on:click="showPlayer(user.id)">
                                 <b-row>
                                     <b-col>
-                                        <b-avatar :src="user.icon"></b-avatar>
+                                        <b-avatar :src="icon"></b-avatar>
                                     </b-col>
                                     <b-col>
-                                        <a>{{user.nick}}</a>
+                                        <a>{{user.user.username}}</a>
                                     </b-col>
                                     <b-col>
-                                        <a>{{user.level}} level</a>
+                                        <a>{{user.user.level.id}} level</a>
                                     </b-col>
                                 </b-row>
                             </li>
@@ -37,29 +37,20 @@
 </template>
 
 <script>
+    import {usersRankingService} from "../App";
+
     export default {
         name: "UsersRanking",
         data: function () {
             return {
-                users: [{
-                    id: 1,
-                    nick: 'Arturito',
-                    level: 2,
-                    icon: require('../assets/profileIcon.png')
-                },
-                    {
-                        id: 2,
-                        nick: 'Michacy',
-                        level: 3,
-                        icon: require('../assets/profileIcon.png')
-                    },
-                    {
-                        id: 3,
-                        nick: 'Maciek12',
-                        level: 1,
-                        icon: require('../assets/appLogo.png')
-                    }]
+                users: [],
+                icon: require('../assets/profileIcon.png')
             }
+        },
+        mounted() {
+            usersRankingService.getRanking().then(response => {
+                this.users = response
+            })
         },
         methods: {
             isNotLast: function (index) {
