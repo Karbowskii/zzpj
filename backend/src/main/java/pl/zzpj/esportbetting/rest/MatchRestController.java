@@ -5,8 +5,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import pl.zzpj.esportbetting.interfaces.MatchService;
 import pl.zzpj.esportbetting.model.Match;
-import pl.zzpj.esportbetting.services.MatchService;
 
 import java.util.List;
 

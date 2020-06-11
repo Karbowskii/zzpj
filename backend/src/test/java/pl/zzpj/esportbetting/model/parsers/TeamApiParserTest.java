@@ -5,8 +5,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
+import pl.zzpj.esportbetting.enumerate.GameEnum;
 import pl.zzpj.esportbetting.model.Team;
 import pl.zzpj.esportbetting.mock.MockedPandaScoreConnector;
+
+import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -15,9 +18,9 @@ public class TeamApiParserTest {
     JSONArray jsonTeams;
 
     @Before
-    public void setUp() {
+    public void setUp() throws IOException, InterruptedException {
         parser = new TeamApiParser();
-        jsonTeams = new MockedPandaScoreConnector().getAllTeams();
+        jsonTeams = new MockedPandaScoreConnector().getAllTeams(GameEnum.DOTA2);
     }
 
     @Test
@@ -30,12 +33,10 @@ public class TeamApiParserTest {
 
         // test
         Team expectedTeam = Team.builder()
-                .id(127397)
                 .name("OverPower Esports")
                 .url("https://cdn.pandascore.co/images/team/image/127397/123px_over_power_esportslogo_square.png")
                 .build();
 
-        assertEquals(expectedTeam.getId(), team.getId());
         assertEquals(expectedTeam.getName(), team.getName());
         assertEquals(expectedTeam.getUrl(), team.getUrl());
     }

@@ -1,6 +1,9 @@
 package pl.zzpj.esportbetting.pandascore;
 
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+import pl.zzpj.esportbetting.enumerate.GameEnum;
 import pl.zzpj.esportbetting.interfaces.ESportRestApi;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -11,84 +14,55 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
+@Component("eSportRestApi")
 public class PandaScoreRestApiConnector implements ESportRestApi {
-    
-    enum Game {
-        LEAGUE_OF_LEGENDS {
-            public String toString() {
-                return "lol";
-            }
-        },
-        CS_GO {
-            public String toString() {
-                return "csgo";
-            }
-        },
-        DOTA2 {
-            public String toString() {
-                return "dota2";
-            }
-        },
-        OVERWATCH {
-            public String toString() {
-                return "ow";
-            }
-        },
 
-    }
+    @Value("${esportbetting.pandascore.token}")
+    private String token;
+    private final String baseUrl = "https://api.pandascore.co/";
+    private final HttpClient httpClient = HttpClient.newBuilder().build();
 
-    private final String token;
-    private final String baseUrl;
-    private final String url;
-    private final HttpClient httpClient;
-
-    public PandaScoreRestApiConnector(Game game, String token) {
-        this.baseUrl = "https://api.pandascore.co/";
-        this.url = this.baseUrl + game;
-        this.token = token;
-        this.httpClient = HttpClient.newBuilder().build();
-    }
 
     @Override
-    public JSONArray getAllLeagues() throws IOException, InterruptedException {
-        HttpRequest request = this.createRequest("/tournaments");
+    public JSONArray getAllLeagues(GameEnum game) throws IOException, InterruptedException {
+        HttpRequest request = this.createRequest(game, "/tournaments");
         return this.processRequest(request);
     }
 
     @Override
-    public JSONArray getAllSeries() throws IOException, InterruptedException {
-        HttpRequest request = this.createRequest("/series");
+    public JSONArray getAllSeries(GameEnum game) throws IOException, InterruptedException {
+        HttpRequest request = this.createRequest(game, "/series");
         return this.processRequest(request);
     }
 
     @Override
-    public JSONArray getAllTournaments() throws IOException, InterruptedException {
-        HttpRequest request = this.createRequest("/tournaments");
+    public JSONArray getAllTournaments(GameEnum game) throws IOException, InterruptedException {
+        HttpRequest request = this.createRequest(game, "/tournaments");
         return this.processRequest(request);
     }
 
     @Override
-    public JSONArray getAllMatches() throws IOException, InterruptedException {
-        HttpRequest request = this.createRequest("/matches");
+    public JSONArray getAllMatches(GameEnum game) throws IOException, InterruptedException {
+        HttpRequest request = this.createRequest(game, "/matches");
         return this.processRequest(request);
     }
 
     @Override
-    public JSONArray getAllTeams() throws IOException, InterruptedException {
-        HttpRequest request = this.createRequest("/teams");
+    public JSONArray getAllTeams(GameEnum game) throws IOException, InterruptedException {
+        HttpRequest request = this.createRequest(game, "/teams");
         return this.processRequest(request);
     }
 
     @Override
-    public JSONArray getAllPlayers() throws IOException, InterruptedException {
-        HttpRequest request = this.createRequest("/players");
+    public JSONArray getAllPlayers(GameEnum game) throws IOException, InterruptedException {
+        HttpRequest request = this.createRequest(game, "/players");
         return this.processRequest(request);
     }
 
-    private HttpRequest createRequest(String option) {
+    private HttpRequest createRequest(GameEnum game, String option) {
         HttpRequest request = HttpRequest.newBuilder()
                                 .GET()
-                                .uri(URI.create(this.url + option + "?token=" + this.token))
+                                .uri(URI.create(this.baseUrl + game.toString() + option + "?token=" + this.token))
                                 .build();
         return request;
     }

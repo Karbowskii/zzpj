@@ -14,11 +14,11 @@
             <column name="match_id" type="bigint" >
                 <constraints  nullable="false" />
             </column>
-            <column name="score_A" type="int" >
+            <column name="user_id" type="bigint" >
                 <constraints  nullable="false" />
             </column>
-            <column name="score_B" type="int" >
-                <constraints  nullable="false" />
+            <column name="selected_A" type="boolean" defaultValueBoolean="true">
+                <constraints  nullable="false"/>
             </column>
             <column name="coins" type="int" >
                 <constraints  nullable="false" />
@@ -29,6 +29,12 @@
                                  baseTableName="bets"
                                  baseColumnNames="match_id"
                                  referencedTableName="matches"
+                                 referencedColumnNames="id" />
+
+        <addForeignKeyConstraint constraintName="fk_user_7"
+                                 baseTableName="bets"
+                                 baseColumnNames="user_id"
+                                 referencedTableName="users"
                                  referencedColumnNames="id" />
     </changeSet>
 

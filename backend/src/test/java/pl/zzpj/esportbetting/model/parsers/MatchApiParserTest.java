@@ -5,6 +5,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
+import pl.zzpj.esportbetting.enumerate.GameEnum;
+import pl.zzpj.esportbetting.enumerate.MatchStatusEnum;
 import pl.zzpj.esportbetting.interfaces.ESportRestApi;
 import pl.zzpj.esportbetting.model.Match;
 import pl.zzpj.esportbetting.mock.MockedPandaScoreConnector;
@@ -25,7 +27,7 @@ public class MatchApiParserTest {
         parser = new MatchApiParser();
         ESportRestApi connector = new MockedPandaScoreConnector();
         try {
-            jsonArray = connector.getAllMatches();
+            jsonArray = connector.getAllMatches(GameEnum.DOTA2);
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
@@ -45,7 +47,8 @@ public class MatchApiParserTest {
                 .realId(560452)
                 .realScoreA(0)
                 .realScoreB(0)
-                .isFinished(false)
+                .endDate(null)
+                .status(MatchStatusEnum.RUNNING)
                 .startDate(LocalDateTime.ofInstant(Instant.parse("2020-05-11T19:00:00Z"), ZoneId.systemDefault()))
                 .build();
 
@@ -55,7 +58,7 @@ public class MatchApiParserTest {
         assertNotNull(match.getTeamA());
         assertNotNull(match.getTeamA());
         assertEquals(expectedMatch.getStartDate(), match.getStartDate());
-        assertFalse(match.isFinished());
+        assertTrue(match.getStatus().equals(MatchStatusEnum.RUNNING));
 
     }
 
@@ -73,8 +76,9 @@ public class MatchApiParserTest {
                 .realId(34512)
                 .realScoreA(0)
                 .realScoreB(0)
-                .isFinished(false)
+                .status(MatchStatusEnum.CANCELED)
                 .startDate(null)
+                .endDate(null)
                 .build();
 
         assertEquals(expectedMatch.getRealId(), match.getRealId());
@@ -83,7 +87,7 @@ public class MatchApiParserTest {
         assertNotNull(match.getTeamA());
         assertNotNull(match.getTeamA());
         assertNull(match.getStartDate());
-        assertFalse(match.isFinished());
+        assertTrue(match.getStatus().equals(MatchStatusEnum.CANCELED));
     }
 
     @Test
@@ -100,7 +104,7 @@ public class MatchApiParserTest {
                 .realId(65474)
                 .realScoreA(0)
                 .realScoreB(1)
-                .isFinished(true)
+                .status(MatchStatusEnum.FINISHED)
                 .startDate(LocalDateTime.ofInstant(Instant.parse("2020-05-11T19:00:00Z"),
                         ZoneId.systemDefault()))
                 .build();
@@ -111,7 +115,7 @@ public class MatchApiParserTest {
         assertNotNull(match.getTeamA());
         assertNotNull(match.getTeamA());
         assertEquals(expectedMatch.getStartDate(), match.getStartDate());
-        assertTrue(match.isFinished());
+        assertTrue(match.getStatus().equals(MatchStatusEnum.FINISHED));
     }
 
     @Test(expected = JSONException.class)

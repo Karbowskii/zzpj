@@ -14,7 +14,6 @@
     <include file="db/changelog/version/create-matches-table.xml"/>
     <include file="db/changelog/version/create-comments-table.xml"/>
     <include file="db/changelog/version/create-bets-table.xml"/>
-    <include file="db/changelog/version/create-bets-users-table.xml"/>
 
     <include file="db/changelog/version/insert-data-authority.xml"/>
     <include file="db/changelog/version/insert-data-level.xml"/>
