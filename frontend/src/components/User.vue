@@ -27,10 +27,8 @@
 </template>
 
 <script>
-    import PublicUsersService from "../Core/service/PublicUsersService";
-    import HttpRequest from "../Core/HttpRequest";
+    import {publicUsersService} from "../App";
 
-    const publicUsersService = new PublicUsersService(new HttpRequest('http://localhost:8080'))
     export default {
         name: "User",
         data: function () {

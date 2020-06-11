@@ -8,8 +8,12 @@
 <script>
     import NavigationPanel from "./components/NavigationPanel";
     import AuthorizationStorage from "./Core/AuthorizationStorage";
+    import HttpRequest from "./Core/HttpRequest";
+    import PublicUsersService from "./Core/service/PublicUsersService";
 
     export const authorizationStorage = new AuthorizationStorage();
+    export const httpRequest = new HttpRequest(process.env.VUE_APP_URL, authorizationStorage);
+    export const publicUsersService = new PublicUsersService(httpRequest);
 
 
     export default {
