@@ -12,12 +12,14 @@
     import HttpRequest from "./Core/HttpRequest";
     import BetService from "./Core/service/BetService";
     import UsersRankingService from "./Core/service/UsersRankingService";
+    import MatchService from "./Core/service/MatchService";
 
     export const authorizationStorage = new AuthorizationStorage();
     export const httpRequest = new HttpRequest(process.env.VUE_APP_URL, authorizationStorage);
     export const authorizationService = new AuthorizationService(httpRequest);
     export const betService = new BetService(httpRequest);
     export const usersRankingService = new UsersRankingService(httpRequest);
+    export const matchService = new MatchService(httpRequest);
 
 
     export default {
@@ -36,7 +38,6 @@
     #app {
         font-family: Avenir, Helvetica, Arial, sans-serif;
         text-align: center;
-        height: 100%;
     }
 
     html, body {
