@@ -15,4 +15,7 @@ public interface BetService {
     Bet createBetForUser(User user, Bet bet);
 
     List<Bet> getAllBetsForUser(User user);
+
+    List<Bet> findAllByUserId(long userId);
+
 }

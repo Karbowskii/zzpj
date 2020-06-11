@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 import pl.zzpj.esportbetting.enumerate.AuthorityEnum;
 import pl.zzpj.esportbetting.model.Statistics;
+import pl.zzpj.esportbetting.model.Level;
 
 import java.util.List;
 
@@ -15,7 +16,7 @@ public class UserResponse {
     private String email;
     private String firstName;
     private String lastName;
-    private long levelId;
+    private Level level;
     private int exp;
     private int coins;
     private List<AuthorityEnum> authorities;

@@ -7,6 +7,7 @@ import {BootstrapVue, IconsPlugin} from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import {authorizationStorage} from "./App";
+import cors from 'cors';
 
 Vue.config.productionTip = false;
 
@@ -14,6 +15,8 @@ Vue.use(VueRouter);
 Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
 Vue.use(Vuex);
+Vue.use(cors);
+
 
 const router = new VueRouter({routes});
 

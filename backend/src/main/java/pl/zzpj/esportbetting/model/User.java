@@ -69,6 +69,7 @@ public class User {
     @JoinTable(name = "user_authority",
             joinColumns = {@JoinColumn(name = "user_id")},
             inverseJoinColumns = {@JoinColumn(name = "authority_id")})
+    @JsonIgnore
     private Set<Authority> authorities = new HashSet<>();
 
     @ColumnDefault("true")
@@ -77,7 +78,7 @@ public class User {
     @ColumnDefault("0")
     @Setter(AccessLevel.NONE) private int exp;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "level_id")
     private Level level;
 
@@ -86,7 +87,8 @@ public class User {
 
     @OneToMany(mappedBy = "user",
             orphanRemoval = true,
-            cascade = CascadeType.ALL)
+            cascade = CascadeType.ALL,
+            fetch = FetchType.EAGER)
     private List<Comment> comments = new ArrayList<>();
 
     @OneToMany(mappedBy = "user",

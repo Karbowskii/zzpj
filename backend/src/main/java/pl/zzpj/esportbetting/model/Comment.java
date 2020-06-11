@@ -1,5 +1,6 @@
 package pl.zzpj.esportbetting.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -39,6 +40,7 @@ public class Comment {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private User user;
 
     @ManyToOne(cascade = CascadeType.ALL)

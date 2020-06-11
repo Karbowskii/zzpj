@@ -1,5 +1,6 @@
 package pl.zzpj.esportbetting.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,12 +13,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Data
 @Entity
@@ -43,6 +39,8 @@ public class Level {
     @EqualsAndHashCode.Exclude @ToString.Exclude
     @OneToMany(mappedBy = "level",
             orphanRemoval = true,
-            cascade = CascadeType.ALL)
+            cascade = CascadeType.ALL,
+            fetch = FetchType.EAGER)
+    @JsonIgnore
     private Set<User> users = new HashSet<>();
 }

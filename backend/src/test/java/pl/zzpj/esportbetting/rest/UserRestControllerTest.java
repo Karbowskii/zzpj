@@ -23,6 +23,7 @@ import pl.zzpj.esportbetting.interfaces.UserService;
 import pl.zzpj.esportbetting.model.Authority;
 import pl.zzpj.esportbetting.model.Level;
 import pl.zzpj.esportbetting.model.User;
+import pl.zzpj.esportbetting.repos.UserRepository;
 import pl.zzpj.esportbetting.request.RegisterRequest;
 
 import java.util.Arrays;
@@ -88,10 +89,10 @@ public class UserRestControllerTest {
                 .build();
         users = Arrays.asList(user, createdUser);
     }
-    
+
     @Before
     public void setUp() {
-        userRestController = new UserRestController(userService, encoder, userContextService);
+        userRestController = new UserRestController(userService, userContextService, encoder);
         mockMvc = MockMvcBuilders.standaloneSetup(userRestController).build();
     }
 
@@ -108,7 +109,7 @@ public class UserRestControllerTest {
                 .andExpect(jsonPath("$.email", Matchers.is(user.getEmail())))
                 .andExpect(jsonPath("$.firstName", Matchers.is(user.getFirstName())))
                 .andExpect(jsonPath("$.lastName", Matchers.is(user.getLastName())))
-                .andExpect(jsonPath("$.levelId",
+                .andExpect(jsonPath("$.level.id",
                         Matchers.is(Integer.parseInt(Long.toString(user.getLevel().getId())))))
                 .andExpect(jsonPath("$.exp", Matchers.is(user.getExp())))
                 .andExpect(jsonPath("$.coins", Matchers.is(user.getCoins())))
@@ -134,7 +135,7 @@ public class UserRestControllerTest {
                 .andExpect(jsonPath("$.[0].email", Matchers.is(users.get(0).getEmail())))
                 .andExpect(jsonPath("$.[0].firstName", Matchers.is(users.get(0).getFirstName())))
                 .andExpect(jsonPath("$.[0].lastName", Matchers.is(users.get(0).getLastName())))
-                .andExpect(jsonPath("$.[0].levelId",
+                .andExpect(jsonPath("$.[0].level.id",
                         Matchers.is(Integer.parseInt(Long.toString(users.get(0).getLevel().getId())))))
                 .andExpect(jsonPath("$.[0].exp", Matchers.is(users.get(0).getExp())))
                 .andExpect(jsonPath("$.[0].coins", Matchers.is(users.get(0).getCoins())))
@@ -147,12 +148,12 @@ public class UserRestControllerTest {
                         "", Matchers.is(users.get(0).getIsActive())))
 
                 .andExpect(jsonPath("$.[1].id",
-                Matchers.is((Integer.parseInt(Long.toString(users.get(1).getId()))))))
+                        Matchers.is((Integer.parseInt(Long.toString(users.get(1).getId()))))))
                 .andExpect(jsonPath("$.[1].username", Matchers.is(users.get(1).getUsername())))
                 .andExpect(jsonPath("$.[1].email", Matchers.is(users.get(1).getEmail())))
                 .andExpect(jsonPath("$.[1].firstName", Matchers.is(users.get(1).getFirstName())))
                 .andExpect(jsonPath("$.[1].lastName", Matchers.is(users.get(1).getLastName())))
-                .andExpect(jsonPath("$.[1].levelId",
+                .andExpect(jsonPath("$.[1].level.id",
                         Matchers.is(Integer.parseInt(Long.toString(users.get(1).getLevel().getId())))))
                 .andExpect(jsonPath("$.[1].exp", Matchers.is(users.get(1).getExp())))
                 .andExpect(jsonPath("$.[1].coins", Matchers.is(users.get(1).getCoins())))

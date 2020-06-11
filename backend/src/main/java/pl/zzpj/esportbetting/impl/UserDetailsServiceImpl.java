@@ -1,7 +1,13 @@
 package pl.zzpj.esportbetting.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.fge.jsonpatch.JsonPatch;
+import com.github.fge.jsonpatch.JsonPatchException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.zzpj.esportbetting.enumerate.AuthorityEnum;
 import pl.zzpj.esportbetting.enumerate.DetailedFinishedStatusEnum;
@@ -9,6 +15,7 @@ import pl.zzpj.esportbetting.enumerate.MatchStatusEnum;
 import pl.zzpj.esportbetting.exception.AlreadyTakenException;
 import pl.zzpj.esportbetting.exception.IllegalActionException;
 import pl.zzpj.esportbetting.exception.ObjectNotFoundException;
+import pl.zzpj.esportbetting.exception.ValidationException;
 import pl.zzpj.esportbetting.interfaces.UserService;
 import pl.zzpj.esportbetting.model.*;
 import pl.zzpj.esportbetting.repos.AuthorityRepository;
@@ -85,7 +92,7 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
 
     @Override
     public User update(User user) {
-        Optional<User> userFound = userRepository.findById(user.getId());
+        Optional<User> userFound = Optional.of(userRepository.getOne(user.getId()));
         if (!userFound.isPresent()) {
             throw new ObjectNotFoundException("Not found user with id: " + user.getId());
         }
@@ -125,15 +132,15 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
     @Override
     public Statistics getUserStats(User user) {
         List<Bet> userFinishedBets = user.getBets().stream()
-                                            .filter(b -> b.getMatch().getStatus() == MatchStatusEnum.FINISHED)
-                                            .collect(Collectors.toList());
+                .filter(b -> b.getMatch().getStatus() == MatchStatusEnum.FINISHED)
+                .collect(Collectors.toList());
 
         int goodBets = 0;
         int badBets = 0;
         int earnedCoins = 0;
         int lostCoins = 0;
 
-        for (Bet bet: userFinishedBets) {
+        for (Bet bet : userFinishedBets) {
             DetailedFinishedStatusEnum winnerTeam = bet.getMatch().getWhichTeamWon();
             if ((winnerTeam.equals(DetailedFinishedStatusEnum.A_WIN) && bet.isSelectedA()) ||
                     (winnerTeam.equals(DetailedFinishedStatusEnum.B_WIN) && !bet.isSelectedA())) {
@@ -147,5 +154,29 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
             }
         }
         return new Statistics(goodBets, badBets, earnedCoins, lostCoins);
+    }
+
+    @Override
+    public User changePassword(User user, String oldPassword, String newPassword, PasswordEncoder passwordEncoder) {
+        Optional<User> userFound = Optional.of(userRepository.getOne(user.getId()));
+        if (!userFound.isPresent()) {
+            throw new ObjectNotFoundException("Not found user with id: " + user.getId());
+        }
+
+        if (!passwordEncoder.matches(oldPassword, userFound.get().getPassword())) {
+            throw new ValidationException("Incorrect old password");
+        }
+
+        userFound.get().setPassword(passwordEncoder.encode(newPassword));
+
+        return userRepository.saveAndFlush(userFound.get());
+    }
+
+    @Override
+    public User applyPatchToCustomer (JsonPatch patch, User targetCustomer) throws JsonPatchException,
+            JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode patched = patch.apply(objectMapper.convertValue(targetCustomer, JsonNode.class));
+        return objectMapper.treeToValue(patched, User.class);
     }
 }
