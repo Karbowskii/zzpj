@@ -3,7 +3,7 @@
         <b-navbar>
             <b-navbar-brand>
                 <b-link :to="{path:'/'}">
-                    <b-img :src="require('../assets/appLogo.png')" width="43" height="54"></b-img>
+                    <b-img :src="require('../assets/peepoHappy.png')" height="50"></b-img>
                 </b-link>
             </b-navbar-brand>
             <b-navbar-nav class="navigationRouter">
@@ -22,12 +22,13 @@
 
 
             <b-navbar-nav class="ml-auto tokens" v-if="isLogged===true">
+                <b-img :src="require('../assets/pepeCoin.png')" height="40"></b-img>
                 <a>{{user.tokensNumber}}</a>
             </b-navbar-nav>
             <b-navbar-nav class="ml-auto account" v-if="isLogged===true" right>
                 <b-nav-item>
                     <b-link :to="{path:'/Profile'}" class="profile">
-                        <b-img :src="require('../assets/profileIcon.png')" width="50" height="50"></b-img>
+                        <b-img :src="user.icon" width="50" height="50"></b-img>
                     </b-link>
                 </b-nav-item>
                 <a class="lvl">{{user.lvl}}</a>
@@ -74,7 +75,8 @@
                     nickname: this.$store.state.user.username,
                     tokensNumber: this.$store.state.user.coins,
                     lvl: this.$store.state.user.level.id,
-                    expPrc: this.$store.state.user.exp * 100 / this.$store.state.user.level.expToNextLevel
+                    expPrc: this.$store.state.user.exp * 100 / this.$store.state.user.level.expToNextLevel,
+                    icon: this.$store.state.user.icon
                 };
             }
         },
@@ -133,8 +135,14 @@
         margin-top: 5px;
     }
 
+    .tokens img {
+        border-radius: 50%;
+        margin-top: 13px;
+        margin-right: 10px;
+    }
+
     .logout {
-        margin-left: 0 !important;
+        margin-left: 20px !important;
     }
 
     .account {

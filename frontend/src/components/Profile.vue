@@ -51,8 +51,7 @@
                     exp: this.$store.state.user.exp,
                     expToNextLvl: this.$store.state.user.level.expToNextLevel,
                     tokens: this.$store.state.user.coins,
-                    icon: require('../assets/profileIcon.png'),
-                    description: ''
+                    icon: this.$store.state.user.icon,
                 }
             }
         }
@@ -121,6 +120,11 @@
 
     .progress .progress-bar {
         background: #b600b9 !important;
+    }
+
+    img {
+        border-radius: 30%;
+        padding: 5px;
     }
 
 </style>

@@ -11,11 +11,13 @@
     import AuthorizationService from "./Core/service/AuthorizationService";
     import HttpRequest from "./Core/HttpRequest";
     import BetService from "./Core/service/BetService";
+    import MatchService from "./Core/service/MatchService";
 
     export const authorizationStorage = new AuthorizationStorage();
     export const httpRequest = new HttpRequest(process.env.VUE_APP_URL, authorizationStorage);
     export const authorizationService = new AuthorizationService(httpRequest);
     export const betService = new BetService(httpRequest);
+    export const matchService = new MatchService(httpRequest);
 
 
     export default {
@@ -34,7 +36,6 @@
     #app {
         font-family: Avenir, Helvetica, Arial, sans-serif;
         text-align: center;
-        height: 100%;
     }
 
     html, body {
