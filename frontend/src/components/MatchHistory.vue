@@ -1,117 +1,74 @@
 <template>
-    <div class="matchHistory">
-        <a class="history">HISTORY</a>
-        <ul>
-            <li v-for="(bet, index) in bets"
-                v-bind:key="index"
-                v-bind:not-last="isNotLast(index)">
-                <b-row>
-                    <b-col cols="2" class="bet-result">
-                        <a v-if="bet.team===1">
-                            <a v-if="bet.result===true" class="win">+{{bet.value*bet.stake-bet.value}}</a>
-                            <a v-else-if="bet.result===false" class="lose">-{{bet.value}}</a>
-                            <a v-else>{{bet.value}}</a>
-                        </a>
-                    </b-col>
-                    <b-col class="leftTeam">
-                        {{bet.match.team1Name}}
-                        <b-avatar v-bind:src="bet.match.team1Logo"/>
-                    </b-col>
-                    <b-col class="res" cols="1">
-                        <a>{{bet.match.result}}</a>
-                    </b-col>
-                    <b-col class="rightTeam">
-                        <b-avatar v-bind:src="bet.match.team2Logo"/>
-                        {{bet.match.team2Name}}
-                    </b-col>
-                    <b-col cols="2" class="bet-result">
-                        <a v-if="bet.team===2">
-                            <a v-if="bet.result===true" class="win">+{{bet.value*bet.stake-bet.value}}</a>
-                            <a v-else-if="bet.result===false" class="lose">-{{bet.value}}</a>
-                            <a v-else>{{bet.value}}</a>
-                        </a>
-                    </b-col>
-                </b-row>
-            </li>
-        </ul>
+    <div>
+        <div v-if="isLoaded" class="matchHistory">
+            <a class="history">HISTORY</a>
+            <ul>
+                <li v-for="(bet, index) in bets"
+                    v-bind:key="bet.id"
+                    v-bind:not-last="isNotLast(index)">
+                    <b-row>
+                        <b-col cols="2" class="bet-result">
+                            <a v-if="bet.selectedA">
+                                <a v-if="bet.match.whichTeamWon===1" class="win">+{{bet.coins * bet.match.stakeA -
+                                    bet.coins}}</a>
+                                <a v-else-if="bet.match.whichTeamWon===2" class="lose">-{{bet.coins}}</a>
+                                <a v-else>{{bet.coins}}</a>
+                            </a>
+                        </b-col>
+                        <b-col class="leftTeam">
+                            {{bet.match.teamA.name}}
+                            <b-avatar v-bind:src="bet.match.teamA.url"/>
+                        </b-col>
+                        <b-col class="res" cols="1">
+                            <a>{{bet.match.realScoreA}} - {{bet.match.realScoreB}}</a>
+                        </b-col>
+                        <b-col class="rightTeam">
+                            <b-avatar v-bind:src="bet.match.teamB.url"/>
+                            {{bet.match.teamB.name}}
+                        </b-col>
+                        <b-col cols="2" class="bet-result">
+                            <a v-if="!bet.selectedA">
+                                <a v-if="bet.match.whichTeamWon===2" class="win">+{{bet.coins * bet.match.stakeB -
+                                    bet.coins}}</a>
+                                <a v-else-if="bet.match.whichTeamWon===1" class="lose">-{{bet.coins}}</a>
+                                <a v-else>{{bet.value}}</a>
+                            </a>
+                        </b-col>
+                    </b-row>
+                </li>
+            </ul>
+        </div>
+        <div v-else>
+            <h1>LOADING</h1>
+        </div>
     </div>
 </template>
 
 <script>
+    import {betService} from "../App";
+
+    const _ = require('lodash');
+
     export default {
         name: "MatchHistory",
         data: function () {
             return {
-                bets: [{
-                    match: {
-                        id: '1',
-                        result: "3:0",
-                        team1Name: "G2",
-                        team1Logo: "https://cybersport.pl/wp-content/uploads/2019/01/g2_logo2019.png",
-                        team2Name: "Fnatic",
-                        team2Logo: "https://gamepedia.cursecdn.com/lolesports_gamepedia_en/thumb/f/fc/Fnaticlogo_square.png/1200px-Fnaticlogo_square.png",
-                        date: new Date("2020-04-19"),
-                        status: "finished"
-                    },
-                    value: 30,
-                    stake: 2.25,
-                    team: 1,
-                    result: true
-                },
-                    {
-                        match: {
-                            id: '1',
-                            result: "3:0",
-                            team1Name: "G2",
-                            team1Logo: "https://cybersport.pl/wp-content/uploads/2019/01/g2_logo2019.png",
-                            team2Name: "Fnatic",
-                            team2Logo: "https://gamepedia.cursecdn.com/lolesports_gamepedia_en/thumb/f/fc/Fnaticlogo_square.png/1200px-Fnaticlogo_square.png",
-                            date: new Date("2020-04-19"),
-                            status: "finished"
-                        },
-                        value: 30,
-                        stake: 2.25,
-                        team: 2,
-                        result: false
-                    },
-                    {
-                        match: {
-                            id: '1',
-                            result: "0:0",
-                            team1Name: "G2",
-                            team1Logo: "https://cybersport.pl/wp-content/uploads/2019/01/g2_logo2019.png",
-                            team2Name: "Fnatic",
-                            team2Logo: "https://gamepedia.cursecdn.com/lolesports_gamepedia_en/thumb/f/fc/Fnaticlogo_square.png/1200px-Fnaticlogo_square.png",
-                            date: new Date("2020-04-19"),
-                            status: "not started"
-                        },
-                        value: 200,
-                        stake: 2.25,
-                        team: 1,
-                        result: null
-                    },
-                    {
-                        match: {
-                            id: '1',
-                            result: "0:2",
-                            team1Name: "G2",
-                            team1Logo: "https://cybersport.pl/wp-content/uploads/2019/01/g2_logo2019.png",
-                            team2Name: "Fnatic",
-                            team2Logo: "https://gamepedia.cursecdn.com/lolesports_gamepedia_en/thumb/f/fc/Fnaticlogo_square.png/1200px-Fnaticlogo_square.png",
-                            date: new Date("2020-04-19"),
-                            status: "finished"
-                        },
-                        value: 300,
-                        stake: 2.25,
-                        team: 2,
-                        result: true
-                    }]
+                bets: [],
+                isLoaded: false
             }
         },
         methods: {
             isNotLast: function (index) {
                 return !(index + 1 === this.bets.length) ? 1 : 0;
             }
+        },
+        created() {
+            betService.getBetsForUser(this.$store.state.user.id).then(data => {
+                this.bets = _.sortBy(data, function (o) {
+                    return [o.match.startDate.year, o.match.startDate.dayOfYear]
+                }, ['desc']);
+                this.isLoaded = true;
+            })
         }
     }
 </script>

@@ -8,16 +8,23 @@
 <script>
     import NavigationPanel from "./components/NavigationPanel";
     import AuthorizationStorage from "./Core/AuthorizationStorage";
+    import AuthorizationService from "./Core/service/AuthorizationService";
+    import HttpRequest from "./Core/HttpRequest";
+    import BetService from "./Core/service/BetService";
 
     export const authorizationStorage = new AuthorizationStorage();
+    export const httpRequest = new HttpRequest(process.env.VUE_APP_URL, authorizationStorage);
+    export const authorizationService = new AuthorizationService(httpRequest);
+    export const betService = new BetService(httpRequest);
 
 
     export default {
         name: 'App',
         components: {NavigationPanel},
-        mounted() {
+        created() {
             if (authorizationStorage.isAuthorized()) {
-                this.$store.commit('login', authorizationStorage.getAuthorization())
+                this.$store.state.user = authorizationStorage.getAuthorization().user;
+                this.$store.state.token = authorizationStorage.getAuthorization().token;
             }
         }
     }

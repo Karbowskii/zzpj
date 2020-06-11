@@ -57,7 +57,7 @@ public class UserRestController {
         User user = new User(registerRequest);
 
         userService.register(user);
-        return ResponseEntity.ok("User successfully created");
+        return ResponseEntity.ok("\"User successfully created!\"");
     }
 
 }

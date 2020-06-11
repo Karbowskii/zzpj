@@ -14,7 +14,7 @@ public class UserToUserResponseConverter {
                 .email(user.getEmail())
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
-                .levelId(user.getLevel().getId())
+                .level(user.getLevel())
                 .exp(user.getExp())
                 .coins(user.getCoins())
                 .authorities(user.getAuthorities()
