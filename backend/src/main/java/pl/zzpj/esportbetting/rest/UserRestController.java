@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import pl.zzpj.esportbetting.impl.UserToUserResponseConverter;
 import pl.zzpj.esportbetting.interfaces.UserContextService;
 import pl.zzpj.esportbetting.interfaces.UserService;
+import pl.zzpj.esportbetting.model.Statistics;
 import pl.zzpj.esportbetting.model.User;
 import pl.zzpj.esportbetting.request.ChangePasswordRequest;
 import pl.zzpj.esportbetting.response.UserResponse;
@@ -26,8 +27,8 @@ import javax.validation.Valid;
 public class UserRestController {
 
     private final UserService userService;
-    private final UserContextService userContextService;
     private final PasswordEncoder encoder;
+    private final UserContextService userContextService;
 
     @Autowired
     public UserRestController(UserService userService, UserContextService userContextService, PasswordEncoder encoder) {
@@ -37,9 +38,10 @@ public class UserRestController {
     }
 
     @GetMapping(path = "/{id}", produces = "application/json")
-    public ResponseEntity<UserResponse> findById(@PathVariable("id") int id) {
+    public ResponseEntity<UserResponse> findById(@PathVariable("id") long id) {
         User user = userService.findById(id);
-        return ResponseEntity.ok(UserToUserResponseConverter.convert(user));
+        Statistics statistics= userService.getUserStats(user);
+        return ResponseEntity.ok(UserToUserResponseConverter.convert(user, statistics));
     }
 
     @GetMapping
@@ -47,7 +49,7 @@ public class UserRestController {
         List<User> users = userService.findAll();
         return ResponseEntity.ok(users
                 .stream()
-                .map(UserToUserResponseConverter::convert)
+                .map( user -> UserToUserResponseConverter.convert(user, userService.getUserStats(user)))
                 .collect(Collectors.toList()));
     }
 
@@ -77,6 +79,12 @@ public class UserRestController {
         User updatedUser = userService.changePassword(loggedUser, changePasswordRequest.getOldPassword(),
                                                       changePasswordRequest.getNewPassword(), encoder);
         return ResponseEntity.ok(updatedUser);
+    }
+
+    @GetMapping(path = "/me")
+    public ResponseEntity<UserResponse> getStats() {
+        User loggedUser = userContextService.getAuthenticatedUser();
+        return findById(loggedUser.getId());
     }
 
 }

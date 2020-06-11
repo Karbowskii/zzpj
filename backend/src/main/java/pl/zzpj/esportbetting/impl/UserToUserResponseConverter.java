@@ -1,6 +1,7 @@
 package pl.zzpj.esportbetting.impl;
 
 import pl.zzpj.esportbetting.enumerate.AuthorityEnum;
+import pl.zzpj.esportbetting.model.Statistics;
 import pl.zzpj.esportbetting.model.User;
 import pl.zzpj.esportbetting.response.UserResponse;
 
@@ -23,5 +24,11 @@ public class UserToUserResponseConverter {
                         .collect(Collectors.toList()))
                 .isActive(user.getIsActive())
                 .build();
+    }
+
+    public static UserResponse convert(User user, Statistics statistics) {
+        UserResponse userResponse = convert(user);
+        userResponse.setStatistics(statistics);
+        return userResponse;
     }
 }

@@ -10,20 +10,21 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.zzpj.esportbetting.enumerate.AuthorityEnum;
+import pl.zzpj.esportbetting.enumerate.DetailedFinishedStatusEnum;
+import pl.zzpj.esportbetting.enumerate.MatchStatusEnum;
 import pl.zzpj.esportbetting.exception.AlreadyTakenException;
 import pl.zzpj.esportbetting.exception.IllegalActionException;
 import pl.zzpj.esportbetting.exception.ObjectNotFoundException;
 import pl.zzpj.esportbetting.exception.ValidationException;
 import pl.zzpj.esportbetting.interfaces.UserService;
-import pl.zzpj.esportbetting.model.Authority;
-import pl.zzpj.esportbetting.model.Level;
-import pl.zzpj.esportbetting.model.User;
+import pl.zzpj.esportbetting.model.*;
 import pl.zzpj.esportbetting.repos.AuthorityRepository;
 import pl.zzpj.esportbetting.repos.LevelRepository;
 import pl.zzpj.esportbetting.repos.UserRepository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
@@ -126,6 +127,33 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
     public User getUser(Authentication principal) {
         UserDetailsImpl userDetails = (UserDetailsImpl) principal.getPrincipal();
         return UserDetailsImplToUserConverter.convert(userDetails);
+    }
+
+    @Override
+    public Statistics getUserStats(User user) {
+        List<Bet> userFinishedBets = user.getBets().stream()
+                .filter(b -> b.getMatch().getStatus() == MatchStatusEnum.FINISHED)
+                .collect(Collectors.toList());
+
+        int goodBets = 0;
+        int badBets = 0;
+        int earnedCoins = 0;
+        int lostCoins = 0;
+
+        for (Bet bet : userFinishedBets) {
+            DetailedFinishedStatusEnum winnerTeam = bet.getMatch().getWhichTeamWon();
+            if ((winnerTeam.equals(DetailedFinishedStatusEnum.A_WIN) && bet.isSelectedA()) ||
+                    (winnerTeam.equals(DetailedFinishedStatusEnum.B_WIN) && !bet.isSelectedA())) {
+                float stake = winnerTeam.equals(DetailedFinishedStatusEnum.A_WIN) ?
+                        bet.getMatch().getStakeA() : bet.getMatch().getStakeB();
+                earnedCoins += Math.round(bet.getCoins() * stake);
+                goodBets++;
+            } else {
+                lostCoins += bet.getCoins();
+                badBets++;
+            }
+        }
+        return new Statistics(goodBets, badBets, earnedCoins, lostCoins);
     }
 
     @Override
