@@ -4,62 +4,67 @@
             <b-row>
                 <b-col class="leftTeam" cols="3">
                     <div class="text-center">
-                        <b-avatar v-bind:src="team1Logo"/>
-                        <p>{{team1Name}}</p>
-                        <b-button v-if="status!=='finished'" @click="calculateBetStake(betRatio)">Bet
+                        <b-avatar v-bind:src="match.teamA.url"/>
+                        <p>{{match.teamA.name}}</p>
+                        <b-button v-if="match.status === 'NOT_STARTED'" @click="calculateBetStake(match.stakeA, true)">
+                            Bet
                         </b-button>
                     </div>
                 </b-col>
                 <b-col class="res" cols="6">
                     <div>
-                        <a>{{result}}</a>
+                        <a>{{match.realScoreA}} - {{match.realScoreB}}</a>
                         <b-progress>
-                            <b-progress-bar :max="100" :value="betRatio"></b-progress-bar>
+                            <b-progress-bar :max="match.stakeA + match.stakeB" :value="match.stakeA"></b-progress-bar>
                         </b-progress>
-                        <a class="left-ratio">{{betRatio}}%</a>
-                        <a class="right-ratio">{{100-betRatio}}%</a>
+                        <a class="left-ratio">{{match.stakeA.toFixed(2)}}</a>
+                        <a class="right-ratio">{{match.stakeB.toFixed(2)}}</a>
                     </div>
                 </b-col>
                 <b-col class="rightTeam" cols="3">
                     <div class="text-center">
-                        <b-avatar v-bind:src="team2Logo"/>
-                        <p>{{team2Name}}</p>
-                        <b-button v-if="status!=='finished'" @click="calculateBetStake(100-betRatio)">Bet
+                        <b-avatar v-bind:src="match.teamB.url"/>
+                        <p>{{match.teamB.name}}</p>
+                        <b-button v-if="match.status === 'NOT_STARTED'" @click="calculateBetStake(match.stakeB, false)">
+                            Bet
                         </b-button>
                     </div>
                 </b-col>
             </b-row>
         </b-container>
-        <betting-modal v-bind:betStake="betStake"></betting-modal>
+        <betting-modal v-bind:betStake="betStake" v-bind:is-a-selected="isASelected"></betting-modal>
     </div>
 </template>
 
 <script>
     import BettingModal from "./BettingModal";
+    import {matchService} from "../App";
 
     export default {
         name: "Match",
         components: {BettingModal},
         data: function () {
             return {
-                id: null,
-                result: "0:0",
-                team1Name: "G2",
-                team1Logo: "https://cybersport.pl/wp-content/uploads/2019/01/g2_logo2019.png",
-                team2Name: "Fnatic",
-                team2Logo: "https://gamepedia.cursecdn.com/lolesports_gamepedia_en/thumb/f/fc/Fnaticlogo_square.png/1200px-Fnaticlogo_square.png",
-                date: new Date("2020-04-19"),
-                status: "planned",
-                betRatio: 60,
-                betStake: null
+                match: null,
+                betStake: 0,
+                isASelected: false
             }
         },
         created() {
-            this.id = this.$route.params.id
+            this.id = this.$route.params.id;
+            matchService.getMatchById(this.$route.params.id).then((response) => {
+                if (response.errors) {
+                    alert("Error");
+                } else {
+                    this.match = response;
+                }
+            })
+
         },
         methods: {
-            calculateBetStake: function (teamBetRatio) {
-                this.betStake = 100 / teamBetRatio;
+            calculateBetStake: function (stake, isASelected) {
+                this.betStake = stake;
+                this.isASelected = isASelected;
                 if (this.$store.getters.isAuthorized) {
                     this.showModal();
                 } else {
@@ -69,14 +74,16 @@
             showModal: function () {
                 this.$bvModal.show('betting-modal');
             }
-        }
+        },
+
     }
 </script>
 
 <style scoped>
 
     .match {
-        margin-top: 130px;
+        margin-top: 70px;
+        margin-bottom: 40px;
     }
 
     .res {

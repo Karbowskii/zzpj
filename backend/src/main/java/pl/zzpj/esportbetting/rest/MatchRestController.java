@@ -3,6 +3,7 @@ package pl.zzpj.esportbetting.rest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pl.zzpj.esportbetting.interfaces.MatchService;
@@ -23,5 +24,10 @@ public class MatchRestController {
     @GetMapping()
     public ResponseEntity<List<Match>> findAll(){
         return ResponseEntity.ok(matchService.findAll());
+    }
+
+    @GetMapping(path = "/{id}")
+    public ResponseEntity<Match> findById(@PathVariable("id") long id){
+        return ResponseEntity.ok(matchService.findById(id));
     }
 }

@@ -3,7 +3,7 @@
         <b-modal id="betting-modal" centered title="Make your bet!" :hide-footer=true>
             <form @submit="onSubmit" @submit.prevent>
                 <div class="bet">
-                    <!--                    <div class="text-center stake">Stake is x{{betStake.toFixed(2)}}</div>-->
+                    <div class="text-center stake">Stake is x{{betStake.toFixed(2)}}</div>
                     <label for="bet-input" class="text-center">Your bet:</label>
                 </div>
                 <b-form-input :min="1" :max="100" id="bet-input" v-model="betValue" type="number">
@@ -17,7 +17,7 @@
 <script>
     export default {
         name: "BettingModal",
-        props: ['betStake'],
+        props: ['betStake', 'isASelected'],
         data: function () {
             return {
                 betValue: 0,
@@ -25,7 +25,7 @@
         },
         methods: {
             onSubmit() {
-                this.betValue = null;
+                this.betValue = 0;
                 this.$bvModal.hide('betting-modal');
                 /* TODO Zapisywanko zakladu do DB*/
             }

@@ -27,6 +27,7 @@
 <script>
 
     import {authorizationService} from "../App";
+    import LevelToIconMapper from "../Core/LevelToIconMapper";
 
     export default {
         name: "LoginView",
@@ -42,9 +43,9 @@
                     .then((response) => {
                             if (response.errors) {
                                 alert("Logging error!");
-                                this.login = '';
                                 this.password = '';
                             } else {
+                                response.user.icon = LevelToIconMapper.getUrl(response.user.level.id);
                                 this.$store.commit('login', {user: response.user, token: response.token});
                                 this.$router.push({path: `/`});
                             }
