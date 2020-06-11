@@ -20,6 +20,7 @@
                             <p>{{profile.nick}}</p>
                             <p class="name">{{profile.firstName}} {{profile.lastName}}</p>
                             <p class="name">{{profile.email}}</p>
+                            <p class="name">Ranking: {{ranking}}</p>
                         </div>
                     </div>
                 </b-col>
@@ -36,10 +37,16 @@
 <script>
 
     import MatchHistory from "./MatchHistory";
+    import {usersRankingService} from "../App";
 
     export default {
         name: "Profile",
         components: {MatchHistory},
+        data: function(){
+            return{
+                ranking: null
+            }
+        },
         computed: {
             profile: function () {
                 return {
@@ -54,7 +61,12 @@
                     icon: this.$store.state.user.icon,
                 }
             }
-        }
+        },
+            mounted(){
+                usersRankingService.getMyRanking().then(response => {
+                    this.ranking = response.place
+                })
+            }
     }
 </script>
 
