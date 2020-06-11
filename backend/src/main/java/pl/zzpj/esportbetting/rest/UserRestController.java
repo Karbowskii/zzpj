@@ -59,7 +59,7 @@ public class UserRestController {
         User user = new User(registerRequest);
 
         userService.register(user);
-        return ResponseEntity.ok("User successfully created");
+        return ResponseEntity.ok("\"User successfully created!\"");
     }
 
     @PatchMapping(path = "/me/update", consumes = "application/json-patch+json", produces = "application/json")

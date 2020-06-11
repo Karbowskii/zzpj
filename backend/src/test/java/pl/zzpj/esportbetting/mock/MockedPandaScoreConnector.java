@@ -3,28 +3,29 @@ package pl.zzpj.esportbetting.mock;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import pl.zzpj.esportbetting.enumerate.GameEnum;
 import pl.zzpj.esportbetting.interfaces.ESportRestApi;
 
 import java.io.IOException;
 
 public class MockedPandaScoreConnector implements ESportRestApi {
     @Override
-    public JSONArray getAllLeagues() {
+    public JSONArray getAllLeagues(GameEnum game) {
         return null;
     }
 
     @Override
-    public JSONArray getAllSeries() {
+    public JSONArray getAllSeries(GameEnum game) {
         return null;
     }
 
     @Override
-    public JSONArray getAllTournaments() {
+    public JSONArray getAllTournaments(GameEnum game) {
         return null;
     }
 
     @Override
-    public JSONArray getAllMatches() {
+    public JSONArray getAllMatches(GameEnum game) {
         JSONArray jsonArray = new JSONArray();
         try {
             // not started
@@ -71,7 +72,7 @@ public class MockedPandaScoreConnector implements ESportRestApi {
                     "\t\"draw\": false,\n" +
                     "\t\"winner\": null,\n" +
                     "\t\"name\": \"Semifinal 2: TheDice vs LDLC\",\n" +
-                    "\t\"status\": \"not_started\"\n" +
+                    "\t\"status\": \"running\"\n" +
                     "}"));
 
             // no start date
@@ -118,7 +119,7 @@ public class MockedPandaScoreConnector implements ESportRestApi {
                     "\t\"draw\": false,\n" +
                     "\t\"winner\": null,\n" +
                     "\t\"name\": \"Semifinal 2: TheDice vs LDLC\",\n" +
-                    "\t\"status\": \"not_started\"\n" +
+                    "\t\"status\": \"canceled\"\n" +
                     "}"));
 
             // finished
@@ -165,7 +166,7 @@ public class MockedPandaScoreConnector implements ESportRestApi {
                     "\t\"draw\": false,\n" +
                     "\t\"winner\": null,\n" +
                     "\t\"name\": \"Semifinal 2: TheDice vs LDLC\",\n" +
-                    "\t\"status\": \"not_started\"\n" +
+                    "\t\"status\": \"finished\"\n" +
                     "}"));
         } catch (JSONException e) {
             e.printStackTrace();
@@ -175,7 +176,7 @@ public class MockedPandaScoreConnector implements ESportRestApi {
     }
 
     @Override
-    public JSONArray getAllTeams() {
+    public JSONArray getAllTeams(GameEnum game) {
         JSONArray jsonArray = new JSONArray();
         try {
             jsonArray.put(new JSONObject("{\n" +
@@ -195,7 +196,7 @@ public class MockedPandaScoreConnector implements ESportRestApi {
     }
 
     @Override
-    public JSONArray getAllPlayers() {
+    public JSONArray getAllPlayers(GameEnum game) {
         return null;
     }
 }

@@ -4,7 +4,7 @@
             <b-row align-h="center">
                 <b-col cols="5">
                     <div class="login-panel">
-                        <b-form class="text-left" @submit="logIn">
+                        <b-form class="text-left" @submit.prevent="logIn">
                             <label for="login-input">Login:</label>
                             <b-form-input id="login-input" type="text" required v-model="login">
                             </b-form-input>
@@ -26,18 +26,30 @@
 
 <script>
 
+    import {authorizationService} from "../App";
+
     export default {
         name: "LoginView",
         data: function () {
             return {
-                login: null,
-                password: null
+                login: '',
+                password: ''
             }
         },
         methods: {
             logIn() {
-                this.$store.commit('login', {user: this.login, token: '123qwe'});
-                this.$router.push({path: `/`});
+                authorizationService.login(this.login, this.password)
+                    .then((response) => {
+                            if (response.errors) {
+                                alert("Logging error!");
+                                this.login = '';
+                                this.password = '';
+                            } else {
+                                this.$store.commit('login', {user: response.user, token: response.token});
+                                this.$router.push({path: `/`});
+                            }
+                        }
+                    )
             }
         }
     }

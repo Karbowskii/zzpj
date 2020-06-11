@@ -34,13 +34,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(MockitoExtension.class)
 @RunWith(MockitoJUnitRunner.class)
-public class AuthRestControllerTest {
+public class AuthenticationRestControllerTest {
 
     @Mock
     private AuthenticationService authenticationService;
 
     @InjectMocks
-    private AuthController authController;
+    private AuthenticationRestController authController;
 
 
     private static User activeUser;
@@ -78,7 +78,7 @@ public class AuthRestControllerTest {
 
     @Before
     public void setUp() {
-        authController = new AuthController(authenticationService);
+        authController = new AuthenticationRestController(authenticationService);
         mockMvc = MockMvcBuilders.standaloneSetup(authController).build();
         objectMapper = new ObjectMapper();
     }
@@ -104,7 +104,7 @@ public class AuthRestControllerTest {
             .andExpect(jsonPath("$.user.email", Matchers.is(activeUser.getEmail())))
             .andExpect(jsonPath("$.user.firstName", Matchers.is(activeUser.getFirstName())))
             .andExpect(jsonPath("$.user.lastName", Matchers.is(activeUser.getLastName())))
-            .andExpect(jsonPath("$.user.levelId",
+            .andExpect(jsonPath("$.user.level.id",
                     Matchers.is(Integer.parseInt(Long.toString(activeUser.getLevel().getId())))))
             .andExpect(jsonPath("$.user.exp", Matchers.is(activeUser.getExp())))
             .andExpect(jsonPath("$.user.coins", Matchers.is(activeUser.getCoins())))

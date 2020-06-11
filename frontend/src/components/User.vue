@@ -27,6 +27,10 @@
 </template>
 
 <script>
+    import PublicUsersService from "../Core/service/PublicUsersService";
+    import HttpRequest from "../Core/HttpRequest";
+
+    const publicUsersService = new PublicUsersService(new HttpRequest('zzpj-backend'))
     export default {
         name: "User",
         data: function () {
@@ -40,6 +44,15 @@
                         icon: require('../assets/profileIcon.png'),
                     }
             }
+        },
+        mounted() {
+            publicUsersService.getUser(this.$route.params.id).then(
+                response => {
+                    this.profile.nick = response.username;
+                    this.profile.lvl = response.levelId;
+                    this.profile.exp = response.exp;
+                }
+            )
         }
     }
 </script>

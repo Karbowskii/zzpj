@@ -1,5 +1,6 @@
 package pl.zzpj.esportbetting.pandascore;
 
+import pl.zzpj.esportbetting.enumerate.GameEnum;
 import pl.zzpj.esportbetting.interfaces.ESportRestApi;
 import org.json.JSONException;
 
@@ -14,13 +15,13 @@ public class PandaScoreMainTest {
         String token = br.readLine();
         br.close();
 
-        ESportRestApi restApiConnector = new PandaScoreRestApiConnector(PandaScoreRestApiConnector.Game.DOTA2, token);
+        ESportRestApi restApiConnector = new PandaScoreRestApiConnector();
 
-        System.out.println(restApiConnector.getAllLeagues());
-        System.out.println(restApiConnector.getAllSeries());
-        System.out.println(restApiConnector.getAllTournaments());
-        System.out.println(restApiConnector.getAllMatches());
-        System.out.println(restApiConnector.getAllTeams());
-        System.out.println(restApiConnector.getAllPlayers());
+        System.out.println(restApiConnector.getAllLeagues(GameEnum.DOTA2));
+        System.out.println(restApiConnector.getAllSeries(GameEnum.DOTA2));
+        System.out.println(restApiConnector.getAllTournaments(GameEnum.DOTA2));
+        System.out.println(restApiConnector.getAllMatches(GameEnum.DOTA2));
+        System.out.println(restApiConnector.getAllTeams(GameEnum.DOTA2));
+        System.out.println(restApiConnector.getAllPlayers(GameEnum.DOTA2));
     }
 }
