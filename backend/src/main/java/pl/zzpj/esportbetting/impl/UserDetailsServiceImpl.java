@@ -1,12 +1,19 @@
 package pl.zzpj.esportbetting.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.fge.jsonpatch.JsonPatch;
+import com.github.fge.jsonpatch.JsonPatchException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.zzpj.esportbetting.enumerate.AuthorityEnum;
 import pl.zzpj.esportbetting.exception.AlreadyTakenException;
 import pl.zzpj.esportbetting.exception.IllegalActionException;
 import pl.zzpj.esportbetting.exception.ObjectNotFoundException;
+import pl.zzpj.esportbetting.exception.ValidationException;
 import pl.zzpj.esportbetting.interfaces.UserService;
 import pl.zzpj.esportbetting.model.Authority;
 import pl.zzpj.esportbetting.model.Level;
@@ -84,7 +91,7 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
 
     @Override
     public User update(User user) {
-        Optional<User> userFound = userRepository.findById(user.getId());
+        Optional<User> userFound = Optional.of(userRepository.getOne(user.getId()));
         if (!userFound.isPresent()) {
             throw new ObjectNotFoundException("Not found user with id: " + user.getId());
         }
@@ -119,5 +126,29 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
     public User getUser(Authentication principal) {
         UserDetailsImpl userDetails = (UserDetailsImpl) principal.getPrincipal();
         return UserDetailsImplToUserConverter.convert(userDetails);
+    }
+
+    @Override
+    public User changePassword(User user, String oldPassword, String newPassword, PasswordEncoder passwordEncoder) {
+        Optional<User> userFound = Optional.of(userRepository.getOne(user.getId()));
+        if (!userFound.isPresent()) {
+            throw new ObjectNotFoundException("Not found user with id: " + user.getId());
+        }
+
+        if (!passwordEncoder.matches(oldPassword, userFound.get().getPassword())) {
+            throw new ValidationException("Incorrect old password");
+        }
+
+        userFound.get().setPassword(passwordEncoder.encode(newPassword));
+
+        return userRepository.saveAndFlush(userFound.get());
+    }
+
+    @Override
+    public User applyPatchToCustomer (JsonPatch patch, User targetCustomer) throws JsonPatchException,
+            JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode patched = patch.apply(objectMapper.convertValue(targetCustomer, JsonNode.class));
+        return objectMapper.treeToValue(patched, User.class);
     }
 }

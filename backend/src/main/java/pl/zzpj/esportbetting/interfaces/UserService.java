@@ -1,6 +1,10 @@
 package pl.zzpj.esportbetting.interfaces;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.github.fge.jsonpatch.JsonPatch;
+import com.github.fge.jsonpatch.JsonPatchException;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import pl.zzpj.esportbetting.model.User;
 
 import java.util.List;
@@ -20,4 +24,8 @@ public interface UserService {
     Boolean existsByEmail(String email);
 
     User getUser(Authentication principal);
+
+    User changePassword(User user, String oldPassword, String newPassword, PasswordEncoder passwordEncoder);
+
+    User applyPatchToCustomer(JsonPatch patch, User targetCustomer) throws JsonPatchException, JsonProcessingException;
 }
