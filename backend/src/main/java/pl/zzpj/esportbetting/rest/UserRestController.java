@@ -29,13 +29,13 @@ public class UserRestController {
 
     private final UserService userService;
     private final PasswordEncoder encoder;
-    private final UserContextService userContextServiceService;
+    private final UserContextService userContextService;
 
     @Autowired
-    public UserRestController(UserService userService, PasswordEncoder encoder, UserContextService userContextServiceService) {
+    public UserRestController(UserService userService, PasswordEncoder encoder, UserContextService userContextService) {
         this.userService = userService;
         this.encoder = encoder;
-        this.userContextServiceService = userContextServiceService;
+        this.userContextService = userContextService;
     }
 
     @GetMapping(path = "/{id}", produces = "application/json")
@@ -67,7 +67,7 @@ public class UserRestController {
 
     @GetMapping(path = "/me")
     public ResponseEntity<UserResponse> getStats() {
-        User loggedUser = userContextServiceService.getAuthenticatedUser();
+        User loggedUser = userContextService.getAuthenticatedUser();
         return findById(loggedUser.getId());
     }
 

@@ -136,7 +136,7 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
         for (Bet bet: userFinishedBets) {
             DetailedFinishedStatusEnum winnerTeam = bet.getMatch().getWhichTeamWon();
             if ((winnerTeam.equals(DetailedFinishedStatusEnum.A_WIN) && bet.isSelectedA()) ||
-                    (winnerTeam.equals(DetailedFinishedStatusEnum.B_WIN) && bet.isSelectedA() && !bet.isSelectedA())) {
+                    (winnerTeam.equals(DetailedFinishedStatusEnum.B_WIN) && !bet.isSelectedA())) {
                 float stake = winnerTeam.equals(DetailedFinishedStatusEnum.A_WIN) ?
                         bet.getMatch().getStakeA() : bet.getMatch().getStakeB();
                 earnedCoins += Math.round(bet.getCoins() * stake);
