@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.PathVariable;
 import pl.zzpj.esportbetting.interfaces.BetService;
 import pl.zzpj.esportbetting.interfaces.MatchService;
 import pl.zzpj.esportbetting.interfaces.UserContextService;
@@ -14,6 +15,7 @@ import pl.zzpj.esportbetting.model.Bet;
 import pl.zzpj.esportbetting.model.Match;
 import pl.zzpj.esportbetting.model.User;
 import pl.zzpj.esportbetting.request.CreateBetRequest;
+
 
 import java.util.List;
 
@@ -51,4 +53,9 @@ public class BetRestController {
         return ResponseEntity.ok(betService.getAllBetsForUser(user));
     }
 
+
+    @GetMapping(path = "/user/{id}")
+    public ResponseEntity<List<Bet>> findAllByUser(@PathVariable("id") long id){
+        return ResponseEntity.ok(betService.findAllByUserId(id));
+    }
 }

@@ -2,21 +2,21 @@
     <div class="matches">
         <ul>
             <li v-for="(match, index) in filteredMatches"
-                v-bind:key="index"
+                v-bind:key="match.id"
                 v-bind:not-last="isNotLast(index)"
                 v-bind:first="isFirst(index)"
                 v-on:click="showMatch(match.id)">
                 <b-row>
                     <b-col class="leftTeam">
-                        {{match.team1Name}}
-                        <b-avatar v-bind:src="match.team1Logo"/>
+                        {{match.teamA.name}}
+                        <b-avatar v-bind:src="match.teamA.url"/>
                     </b-col>
                     <b-col class="res" cols="1">
-                        <a>{{match.result}}</a>
+                        <a>{{match.realScoreA}} - {{match.realScoreB}}</a>
                     </b-col>
                     <b-col class="rightTeam">
-                        <b-avatar v-bind:src="match.team2Logo"/>
-                        {{match.team2Name}}
+                        <b-avatar v-bind:src="match.teamB.url"/>
+                        {{match.teamB.name}}
                     </b-col>
                 </b-row>
             </li>
@@ -43,7 +43,6 @@
             showMatch: function (matchId) {
                 this.$router.push({path: `/match/${matchId}`});
             }
-
         }
     }
 </script>

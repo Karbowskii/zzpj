@@ -18,10 +18,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import pl.zzpj.esportbetting.enumerate.AuthorityEnum;
+import pl.zzpj.esportbetting.interfaces.UserContextService;
 import pl.zzpj.esportbetting.interfaces.UserService;
 import pl.zzpj.esportbetting.model.Authority;
 import pl.zzpj.esportbetting.model.Level;
 import pl.zzpj.esportbetting.model.User;
+import pl.zzpj.esportbetting.repos.UserRepository;
 import pl.zzpj.esportbetting.request.RegisterRequest;
 
 import java.util.Arrays;
@@ -43,6 +45,9 @@ public class UserRestControllerTest {
 
     @Mock
     private PasswordEncoder encoder;
+
+    @Mock
+    private UserContextService userContextService;
     
     @InjectMocks
     public UserRestController userRestController;
@@ -84,10 +89,10 @@ public class UserRestControllerTest {
                 .build();
         users = Arrays.asList(user, createdUser);
     }
-    
+
     @Before
     public void setUp() {
-        userRestController = new UserRestController(userService, encoder);
+        userRestController = new UserRestController(userService, userContextService, encoder);
         mockMvc = MockMvcBuilders.standaloneSetup(userRestController).build();
     }
 
@@ -147,7 +152,7 @@ public class UserRestControllerTest {
                         "", Matchers.is(users.get(0).getIsActive())))
 
                 .andExpect(jsonPath("$.[1].id",
-                Matchers.is((Integer.parseInt(Long.toString(users.get(1).getId()))))))
+                        Matchers.is((Integer.parseInt(Long.toString(users.get(1).getId()))))))
                 .andExpect(jsonPath("$.[1].username", Matchers.is(users.get(1).getUsername())))
                 .andExpect(jsonPath("$.[1].email", Matchers.is(users.get(1).getEmail())))
                 .andExpect(jsonPath("$.[1].firstName", Matchers.is(users.get(1).getFirstName())))

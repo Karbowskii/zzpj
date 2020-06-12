@@ -32,9 +32,9 @@ public class Bet {
     @Column(name = "id", updatable = false, nullable = false)
     private long id;
 
+    @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
-    @JsonIgnore
     private User user;
 
     @ManyToOne(cascade = CascadeType.ALL)

@@ -3,8 +3,8 @@
         <b-modal id="betting-modal" centered title="Make your bet!" :hide-footer=true>
             <form @submit="onSubmit" @submit.prevent>
                 <div class="bet">
-<!--                    <div class="text-center stake">Stake is x{{betStake.toFixed(2)}}</div>-->
-                    <label  for="bet-input" class="text-center">Your bet:</label>
+                    <div class="text-center stake">Stake is x{{betStake.toFixed(2)}}</div>
+                    <label for="bet-input" class="text-center">Your bet:</label>
                 </div>
                 <b-form-input :min="1" :max="100" id="bet-input" v-model="betValue" type="number">
                 </b-form-input>
@@ -17,30 +17,30 @@
 <script>
     export default {
         name: "BettingModal",
-        props:['betStake'],
+        props: ['betStake', 'isASelected'],
         data: function () {
-            return{
+            return {
                 betValue: 0,
             }
         },
         methods: {
-          onSubmit(){
-              this.betValue = null;
-              this.$bvModal.hide('betting-modal');
-              /* TODO Zapisywanko zakladu do DB*/
-          }
+            onSubmit() {
+                this.betValue = 0;
+                this.$bvModal.hide('betting-modal');
+                /* TODO Zapisywanko zakladu do DB*/
+            }
         }
     }
 </script>
 
 <style scoped>
 
-    .stake{
+    .stake {
         font-size: 20px;
         color: var(--colour4);
     }
 
-    button{
+    button {
         float: right;
         margin-top: 13px;
         margin-right: 5px;
@@ -49,13 +49,13 @@
         color: #b9b9b9;
     }
 
-    button:hover{
+    button:hover {
         border: 2px solid var(--colour4);
         background: none;
         text-shadow: 0 0 5px var(--colour5);
     }
 
-    label{
+    label {
         color: var(--colour4);
     }
 </style>

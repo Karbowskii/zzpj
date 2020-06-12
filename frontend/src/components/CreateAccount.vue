@@ -4,7 +4,7 @@
             <b-row align-h="center">
                 <b-col cols="6">
                     <div class="create-account-panel">
-                        <b-form class="text-left" @submit="createAccount">
+                        <b-form class="text-left" @submit.prevent="createAccount">
                             <label for="email-input">Email:</label>
                             <b-form-input id="email-input" required type="email" v-model="email"></b-form-input>
                             <label for="login-input">Login:</label>
@@ -31,10 +31,24 @@
 </template>
 
 <script>
+    import {authorizationService} from "../App";
+
     export default {
         name: "CreateAccount",
         methods: {
             createAccount: function () {
+                if (this.password !== this.confirmPassword) {
+                    alert("be");
+                } else {
+                    authorizationService.register(this.login, this.password, this.email, this.firstName, this.lastName)
+                        .then(res => {
+                            if (res.errors) {
+                                alert("Register error!");
+                            } else {
+                                this.$router.push('/login');
+                            }
+                        })
+                }
 
             }
         },
