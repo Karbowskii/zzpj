@@ -8,6 +8,7 @@
 <script>
     import NavigationPanel from "./components/NavigationPanel";
     import AuthorizationStorage from "./Core/AuthorizationStorage";
+    import PublicUsersService from "./Core/service/PublicUsersService";
     import AuthorizationService from "./Core/service/AuthorizationService";
     import HttpRequest from "./Core/HttpRequest";
     import BetService from "./Core/service/BetService";
@@ -20,6 +21,7 @@
     export const betService = new BetService(httpRequest);
     export const usersRankingService = new UsersRankingService(httpRequest);
     export const matchService = new MatchService(httpRequest);
+    export const publicUsersService = new PublicUsersService(httpRequest);
 
 
     export default {

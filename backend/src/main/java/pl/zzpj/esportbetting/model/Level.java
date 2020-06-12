@@ -36,6 +36,7 @@ public class Level {
     @Column(nullable = false)
     private int maxBets;
 
+    @JsonIgnore
     @EqualsAndHashCode.Exclude @ToString.Exclude
     @OneToMany(mappedBy = "level",
             orphanRemoval = true,
