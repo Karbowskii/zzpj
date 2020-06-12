@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Squada+One&display=swap");
+
 :root{
     --colour1:#0B0C10;
     --colour2:#1F2833;
@@ -19,4 +21,8 @@
 
 #betting-modal button.close{
     color: white;
+}
+
+* > * {
+    font-family: 'Squada One', cursive;
 }
