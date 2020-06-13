@@ -37,12 +37,11 @@ export default class HttpRequest {
         })
             .then(response => {
                 if (!response.ok) {
-                    throw new Error("HTTP status " + response.status);
+                    return response.json().then(error => {
+                        return {errors: error};
+                    })
                 }
                 return response.json();
-            })
-            .catch(err => {
-                return {errors: [err]}
             })
     }
 }

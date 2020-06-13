@@ -12,4 +12,8 @@ export default class MatchService {
         return this.httpRequest.get(`matches/${matchId}`).then(data => data);
     }
 
+    getClosestMatches() {
+        return this.httpRequest.get('matches/closest').then(data => data);
+    }
+
 }

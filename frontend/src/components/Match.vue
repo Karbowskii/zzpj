@@ -32,7 +32,8 @@
                 </b-col>
             </b-row>
         </b-container>
-        <betting-modal v-bind:betStake="betStake" v-bind:is-a-selected="isASelected"></betting-modal>
+        <betting-modal v-bind:betStake="betStake" v-bind:is-a-selected="isASelected"
+                       v-bind:match-id="this.match.id"></betting-modal>
     </div>
 </template>
 

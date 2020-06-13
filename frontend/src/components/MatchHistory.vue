@@ -19,7 +19,7 @@
                             {{bet.match.teamA.name}}
                             <b-avatar v-bind:src="bet.match.teamA.url"/>
                         </b-col>
-                        <b-col class="res" cols="1">
+                        <b-col class="res" cols="2">
                             <a>{{bet.match.realScoreA}} - {{bet.match.realScoreB}}</a>
                         </b-col>
                         <b-col class="rightTeam">

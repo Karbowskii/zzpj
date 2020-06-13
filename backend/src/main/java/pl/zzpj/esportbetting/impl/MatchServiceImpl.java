@@ -134,4 +134,10 @@ public class MatchServiceImpl implements MatchService {
         return matchRepository.findById(matchId)
                 .orElseThrow(() -> new ObjectNotFoundException("Not found match with id: " + matchId));
     }
+
+    @Override
+    public List<Match> findClosestMatches() {
+        return matchRepository.findTop5ByStatusIsOrderByStartDate(MatchStatusEnum.NOT_STARTED);
+    }
+
 }

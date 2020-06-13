@@ -12,4 +12,6 @@ public interface MatchService {
     void checkAndUpdateMatches() throws IOException, InterruptedException, JSONException;
 
     Match findById(long matchId);
+
+    List<Match> findClosestMatches();
 }
