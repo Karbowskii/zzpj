@@ -22,7 +22,6 @@ import pl.zzpj.esportbetting.repos.AuthorityRepository;
 import pl.zzpj.esportbetting.repos.LevelRepository;
 import pl.zzpj.esportbetting.repos.UserRepository;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
