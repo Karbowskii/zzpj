@@ -14,6 +14,7 @@
     import BetService from "./Core/service/BetService";
     import UsersRankingService from "./Core/service/UsersRankingService";
     import MatchService from "./Core/service/MatchService";
+    import UserStatsService from "./Core/service/UserStatsService";
 
     export const authorizationStorage = new AuthorizationStorage();
     export const httpRequest = new HttpRequest(process.env.VUE_APP_URL, authorizationStorage);
@@ -22,6 +23,7 @@
     export const usersRankingService = new UsersRankingService(httpRequest);
     export const matchService = new MatchService(httpRequest);
     export const publicUsersService = new PublicUsersService(httpRequest);
+    export const userStatsService = new UserStatsService(httpRequest);
 
 
     export default {

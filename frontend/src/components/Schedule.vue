@@ -32,7 +32,7 @@
         created() {
             matchService.getAllMatches().then((response) => {
                 this.allMatches = _.sortBy(response, function (o) {
-                    return [o.startDate.year, o.startDate.dayOfYear]
+                    return [o.startDate.year, o.startDate.dayOfYear, o.startDate.hour]
                 }, ['asc']);
             })
         }

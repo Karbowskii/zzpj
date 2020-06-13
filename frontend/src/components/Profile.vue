@@ -25,8 +25,17 @@
                     </div>
                 </b-col>
             </b-row>
+            <b-row class="stats-section" align-h="center" v-if="anyData">
+                <b-col cols="5" class="left">
+                    <user-statistics :labels="['Wins', 'Loses']" :series="betStats"></user-statistics>
+                </b-col>
+                <b-col cols="5" class="right">
+                    <user-statistics :labels="['Gain PepeCoins','Lost PepeCoins']" :series="coinsStats"></user-statistics>
+                </b-col>
+            </b-row>
+
             <b-row align-h="center">
-                <b-col cols=10>
+                <b-col cols=12>
                     <match-history></match-history>
                 </b-col>
             </b-row>
@@ -37,14 +46,18 @@
 <script>
 
     import MatchHistory from "./MatchHistory";
+    import UserStatistics from "./UserStatistics";
     import {usersRankingService} from "../App";
+    import {userStatsService} from "../App";
 
     export default {
         name: "Profile",
-        components: {MatchHistory},
-        data: function(){
-            return{
-                ranking: null
+        components: {UserStatistics, MatchHistory},
+        data: function () {
+            return {
+                ranking: null,
+                stats: {},
+                loaded: false
             }
         },
         computed: {
@@ -58,19 +71,43 @@
                     exp: this.$store.state.user.exp,
                     expToNextLvl: this.$store.state.user.level.expToNextLevel,
                     tokens: this.$store.state.user.coins,
-                    icon: this.$store.state.user.icon,
+                    icon: this.$store.state.user.icon
                 }
+            },
+            betStats: function () {
+                let result = [];
+                result.push(this.stats.goodBets);
+                result.push(this.stats.badBets);
+                return result;
+            },
+            coinsStats: function () {
+                let result = [];
+                result.push(this.stats.earnedCoins);
+                result.push(this.stats.lostCoins);
+                return result;
+            },
+            anyData: function () {
+                return this.stats.allBets > 0 &&  (this.stats.earnedCoins + this.stats.lostCoins) > 0
             }
         },
-            mounted(){
-                usersRankingService.getMyRanking().then(response => {
-                    this.ranking = response.place
-                })
-            }
+        created() {
+            Promise.all([usersRankingService.getMyRanking().then(response => {
+                this.ranking = response.place;
+            }), userStatsService.getStats().then(response => {
+                this.stats = response.statistics;
+                this.loaded = true;
+            })]).then(() => {});
+        },
+
     }
 </script>
 
 <style scoped>
+
+    .profile {
+        margin-bottom: 20px;
+    }
+
     .profile-panel {
         margin-top: 60px;
         padding-top: 25px;
@@ -137,6 +174,22 @@
     img {
         border-radius: 30%;
         padding: 5px;
+    }
+
+    .stats-section {
+        margin-top: 50px;
+    }
+
+    .left, .right {
+        background: rgba(0, 0, 0, 0.4);
+    }
+
+    .right {
+        border-radius: 0 15px 15px 0;
+    }
+
+    .left {
+        border-radius: 15px 0 0 15px;
     }
 
 </style>

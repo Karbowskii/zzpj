@@ -7,7 +7,7 @@
                     v-bind:key="bet.id"
                     v-bind:not-last="isNotLast(index)">
                     <b-row>
-                        <b-col cols="2" class="bet-result">
+                        <b-col cols="1" class="bet-result">
                             <a v-if="bet.selectedA">
                                 <a v-if="bet.match.whichTeamWon===1" class="win">+{{bet.coins * bet.match.stakeA -
                                     bet.coins}}</a>
@@ -26,12 +26,12 @@
                             <b-avatar v-bind:src="bet.match.teamB.url"/>
                             {{bet.match.teamB.name}}
                         </b-col>
-                        <b-col cols="2" class="bet-result">
+                        <b-col cols="1" class="bet-result">
                             <a v-if="!bet.selectedA">
                                 <a v-if="bet.match.whichTeamWon===2" class="win">+{{bet.coins * bet.match.stakeB -
                                     bet.coins}}</a>
                                 <a v-else-if="bet.match.whichTeamWon===1" class="lose">-{{bet.coins}}</a>
-                                <a v-else>{{bet.value}}</a>
+                                <a v-else>{{bet.coins}}</a>
                             </a>
                         </b-col>
                     </b-row>
