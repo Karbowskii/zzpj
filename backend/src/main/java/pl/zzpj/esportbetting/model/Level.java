@@ -41,5 +41,6 @@ public class Level {
             orphanRemoval = true,
             cascade = CascadeType.ALL,
             fetch = FetchType.EAGER)
+    @JsonIgnore
     private Set<User> users = new HashSet<>();
 }
