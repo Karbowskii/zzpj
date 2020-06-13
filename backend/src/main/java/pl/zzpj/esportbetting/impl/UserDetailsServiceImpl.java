@@ -96,8 +96,8 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
         if (!userFound.isPresent()) {
             throw new ObjectNotFoundException("Not found user with id: " + user.getId());
         }
-        if (user.getUsername() != null) {
-            userFound.get().setUsername(user.getUsername());
+        if (user.getUsername() != null && !user.getUsername().equals(userFound.get().getUsername())) {
+            throw new IllegalActionException("Changing username is forbidden");
         }
         if (user.getEmail() != null) {
             userFound.get().setEmail(user.getEmail());
@@ -173,10 +173,10 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
     }
 
     @Override
-    public User applyPatchToCustomer (JsonPatch patch, User targetCustomer) throws JsonPatchException,
+    public User applyPatchToCustomer (JsonPatch patch, User targetUser) throws JsonPatchException,
             JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode patched = patch.apply(objectMapper.convertValue(targetCustomer, JsonNode.class));
+        JsonNode patched = patch.apply(objectMapper.convertValue(targetUser, JsonNode.class));
         return objectMapper.treeToValue(patched, User.class);
     }
 }
