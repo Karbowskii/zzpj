@@ -10,16 +10,19 @@
                                 v-bind:key="user.id"
                                 v-bind:not-last="isNotLast(place)"
                                 v-bind:first="isFirst(place)"
-                                v-on:click="showPlayer(user.id)">
+                                v-on:click="showPlayer(user.user.id)">
                                 <b-row>
-                                    <b-col>
+                                    <b-col cols="2">
+                                        <a class="place">#{{user.place}}</a>
+                                    </b-col>
+                                    <b-col cols="2">
                                         <b-avatar :src="icon"></b-avatar>
                                     </b-col>
                                     <b-col>
-                                        <a>{{user.user.username}}</a>
+                                        <a class="details">{{user.user.username}}</a>
                                     </b-col>
                                     <b-col>
-                                        <a>{{user.user.level.id}} level</a>
+                                        <a class="details">{{user.user.level.id}} level</a>
                                     </b-col>
                                 </b-row>
                             </li>
@@ -103,8 +106,15 @@
         border-top-right-radius: 15px;
     }
 
-    a {
+    .details {
         color: #cfcfcf !important;
+        padding-top: 20px!important;
+    }
+
+    .place{
+        color: var(--colour5);
+        padding-top: 13px;
+        font-size: 25px;
     }
 
     .b-avatar {

@@ -18,6 +18,7 @@
 
                         <div class="nick-name">
                             <p>{{profile.nick}}</p>
+                            <p class="details">Ranking: {{profile.ranking}}</p>
                         </div>
                     </div>
                 </b-col>
@@ -28,6 +29,7 @@
 
 <script>
     import {publicUsersService} from "../App";
+    import {usersRankingService} from "../App";
 
     export default {
         name: "User",
@@ -35,23 +37,32 @@
             return {
                 profile:
                     {
+                        id: null,
                         nick: 'Arturito',
                         lvl: 12,
                         exp: 5,
                         expToNextLvl: 20,
+                        ranking: 0,
                         icon: require('../assets/profileIcon.png'),
                     }
             }
         },
         mounted(){
-            publicUsersService.getUser(this.$route.params.id).then(
+            this.profile.id = this.$route.params.id
+            publicUsersService.getUser(this.profile.id).then(
                 response => {
                     this.profile.nick = response.username;
                     this.profile.lvl = response.level.id;
                     this.profile.exp = response.exp;
                     this.profile.expToNextLvl = response.level.expToNextLevel;
+                    usersRankingService.getUserRanking(this.profile.nick).then(
+                        response => {
+                            this.profile.ranking = response.place;
+                        }
+                    )
                 }
             )
+
         }
     }
 </script>
@@ -107,6 +118,11 @@
         text-align: center;
         color: #b600b9;
         font-size: 30px;
+    }
+
+    .details {
+        font-size: 25px !important;
+        color: var(--colour4) !important;
     }
 
     .progress {

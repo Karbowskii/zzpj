@@ -6,7 +6,12 @@
                 v-bind:not-last="isNotLast(index)"
                 v-bind:first="isFirst(index)"
                 v-on:click="showMatch(match.id)">
-                <b-row>
+                <b-row v-if="showDate(index)">
+                    <b-col class="matchesDate">
+                        {{match.startDate.year}} - {{match.startDate.monthValue}} - {{match.startDate.dayOfMonth}}
+                    </b-col>
+                </b-row>
+                <b-row class="matchRow">
                     <b-col class="leftTeam">
                         {{match.teamA.name}}
                         <b-avatar v-bind:src="match.teamA.url"/>
@@ -33,6 +38,16 @@
                 required: true
             }
         },
+        data: function(){
+            return{
+                dateBefore: {
+                    year: null,
+                    month: null,
+                    day: null
+                }
+            }
+        },
+
         methods: {
             isNotLast: function (index) {
                 return !(index + 1 === this.filteredMatches.length) ? 1 : 0;
@@ -42,6 +57,14 @@
             },
             showMatch: function (matchId) {
                 this.$router.push({path: `/match/${matchId}`});
+            },
+            showDate: function (index) {
+                if(index === 0){
+                    return true;
+                }
+                return !(this.filteredMatches[index].startDate.year === this.filteredMatches[index-1].startDate.year &&
+                    this.filteredMatches[index].startDate.monthValue === this.filteredMatches[index-1].startDate.monthValue &&
+                    this.filteredMatches[index].startDate.dayOfMonth === this.filteredMatches[index-1].startDate.dayOfMonth)
             }
         }
     }
@@ -50,6 +73,8 @@
 <style scoped>
     .matches {
         margin-top: 60px;
+        background: rgba(0, 0, 0, 0.4);
+        border-radius: 15px;
     }
 
     ul {
@@ -96,6 +121,12 @@
         bottom: 0;
         height: 50%;
         margin: auto;
+    }
+
+    .matchesDate{
+        color: var(--colour5);
+        font-size: 30px;
+        padding-bottom: 20px;
     }
 
     .leftTeam {

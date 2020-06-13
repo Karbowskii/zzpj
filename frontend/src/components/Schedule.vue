@@ -19,6 +19,7 @@
 <script>
     import Matches from "./Matches";
     import {matchService} from "../App";
+    const _ = require('lodash');
 
     export default {
         name: "Schedule",
@@ -30,15 +31,13 @@
         },
         created() {
             matchService.getAllMatches().then((response) => {
-                this.allMatches = response;
+                this.allMatches = _.sortBy(response, function (o) {
+                    return [o.startDate.year, o.startDate.dayOfYear]
+                }, ['asc']);
             })
         }
     }
 </script>
 
 <style scoped>
-    .matches {
-        background: rgba(0, 0, 0, 0.4);
-        border-radius: 15px;
-    }
 </style>
