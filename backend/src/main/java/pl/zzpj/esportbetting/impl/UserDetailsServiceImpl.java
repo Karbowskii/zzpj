@@ -33,11 +33,6 @@ import java.util.stream.Stream;
 public class UserDetailsServiceImpl implements UserDetailsService, UserService {
 
     private static final int STARTER_COINS = 100;
-    private final List<String> patchableFields = new LinkedList<>() {{
-        add("/firstName");
-        add("/lastName");
-        add("/email");
-    }};
 
     private final UserRepository userRepository;
     private final LevelRepository levelRepository;
