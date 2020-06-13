@@ -16,7 +16,7 @@
                                         <a class="place">#{{user.place}}</a>
                                     </b-col>
                                     <b-col cols="2">
-                                        <b-avatar :src="icon"></b-avatar>
+                                        <b-avatar :src="getIcon(user.user.level.id)"></b-avatar>
                                     </b-col>
                                     <b-col>
                                         <a class="details">{{user.user.username}}</a>
@@ -41,7 +41,7 @@
 
 <script>
     import {usersRankingService} from "../App";
-
+    import LevelToIconMapper from "../Core/LevelToIconMapper";
     export default {
         name: "UsersRanking",
         data: function () {
@@ -64,6 +64,9 @@
             },
             showPlayer: function (id) {
                 this.$router.push(`/user/${id}`);
+            },
+            getIcon: function(level){
+                return LevelToIconMapper.getUrl(level)
             }
         }
     }
