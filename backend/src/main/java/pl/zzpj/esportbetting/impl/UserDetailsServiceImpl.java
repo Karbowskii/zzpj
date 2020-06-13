@@ -22,6 +22,7 @@ import pl.zzpj.esportbetting.repos.AuthorityRepository;
 import pl.zzpj.esportbetting.repos.LevelRepository;
 import pl.zzpj.esportbetting.repos.UserRepository;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -32,6 +33,11 @@ import java.util.stream.Stream;
 public class UserDetailsServiceImpl implements UserDetailsService, UserService {
 
     private static final int STARTER_COINS = 100;
+    private final List<String> patchableFields = new LinkedList<>() {{
+        add("/firstName");
+        add("/lastName");
+        add("/email");
+    }};
 
     private final UserRepository userRepository;
     private final LevelRepository levelRepository;
@@ -96,8 +102,8 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
         if (!userFound.isPresent()) {
             throw new ObjectNotFoundException("Not found user with id: " + user.getId());
         }
-        if (user.getUsername() != null) {
-            userFound.get().setUsername(user.getUsername());
+        if (user.getUsername() != null && !user.getUsername().equals(userFound.get().getUsername())) {
+            throw new IllegalActionException("Changing username is forbidden");
         }
         if (user.getEmail() != null) {
             userFound.get().setEmail(user.getEmail());
@@ -173,10 +179,10 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
     }
 
     @Override
-    public User applyPatchToCustomer (JsonPatch patch, User targetCustomer) throws JsonPatchException,
+    public User applyPatchToCustomer (JsonPatch patch, User targetUser) throws JsonPatchException,
             JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode patched = patch.apply(objectMapper.convertValue(targetCustomer, JsonNode.class));
+        JsonNode patched = patch.apply(objectMapper.convertValue(targetUser, JsonNode.class));
         return objectMapper.treeToValue(patched, User.class);
     }
 }
