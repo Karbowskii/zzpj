@@ -27,10 +27,8 @@
 </template>
 
 <script>
-    import PublicUsersService from "../Core/service/PublicUsersService";
-    import HttpRequest from "../Core/HttpRequest";
+    import {publicUsersService} from "../App";
 
-    const publicUsersService = new PublicUsersService(new HttpRequest('zzpj-backend'))
     export default {
         name: "User",
         data: function () {
@@ -45,12 +43,13 @@
                     }
             }
         },
-        mounted() {
+        mounted(){
             publicUsersService.getUser(this.$route.params.id).then(
                 response => {
                     this.profile.nick = response.username;
-                    this.profile.lvl = response.levelId;
+                    this.profile.lvl = response.level.id;
                     this.profile.exp = response.exp;
+                    this.profile.expToNextLvl = response.level.expToNextLevel;
                 }
             )
         }
