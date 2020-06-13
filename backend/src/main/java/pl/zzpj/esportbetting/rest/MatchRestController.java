@@ -30,4 +30,9 @@ public class MatchRestController {
     public ResponseEntity<Match> findById(@PathVariable("id") long id){
         return ResponseEntity.ok(matchService.findById(id));
     }
+
+    @GetMapping(path = "/closest")
+    public ResponseEntity<List<Match>> findClosestMatches() {
+        return ResponseEntity.ok(matchService.findClosestMatches());
+    }
 }

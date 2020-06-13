@@ -6,7 +6,7 @@
                     <div class="text-center stake">Stake is x{{betStake.toFixed(2)}}</div>
                     <label for="bet-input" class="text-center">Your bet:</label>
                 </div>
-                <b-form-input :min="1" :max="100" id="bet-input" v-model="betValue" type="number">
+                <b-form-input :min="1" :max="$store.state.user.coins" id="bet-input" v-model="betValue" type="number">
                 </b-form-input>
                 <b-button type="submit">Make a bet!</b-button>
             </form>
@@ -15,9 +15,12 @@
 </template>
 
 <script>
+
+    import {betService} from "../App";
+
     export default {
         name: "BettingModal",
-        props: ['betStake', 'isASelected'],
+        props: ['betStake', 'isASelected', 'matchId'],
         data: function () {
             return {
                 betValue: 0,
@@ -25,9 +28,20 @@
         },
         methods: {
             onSubmit() {
-                this.betValue = 0;
-                this.$bvModal.hide('betting-modal');
-                /* TODO Zapisywanko zakladu do DB*/
+                betService.createBet({
+                    selectedA: this.isASelected,
+                    matchId: this.matchId,
+                    coins: this.betValue
+                }).then((response) => {
+                    if (response.errors) {
+                        alert(response.errors.message)
+                    } else {
+                        this.$store.state.user.coins -= this.betValue;
+                        this.betValue = 0;
+                        alert("Bet created!");
+                    }
+                    this.$bvModal.hide('betting-modal');
+                });
             }
         }
     }
