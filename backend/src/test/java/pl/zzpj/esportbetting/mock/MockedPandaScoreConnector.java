@@ -199,4 +199,10 @@ public class MockedPandaScoreConnector implements ESportRestApi {
     public JSONArray getAllPlayers(GameEnum game) {
         return null;
     }
+
+    @Override
+    public JSONArray getAllPastMatches(GameEnum game){return null;}
+
+    @Override
+    public JSONArray getAllUpcomingMatches(GameEnum game){return null;}
 }

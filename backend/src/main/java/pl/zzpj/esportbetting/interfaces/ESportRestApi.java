@@ -10,6 +10,8 @@ public interface ESportRestApi {
     JSONArray getAllSeries(GameEnum game) throws IOException, InterruptedException;
     JSONArray getAllTournaments(GameEnum game) throws IOException, InterruptedException;
     JSONArray getAllMatches(GameEnum game) throws IOException, InterruptedException;
+    JSONArray getAllPastMatches(GameEnum game) throws IOException, InterruptedException;
+    JSONArray getAllUpcomingMatches(GameEnum game) throws IOException, InterruptedException;
     JSONArray getAllTeams(GameEnum game) throws IOException, InterruptedException;
     JSONArray getAllPlayers(GameEnum game) throws IOException, InterruptedException;
 }

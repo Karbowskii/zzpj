@@ -11,4 +11,8 @@ export default class UsersRankingService {
     getMyRanking(){
         return this.httpRequest.get(`ranking/me`).then(data => data);
     }
+
+    getUserRanking(username){
+        return this.httpRequest.get(`ranking/${username}`).then(data => data);
+    }
 }

@@ -48,6 +48,18 @@ public class PandaScoreRestApiConnector implements ESportRestApi {
     }
 
     @Override
+    public JSONArray getAllPastMatches(GameEnum game) throws IOException, InterruptedException {
+        HttpRequest request = this.createRequest(game, "/matches/past", "&sort=-begin_at");
+        return this.processRequest(request);
+    }
+
+    @Override
+    public JSONArray getAllUpcomingMatches(GameEnum game) throws IOException, InterruptedException {
+        HttpRequest request = this.createRequest(game, "/matches/upcoming", "&sort=begin_at");
+        return this.processRequest(request);
+    }
+
+    @Override
     public JSONArray getAllTeams(GameEnum game) throws IOException, InterruptedException {
         HttpRequest request = this.createRequest(game, "/teams");
         return this.processRequest(request);
@@ -64,6 +76,14 @@ public class PandaScoreRestApiConnector implements ESportRestApi {
                                 .GET()
                                 .uri(URI.create(this.baseUrl + game.toString() + option + "?token=" + this.token))
                                 .build();
+        return request;
+    }
+
+    private HttpRequest createRequest(GameEnum game, String option, String params) {
+        HttpRequest request = HttpRequest.newBuilder()
+                .GET()
+                .uri(URI.create(this.baseUrl + game.toString() + option + "?token=" + this.token + params))
+                .build();
         return request;
     }
 

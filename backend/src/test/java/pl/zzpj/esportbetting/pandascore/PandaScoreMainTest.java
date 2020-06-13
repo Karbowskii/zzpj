@@ -20,7 +20,8 @@ public class PandaScoreMainTest {
         System.out.println(restApiConnector.getAllLeagues(GameEnum.DOTA2));
         System.out.println(restApiConnector.getAllSeries(GameEnum.DOTA2));
         System.out.println(restApiConnector.getAllTournaments(GameEnum.DOTA2));
-        System.out.println(restApiConnector.getAllMatches(GameEnum.DOTA2));
+        System.out.println(restApiConnector.getAllPastMatches(GameEnum.DOTA2));
+        System.out.println(restApiConnector.getAllUpcomingMatches(GameEnum.LEAGUE_OF_LEGENDS));
         System.out.println(restApiConnector.getAllTeams(GameEnum.DOTA2));
         System.out.println(restApiConnector.getAllPlayers(GameEnum.DOTA2));
     }
