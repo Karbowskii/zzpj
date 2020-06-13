@@ -54,9 +54,13 @@ public class MatchServiceImpl implements MatchService {
     @Override
     @Scheduled(cron = "1 * * * * ?")
     public void checkAndUpdateMatches() throws IOException, InterruptedException, JSONException {
-        List<Match> matchesFromApi = MatchApiParser.parse(eSportRestApi.getAllMatches(GAME_NAME));
-        addNewMatchesToDB(matchesFromApi);
-        updateMatches(matchesFromApi);
+        List<Match> pastMatchesFromApi = MatchApiParser.parse(eSportRestApi.getAllPastMatches(GAME_NAME));
+        addNewMatchesToDB(pastMatchesFromApi);
+        updateMatches(pastMatchesFromApi);
+
+        List<Match> upcomingMatchesFromApi = MatchApiParser.parse(eSportRestApi.getAllUpcomingMatches(GAME_NAME));
+        addNewMatchesToDB(upcomingMatchesFromApi);
+        updateMatches(upcomingMatchesFromApi);
     }
 
     public void updateMatches(List<Match> matchesFromApi) {
