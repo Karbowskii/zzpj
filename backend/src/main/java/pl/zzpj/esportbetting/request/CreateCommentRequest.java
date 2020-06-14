@@ -11,6 +11,5 @@ import lombok.NoArgsConstructor;
 @Builder
 public class CreateCommentRequest {
     private long matchId;
-    private long userId;
     private String text;
 }

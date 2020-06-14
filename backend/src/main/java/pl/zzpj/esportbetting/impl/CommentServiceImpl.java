@@ -46,11 +46,10 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public Comment createCommentForMatch(Comment comment) {
         User fullUser = getFullUser(comment.getUser());
-        Match fullMatch = getFullMatch(comment.getMatch());
 
         Comment commentToSave = Comment.builder()
                 .user(fullUser)
-                .match(fullMatch)
+                .match(comment.getMatch())
                 .text(comment.getText())
                 .build();
         userRepository.saveAndFlush(fullUser);
@@ -64,9 +63,9 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public void deleteOwnComment(User user, long commentId) {
-        if(!commentRepository.findAll().stream().
-                filter(comment -> comment.getUser().equals(user)).
-                allMatch(comment -> comment.getId() == commentId)){
+        Comment comment = commentRepository.findById(commentId).
+                orElseThrow(() -> new ObjectNotFoundException("There is no commennt with id: " + commentId));
+        if(!comment.getUser().equals(user)) {
             throw new IllegalActionException("Cannot delete not yours comment!!!");
         }
         commentRepository.deleteById(commentId);

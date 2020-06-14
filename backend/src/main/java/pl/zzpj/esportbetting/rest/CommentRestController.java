@@ -2,7 +2,9 @@ package pl.zzpj.esportbetting.rest;
 
 import org.hibernate.annotations.SQLDeleteAll;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pl.zzpj.esportbetting.interfaces.CommentService;
 import pl.zzpj.esportbetting.interfaces.MatchService;
@@ -48,13 +50,16 @@ public class CommentRestController {
     }
 
     @DeleteMapping(path ="/{id}")
-    public void deleteOwnComment(@PathVariable("id") long id){
+    public ResponseEntity<String> deleteOwnComment(@PathVariable("id") long id){
         User user = userContextService.getAuthenticatedUser();
         commentService.deleteOwnComment(user, id);
+        return ResponseEntity.ok("\"Comment successfully deleted by user!\"");
     }
 
-    @DeleteMapping(path ="/{id}")
-    public void deleteCommentByAdmin(@PathVariable("id") long id){
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @DeleteMapping(path ="/admin/{id}")
+    public ResponseEntity<String> deleteCommentByAdmin(@PathVariable("id") long id){
         commentService.deleteCommentByAdmin(id);
+        return ResponseEntity.ok("\"Comment successfully deleted by admin!\"");
     }
 }
