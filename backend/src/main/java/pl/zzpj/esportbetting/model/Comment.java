@@ -45,6 +45,7 @@ public class Comment {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "match_id")
+    @JsonIgnore
     private Match match;
 
     private String text;
