@@ -30,6 +30,7 @@
 <script>
     import {publicUsersService} from "../App";
     import {usersRankingService} from "../App";
+    import LevelToIconMapper from "../Core/LevelToIconMapper";
 
     export default {
         name: "User",
@@ -43,7 +44,7 @@
                         exp: 5,
                         expToNextLvl: 20,
                         ranking: 0,
-                        icon: require('../assets/profileIcon.png'),
+                        icon: null,
                     }
             }
         },
@@ -55,6 +56,7 @@
                     this.profile.lvl = response.level.id;
                     this.profile.exp = response.exp;
                     this.profile.expToNextLvl = response.level.expToNextLevel;
+                    this.profile.icon = LevelToIconMapper.getUrl(response.level.id);
                     usersRankingService.getUserRanking(this.profile.nick).then(
                         response => {
                             this.profile.ranking = response.place;
@@ -134,5 +136,10 @@
 
     .progress .progress-bar {
         background: #b600b9 !important;
+    }
+
+    img {
+        border-radius: 30%;
+        padding: 5px;
     }
 </style>

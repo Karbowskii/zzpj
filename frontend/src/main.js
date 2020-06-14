@@ -36,6 +36,10 @@ const store = new Vuex.Store({
             state.user = null;
             state.token = null;
             authorizationStorage.clear();
+        },
+        updateUser(state, payload) {
+            state.user = payload.user;
+            authorizationStorage.setUserData(payload.user);
         }
     },
     getters: {

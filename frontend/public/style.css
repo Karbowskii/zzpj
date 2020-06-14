@@ -26,3 +26,7 @@
 * > * {
     font-family: 'Squada One', cursive;
 }
+
+.b-avatar {
+    background: var(--colour4)!important;
+}

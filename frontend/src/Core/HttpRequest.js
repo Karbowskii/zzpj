@@ -21,9 +21,13 @@ export default class HttpRequest {
         return this.execute(url, 'DELETE');
     }
 
+    patch(url, data) {
+        return this.execute(url, 'PATCH', data);
+    }
+
     execute(url, method, data) {
         let headers = new Headers({
-            'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json-patch+json', 'Access-Control-Allow-Origin': '*',
             'Access-Control-Request-Headers': '*'
         });
         if (this.authorizationStorage.isAuthorized()) {

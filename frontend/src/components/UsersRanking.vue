@@ -47,7 +47,6 @@
         data: function () {
             return {
                 users: [],
-                icon: require('../assets/profileIcon.png')
             }
         },
         mounted() {
@@ -125,6 +124,6 @@
         border: 2px solid;
         color: var(--colour3);
         margin-top: 5px;
-        background: none;
+        background: none!important;
     }
 </style>

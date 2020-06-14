@@ -16,12 +16,27 @@
                             </b-progress>
                         </div>
 
-                        <div class="nick-name">
+                        <div class="nick-name" v-if="!isEditing">
                             <p>{{profile.nick}}</p>
+                            <p class="name">Ranking: {{ranking}}</p>
                             <p class="name">{{profile.firstName}} {{profile.lastName}}</p>
                             <p class="name">{{profile.email}}</p>
-                            <p class="name">Ranking: {{ranking}}</p>
                         </div>
+                        <div class="edit" v-if="!isEditing">
+                            <b-button v-on:click="enterEditing">Edit</b-button>
+                        </div>
+                        <b-form @submit.prevent="editAccount" id="edit-form" v-else>
+                            <div class="nick-name">
+                                <p>{{profile.nick}}</p>
+                                <p class="name">Ranking: {{ranking}}</p>
+
+                                <b-form-input required type="text" v-model="editProfile.firstName"></b-form-input>
+                                <b-form-input required type="text" v-model="editProfile.lastName"></b-form-input>
+                                <b-form-input required type="email" v-model="editProfile.email"></b-form-input>
+                                <b-button type="submit">Save</b-button>
+                                <b-button class="ml-2" v-on:click="leaveEditing">Cancel</b-button>
+                            </div>
+                        </b-form>
                     </div>
                 </b-col>
             </b-row>
@@ -30,7 +45,8 @@
                     <user-statistics :labels="['Wins', 'Loses']" :series="betStats"></user-statistics>
                 </b-col>
                 <b-col cols="5" class="right">
-                    <user-statistics :labels="['Gain PepeCoins','Lost PepeCoins']" :series="coinsStats"></user-statistics>
+                    <user-statistics :labels="['Gain PepeCoins','Lost PepeCoins']"
+                                     :series="coinsStats"></user-statistics>
                 </b-col>
             </b-row>
 
@@ -49,6 +65,8 @@
     import UserStatistics from "./UserStatistics";
     import {usersRankingService} from "../App";
     import {userStatsService} from "../App";
+    import {userService} from "../App";
+    import LevelToIconMapper from "../Core/LevelToIconMapper";
 
     export default {
         name: "Profile",
@@ -57,7 +75,49 @@
             return {
                 ranking: null,
                 stats: {},
-                loaded: false
+                loaded: false,
+                isEditing: false,
+                editProfile: {
+                    firstName: "",
+                    lastName: "",
+                    email: ""
+                }
+            }
+        },
+        methods: {
+            enterEditing() {
+                this.editProfile.firstName = this.$store.state.user.firstName;
+                this.editProfile.lastName = this.$store.state.user.lastName;
+                this.editProfile.email = this.$store.state.user.email;
+                this.isEditing = true;
+            },
+            leaveEditing() {
+                this.isEditing = false;
+            },
+            editAccount() {
+                userService.updateUserAccount([{
+                    op: 'replace',
+                    path: '/firstName',
+                    value: this.editProfile.firstName
+                }, {
+                    op: 'replace',
+                    path: '/lastName',
+                    value: this.editProfile.lastName
+                }, {
+                    op: 'replace',
+                    path: '/email',
+                    value: this.editProfile.email
+                }]).then((response) => {
+                    if (response.errors) {
+                        alert(response.errors)
+                    } else {
+                        alert(JSON.stringify(response))
+                        response.icon = LevelToIconMapper.getUrl(response.level.id);
+                        this.$store.commit('updateUser', {user: response});
+                    }
+                    this.leaveEditing();
+
+                })
             }
         },
         computed: {
@@ -87,7 +147,7 @@
                 return result;
             },
             anyData: function () {
-                return this.stats.allBets > 0 &&  (this.stats.earnedCoins + this.stats.lostCoins) > 0
+                return this.stats.allBets > 0 && (this.stats.earnedCoins + this.stats.lostCoins) > 0
             }
         },
         created() {
@@ -96,13 +156,20 @@
             }), userStatsService.getStats().then(response => {
                 this.stats = response.statistics;
                 this.loaded = true;
-            })]).then(() => {});
+            })]).then(() => {
+            });
         },
 
     }
 </script>
 
 <style scoped>
+
+    .edit {
+        width: 100%;
+        text-align: right;
+        padding-right: 25px;
+    }
 
     .profile {
         margin-bottom: 20px;
@@ -120,6 +187,7 @@
     }
 
     .profile-icon {
+        margin-top: 20px;
         background: linear-gradient(to bottom left, var(--colour5) 20%, var(--colour8));
         border: none;
         position: relative;
@@ -145,7 +213,6 @@
     .nick-name {
         color: var(--colour5);
         margin-left: 40px;
-        margin-top: 10px;
         font-size: 40px;
     }
 
@@ -190,6 +257,22 @@
 
     .left {
         border-radius: 15px 0 0 15px;
+    }
+
+    button {
+        border: 2px solid var(--colour4);
+        background: none;
+        color: #b9b9b9;
+    }
+
+    button:hover {
+        border: 2px solid var(--colour4);
+        background: none;
+        text-shadow: 0 0 5px var(--colour5);
+    }
+
+    input {
+        margin-top: 15px;
     }
 
 </style>
