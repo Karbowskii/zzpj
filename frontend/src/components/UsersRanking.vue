@@ -1,8 +1,15 @@
 <template>
     <div class="users-ranking">
-        <b-container>
+        <loading v-if="loading"></loading>
+        <b-container v-else>
             <b-row>
-                <!--Players-->
+                <b-col>
+                    <h1 class="display-1">
+                        Best users
+                    </h1>
+                </b-col>
+            </b-row>
+            <b-row align-h="center">
                 <b-col cols="9">
                     <div class="users">
                         <ul>
@@ -29,11 +36,6 @@
                         </ul>
                     </div>
                 </b-col>
-
-                <!--Filter-->
-                <b-col cols="3">
-
-                </b-col>
             </b-row>
         </b-container>
     </div>
@@ -42,16 +44,29 @@
 <script>
     import {usersRankingService} from "../App";
     import LevelToIconMapper from "../Core/LevelToIconMapper";
+    import Loading from "./Loading";
+
     export default {
         name: "UsersRanking",
+        components: {Loading},
         data: function () {
             return {
                 users: [],
+                loading: true
             }
         },
         mounted() {
             usersRankingService.getRanking().then(response => {
-                this.users = response
+                if(response.errors){
+                    this.$bvToast.toast(response.errors.message, {
+                        title: 'Error',
+                        variant: 'danger',
+                        toaster: 'b-toaster-top-center'
+                    });
+                } else {
+                    this.users = response;
+                }
+                this.loading = false;
             })
         },
         methods: {
@@ -64,7 +79,7 @@
             showPlayer: function (id) {
                 this.$router.push(`/user/${id}`);
             },
-            getIcon: function(level){
+            getIcon: function (level) {
                 return LevelToIconMapper.getUrl(level)
             }
         }
@@ -72,10 +87,11 @@
 </script>
 
 <style scoped>
+
     .users {
         background: rgba(0, 0, 0, 0.4);
         border-radius: 15px;
-        margin-top: 60px;
+        margin-top: 20px;
     }
 
     ul {
@@ -110,10 +126,10 @@
 
     .details {
         color: #cfcfcf !important;
-        padding-top: 20px!important;
+        padding-top: 20px !important;
     }
 
-    .place{
+    .place {
         color: var(--colour5);
         padding-top: 13px;
         font-size: 25px;
@@ -124,6 +140,12 @@
         border: 2px solid;
         color: var(--colour3);
         margin-top: 5px;
-        background: none!important;
+        background: none !important;
+    }
+
+    h1 {
+        margin-top: 50px;
+        color: #e2e2e2;
+        text-shadow: 0 0 5px #ffffff;
     }
 </style>

@@ -34,11 +34,19 @@
                     coins: this.betValue
                 }).then((response) => {
                     if (response.errors) {
-                        alert(response.errors.message)
+                        this.$bvToast.toast(response.errors.message, {
+                            title: 'Error',
+                            variant: 'danger',
+                            toaster: 'b-toaster-top-center'
+                        });
                     } else {
                         this.$store.state.user.coins -= this.betValue;
                         this.betValue = 0;
-                        alert("Bet created!");
+                        this.$bvToast.toast('Your bet was created!', {
+                            title: 'Bet',
+                            variant: 'success',
+                            toaster: 'b-toaster-top-center'
+                        });
                     }
                     this.$bvModal.hide('betting-modal');
                 });
@@ -67,6 +75,12 @@
         border: 2px solid var(--colour4);
         background: none;
         text-shadow: 0 0 5px var(--colour5);
+    }
+
+    button:active, button:focus {
+        background: none!important;
+        border: 2px solid var(--colour4)!important;
+        box-shadow: none!important;
     }
 
     label {

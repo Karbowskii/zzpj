@@ -125,8 +125,8 @@ public class MatchServiceImpl implements MatchService {
     private void setMatchStakesToRandom(Match match) {
         float randomNum = new Random().nextFloat()
                 * (Match.getMAX_STAKE() - Match.getMIN_STAKE()) + Match.getMIN_STAKE();
-        match.setStakeA(randomNum);
-        match.setStakeB(Match.getMAX_STAKE() - randomNum + Match.getMIN_STAKE());
+        match.setStakeA(Match.getMIN_STAKE() + (randomNum / (Match.getMIN_STAKE() + Match.getMAX_STAKE() - randomNum)));
+        match.setStakeB(Match.getMIN_STAKE() + (Match.getMIN_STAKE() + Match.getMAX_STAKE() - randomNum) / randomNum);
     }
 
     @Override

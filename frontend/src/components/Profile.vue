@@ -1,6 +1,7 @@
 <template>
     <div class="profile">
-        <b-container>
+        <loading v-if="loading"></loading>
+        <b-container v-else>
             <b-row align-h="center">
                 <b-col cols=8>
                     <div class="profile-panel">
@@ -67,15 +68,16 @@
     import {userStatsService} from "../App";
     import {userService} from "../App";
     import LevelToIconMapper from "../Core/LevelToIconMapper";
+    import Loading from "./Loading";
 
     export default {
         name: "Profile",
-        components: {UserStatistics, MatchHistory},
+        components: {Loading, UserStatistics, MatchHistory},
         data: function () {
             return {
                 ranking: null,
                 stats: {},
-                loaded: false,
+                loading: true,
                 isEditing: false,
                 editProfile: {
                     firstName: "",
@@ -109,9 +111,17 @@
                     value: this.editProfile.email
                 }]).then((response) => {
                     if (response.errors) {
-                        alert(response.errors)
+                        this.$bvToast.toast(response.errors.message, {
+                            title: 'Error',
+                            variant: 'danger',
+                            toaster: 'b-toaster-top-center'
+                        });
                     } else {
-                        alert(JSON.stringify(response))
+                        this.$bvToast.toast('Your account details have been changed!', {
+                            title: 'Account update',
+                            variant: 'success',
+                            toaster: 'b-toaster-top-center'
+                        });
                         response.icon = LevelToIconMapper.getUrl(response.level.id);
                         this.$store.commit('updateUser', {user: response});
                     }
@@ -152,11 +162,27 @@
         },
         created() {
             Promise.all([usersRankingService.getMyRanking().then(response => {
-                this.ranking = response.place;
+                if (response.errors) {
+                    this.$bvToast.toast(response.errors.message, {
+                        title: 'Error',
+                        variant: 'danger',
+                        toaster: 'b-toaster-top-center'
+                    });
+                } else {
+                    this.ranking = response.place;
+                }
             }), userStatsService.getStats().then(response => {
-                this.stats = response.statistics;
-                this.loaded = true;
+                if (response.errors) {
+                    this.$bvToast.toast(response.errors.message, {
+                        title: 'Error',
+                        variant: 'danger',
+                        toaster: 'b-toaster-top-center'
+                    });
+                } else {
+                    this.stats = response.statistics;
+                }
             })]).then(() => {
+                this.loading = false;
             });
         },
 
@@ -270,6 +296,13 @@
         background: none;
         text-shadow: 0 0 5px var(--colour5);
     }
+
+    button:active, button:focus {
+        background: none!important;
+        border: 2px solid var(--colour4)!important;
+        box-shadow: none!important;
+    }
+
 
     input {
         margin-top: 15px;

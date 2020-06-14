@@ -71,9 +71,9 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
                 user.getLastName()).anyMatch(""::equals)) {
             throw new IllegalActionException("Invalid form");
         } else if (existsByUserName(user.getUsername())) {
-            throw new AlreadyTakenException("username");
+            throw new AlreadyTakenException("Username is taken");
         } else if (existsByEmail(user.getEmail())) {
-            throw new AlreadyTakenException("email");
+            throw new AlreadyTakenException("Email is taken");
         } else {
             setUserToStartingUser(user);
             return userRepository.save(user);

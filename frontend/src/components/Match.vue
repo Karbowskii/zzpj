@@ -1,6 +1,7 @@
 <template>
     <div class="match">
-        <b-container>
+        <loading v-if="loading"></loading>
+        <b-container v-else>
             <b-row>
                 <b-col class="leftTeam" cols="3">
                     <div class="text-center">
@@ -40,25 +41,32 @@
 <script>
     import BettingModal from "./BettingModal";
     import {matchService} from "../App";
+    import Loading from "./Loading";
 
     export default {
         name: "Match",
-        components: {BettingModal},
+        components: {Loading, BettingModal},
         data: function () {
             return {
-                match: null,
+                match: {},
                 betStake: 0,
-                isASelected: false
+                isASelected: false,
+                loading: true
             }
         },
         created() {
             this.id = this.$route.params.id;
             matchService.getMatchById(this.$route.params.id).then((response) => {
                 if (response.errors) {
-                    alert("Error");
+                    this.$bvToast.toast(response.errors.message, {
+                        title: 'Error',
+                        variant: 'danger',
+                        toaster: 'b-toaster-top-center'
+                    });
                 } else {
                     this.match = response;
                 }
+                this.loading = false;
             })
 
         },

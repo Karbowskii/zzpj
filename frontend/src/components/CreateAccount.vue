@@ -38,18 +38,25 @@
         methods: {
             createAccount: function () {
                 if (this.password !== this.confirmPassword) {
-                    alert("be");
+                    this.$bvToast.toast('Password and confirmation password must be the same!', {
+                        title: 'Error',
+                        variant: 'danger',
+                        toaster: 'b-toaster-top-center'
+                    });
                 } else {
                     authorizationService.register(this.login, this.password, this.email, this.firstName, this.lastName)
-                        .then(res => {
-                            if (res.errors) {
-                                alert("Register error!");
+                        .then(response => {
+                            if (response.errors) {
+                                this.$bvToast.toast(response.errors.message, {
+                                    title: 'Error',
+                                    variant: 'danger',
+                                    toaster: 'b-toaster-top-center'
+                                });
                             } else {
-                                this.$router.push('/login');
+                                this.$router.push({path:'/login',query: {newAccount: true}});
                             }
                         })
                 }
-
             }
         },
         data: function () {
@@ -93,6 +100,12 @@
         border: 2px solid var(--colour4);
         background: none;
         text-shadow: 0 0 5px var(--colour5);
+    }
+
+    button:active, button:focus {
+        background: none!important;
+        border: 2px solid var(--colour4)!important;
+        box-shadow: none!important;
     }
 
     .create-account-panel {

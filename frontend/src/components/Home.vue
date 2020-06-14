@@ -1,8 +1,8 @@
 <template>
     <div>
         <h1 class="display-1">UPCOMING MATCHES</h1>
-
-        <b-container>
+        <loading v-if="loading"></loading>
+        <b-container v-else>
             <b-row>
                 <b-col>
                     <b-carousel
@@ -41,36 +41,41 @@
                                 </div>
                             </template>
                         </b-carousel-slide>
-
                     </b-carousel>
                 </b-col>
             </b-row>
         </b-container>
-
     </div>
-
 </template>
 
 <script>
 
     import {matchService} from "../App";
+    import Loading from "./Loading";
 
     export default {
         name: "Home",
+        components: {Loading},
         data() {
             return {
                 slide: 0,
                 matches: [],
-                isSliding: false
+                isSliding: false,
+                loading: true
             }
         },
         created() {
             matchService.getClosestMatches().then((response) => {
                 if (response.errors) {
-                    alert(response.errors.message);
+                    this.$bvToast.toast(response.errors.message, {
+                        title: 'Error',
+                        variant: 'danger',
+                        toaster: 'b-toaster-top-center'
+                    });
                 } else {
                     this.matches = response;
                 }
+                this.loading = false;
             })
         },
         methods: {
