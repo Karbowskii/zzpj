@@ -89,6 +89,7 @@ public class User {
             orphanRemoval = true,
             cascade = CascadeType.ALL,
             fetch = FetchType.EAGER)
+    @JsonIgnore
     private List<Comment> comments = new ArrayList<>();
 
     @OneToMany(mappedBy = "user",

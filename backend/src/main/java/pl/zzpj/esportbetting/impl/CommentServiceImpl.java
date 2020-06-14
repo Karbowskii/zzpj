@@ -1,32 +1,16 @@
 package pl.zzpj.esportbetting.impl;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import pl.zzpj.esportbetting.enumerate.DetailedFinishedStatusEnum;
-import pl.zzpj.esportbetting.enumerate.MatchStatusEnum;
-import pl.zzpj.esportbetting.exception.AlreadyTakenException;
 import pl.zzpj.esportbetting.exception.IllegalActionException;
 import pl.zzpj.esportbetting.exception.ObjectNotFoundException;
-import pl.zzpj.esportbetting.exception.ValidationException;
-import pl.zzpj.esportbetting.interfaces.BetService;
 import pl.zzpj.esportbetting.interfaces.CommentService;
-import pl.zzpj.esportbetting.interfaces.UserContextService;
-import pl.zzpj.esportbetting.interfaces.UserLevelService;
-import pl.zzpj.esportbetting.model.Bet;
 import pl.zzpj.esportbetting.model.Comment;
-import pl.zzpj.esportbetting.model.Match;
 import pl.zzpj.esportbetting.model.User;
-import pl.zzpj.esportbetting.repos.BetRepository;
 import pl.zzpj.esportbetting.repos.CommentRepository;
 import pl.zzpj.esportbetting.repos.MatchRepository;
 import pl.zzpj.esportbetting.repos.UserRepository;
-import pl.zzpj.esportbetting.strategies.HappyHoursStrategy;
-import pl.zzpj.esportbetting.strategies.NormalStrategy;
 
-import java.time.LocalTime;
 import java.util.List;
 
 @Service("commentService")
@@ -65,7 +49,7 @@ public class CommentServiceImpl implements CommentService {
     public void deleteOwnComment(User user, long commentId) {
         Comment comment = commentRepository.findById(commentId).
                 orElseThrow(() -> new ObjectNotFoundException("There is no commennt with id: " + commentId));
-        if(!comment.getUser().equals(user)) {
+        if(!comment.getUser().getUsername().equals(user.getUsername())) {
             throw new IllegalActionException("Cannot delete not yours comment!!!");
         }
         commentRepository.deleteById(commentId);
@@ -83,11 +67,5 @@ public class CommentServiceImpl implements CommentService {
         return userRepository.findByUsername(user.getUsername())
                 .orElseThrow(() -> new ObjectNotFoundException("Not found user with username: "
                         + user.getUsername()));
-    }
-
-    private Match getFullMatch(Match match) {
-        return matchRepository.findById(match.getId())
-                .orElseThrow(() -> new ObjectNotFoundException("Not found match with id: "
-                        + match.getId()));
     }
 }
