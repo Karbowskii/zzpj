@@ -1,6 +1,7 @@
 <template>
     <div>
-        <b-container>
+        <loading v-if="loading"></loading>
+        <b-container v-else>
             <b-row>
                 <!--Matches-->
                 <b-col cols="9">
@@ -11,25 +12,29 @@
                 <b-col cols="3">
                     <div class="filterPanel">
                         <div class="checkboxik form-check">
-                            <input class="form-check-input" type="checkbox" id="pastMatchesCheckbox" v-model="filterOptions.pastMatchesShown">
+                            <input class="form-check-input" type="checkbox" id="pastMatchesCheckbox"
+                                   v-model="filterOptions.pastMatchesShown">
                             <label class="form-check-label" for="pastMatchesCheckbox">
                                 Finished matches
                             </label>
                         </div>
                         <div class="checkboxik form-check">
-                            <input class="form-check-input" type="checkbox" id="upcomingMatchesCheckbox" v-model="filterOptions.upcomingMatchesShown">
+                            <input class="form-check-input" type="checkbox" id="upcomingMatchesCheckbox"
+                                   v-model="filterOptions.upcomingMatchesShown">
                             <label class="form-check-label" for="upcomingMatchesCheckbox">
                                 Upcoming matches
                             </label>
                         </div>
                         <div class="checkboxik form-check">
-                            <input class="form-check-input" type="radio" name="sort" id="sortByDateAsc" v-model="filterOptions.sortByDate" value="asc">
+                            <input class="form-check-input" type="radio" name="sort" id="sortByDateAsc"
+                                   v-model="filterOptions.sortByDate" value="asc">
                             <label class="form-check-label" for="sortByDateAsc">
                                 Sort from oldest
                             </label>
                         </div>
                         <div class="checkboxik form-check">
-                            <input class="form-check-input" type="radio" name="sort" id="sortByDateDesc" v-model="filterOptions.sortByDate" value="desc">
+                            <input class="form-check-input" type="radio" name="sort" id="sortByDateDesc"
+                                   v-model="filterOptions.sortByDate" value="desc">
                             <label class="form-check-label" for="sortByDateDesc">
                                 Sort from newest
                             </label>
@@ -37,7 +42,7 @@
                         <div class="search">
                             <input id="searching" placeholder="Search" v-model="filterOptions.searchName">
                         </div>
-                        <b-button @click="filter">filter</b-button>
+                        <b-button @click="filter">Filter</b-button>
                     </div>
                 </b-col>
             </b-row>
@@ -48,12 +53,13 @@
 <script>
     import Matches from "./Matches";
     import {matchService} from "../App";
+    import Loading from "./Loading";
 
     const _ = require('lodash');
 
     export default {
         name: "Schedule",
-        components: {Matches},
+        components: {Loading, Matches},
         data: function () {
             return {
                 allMatches: [],
@@ -63,20 +69,31 @@
                     pastMatchesShown: true,
                     upcomingMatchesShown: true,
                     sortByDate: 'asc',
-                }
+                },
+                loading: true
             }
         },
         created() {
             matchService.getAllMatches().then((response) => {
-                this.allMatches = _.orderBy(response, function (o) {
-                    return [o.startDate.year, o.startDate.dayOfYear, o.startDate.hour]
-                }, 'asc');
-                this.filteredMatches = this.allMatches
+                if (response.errors) {
+                    this.$bvToast.toast(response.errors.message, {
+                        title: 'Error',
+                        variant: 'danger',
+                        toaster: 'b-toaster-top-center'
+                    });
+                } else {
+                    this.allMatches = _.orderBy(response, function (o) {
+                        return [o.startDate.year, o.startDate.dayOfYear, o.startDate.hour]
+                    }, 'asc');
+                    this.filteredMatches = this.allMatches;
+                }
+
+                this.loading = false
             })
         },
         methods: {
             filter: function () {
-                // alert(this.filterOptions.sortByDate)
+                this.loading = true
                 this.filteredMatches = _.orderBy(this.allMatches, function (o) {
                     return [o.startDate.year, o.startDate.dayOfYear, o.startDate.hour]
                 }, this.filterOptions.sortByDate);
@@ -96,13 +113,14 @@
                     this.filteredMatches = _.filter(this.filteredMatches, function (o) {
                         return (o.teamA.name.includes(teamName) || o.teamB.name.includes(teamName))
                     })
+                this.loading = false
             }
         }
     }
 </script>
 
 <style scoped>
-    .filterPanel{
+    .filterPanel {
         margin-top: 60px;
         margin-left: 60px;
         padding-left: 25px;
@@ -112,18 +130,21 @@
         border-radius: 15px;
         position: fixed;
     }
-    .checkboxik{
+
+    .checkboxik {
         font-size: 20px;
         color: #cfcfcf;
         text-align: left;
         /*padding-left: 17%;*/
         padding-top: 20px;
     }
-    .search{
+
+    .search {
         padding-top: 40px;
         padding-bottom: 40px;
     }
-    label{
+
+    label {
         padding-left: 10px;
     }
 

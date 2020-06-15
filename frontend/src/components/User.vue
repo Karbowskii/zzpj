@@ -1,6 +1,7 @@
 <template>
     <div class="user">
-        <b-container>
+        <loading v-if="loading"></loading>
+        <b-container v-else>
             <b-row align-h="center">
                 <b-col cols=8>
                     <div class="profile-panel">
@@ -30,9 +31,12 @@
 <script>
     import {publicUsersService} from "../App";
     import {usersRankingService} from "../App";
+    import LevelToIconMapper from "../Core/LevelToIconMapper";
+    import Loading from "./Loading";
 
     export default {
         name: "User",
+        components: {Loading},
         data: function () {
             return {
                 profile:
@@ -43,26 +47,44 @@
                         exp: 5,
                         expToNextLvl: 20,
                         ranking: 0,
-                        icon: require('../assets/profileIcon.png'),
-                    }
+                        icon: null,
+                    },
+                loading: true
             }
         },
         mounted(){
             this.profile.id = this.$route.params.id
             publicUsersService.getUser(this.profile.id).then(
                 response => {
-                    this.profile.nick = response.username;
-                    this.profile.lvl = response.level.id;
-                    this.profile.exp = response.exp;
-                    this.profile.expToNextLvl = response.level.expToNextLevel;
-                    usersRankingService.getUserRanking(this.profile.nick).then(
-                        response => {
-                            this.profile.ranking = response.place;
-                        }
-                    )
+                    if(response.errors){
+                        this.$bvToast.toast(response.errors.message, {
+                            title: 'Error',
+                            variant: 'danger',
+                            toaster: 'b-toaster-top-center'
+                        });
+                    } else {
+                        this.profile.nick = response.username;
+                        this.profile.lvl = response.level.id;
+                        this.profile.exp = response.exp;
+                        this.profile.expToNextLvl = response.level.expToNextLevel;
+                        this.profile.icon = LevelToIconMapper.getUrl(response.level.id);
+                        usersRankingService.getUserRanking(this.profile.nick).then(
+                            response => {
+                                if (response.errors) {
+                                    this.$bvToast.toast(response.errors.message, {
+                                        title: 'Error',
+                                        variant: 'danger',
+                                        toaster: 'b-toaster-top-center'
+                                    });
+                                } else {
+                                    this.profile.ranking = response.place;
+                                }
+                                this.loading = false;
+                            }
+                        )
+                    }
                 }
             )
-
         }
     }
 </script>
@@ -134,5 +156,10 @@
 
     .progress .progress-bar {
         background: #b600b9 !important;
+    }
+
+    img {
+        border-radius: 30%;
+        padding: 5px;
     }
 </style>

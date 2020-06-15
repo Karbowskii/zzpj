@@ -15,6 +15,10 @@ export default class AuthorizationStorage {
         sessionStorage.setItem('user', JSON.stringify(user));
     }
 
+    setUserData(user) {
+        sessionStorage.setItem('user', JSON.stringify(user));
+    }
+
     isAuthorized() {
         return sessionStorage.getItem('authorizationToken') !== null;
     }

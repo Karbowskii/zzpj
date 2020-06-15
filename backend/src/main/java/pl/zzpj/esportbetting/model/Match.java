@@ -37,11 +37,11 @@ public class Match {
 
     @Getter
     @Transient
-    private static final float MIN_STAKE = 1.1f;
+    private static final float MIN_STAKE = 1f;
 
     @Getter
     @Transient
-    private static final float MAX_STAKE = 4.9f;
+    private static final float MAX_STAKE = 5f;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,14 +1,15 @@
-import Vue from 'vue'
-import App from './App.vue'
-import Vuex from 'vuex'
-import VueRouter from 'vue-router'
-import {routes} from './routes'
-import {BootstrapVue, IconsPlugin} from 'bootstrap-vue'
-import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap-vue/dist/bootstrap-vue.css'
+import Vue from 'vue';
+import App from './App.vue';
+import Vuex from 'vuex';
+import VueRouter from 'vue-router';
+import {routes} from './routes';
+import {BootstrapVue, IconsPlugin} from 'bootstrap-vue';
+import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap-vue/dist/bootstrap-vue.css';
 import {authorizationStorage} from "./App";
 import cors from 'cors';
 import VueApexCharts from 'vue-apexcharts';
+import {VueSpinners} from "@saeris/vue-spinners";
 
 Vue.config.productionTip = false;
 
@@ -16,6 +17,7 @@ Vue.use(VueRouter);
 Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
 Vue.use(Vuex);
+Vue.use(VueSpinners);
 Vue.use(cors);
 Vue.component('apex-chart', VueApexCharts);
 
@@ -36,6 +38,10 @@ const store = new Vuex.Store({
             state.user = null;
             state.token = null;
             authorizationStorage.clear();
+        },
+        updateUser(state, payload) {
+            state.user = payload.user;
+            authorizationStorage.setUserData(payload.user);
         }
     },
     getters: {

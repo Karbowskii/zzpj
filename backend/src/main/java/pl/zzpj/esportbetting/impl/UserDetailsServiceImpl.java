@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.fge.jsonpatch.JsonPatch;
 import com.github.fge.jsonpatch.JsonPatchException;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -32,6 +33,7 @@ import java.util.stream.Stream;
 public class UserDetailsServiceImpl implements UserDetailsService, UserService {
 
     private static final int STARTER_COINS = 100;
+    private static final int WEEKLY_COINS = 10;
 
     private final UserRepository userRepository;
     private final LevelRepository levelRepository;
@@ -60,6 +62,12 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
                 () -> new ObjectNotFoundException("Not found user with id: " + id));
     }
 
+    @Scheduled(cron = "0 0 10 ? * Mon")
+    public void giveWeeklyCoins(){
+        for(User user: userRepository.findAll()){
+            user.addCoins(WEEKLY_COINS);
+        }
+    }
 
     @Override
     public User register(User user) {
@@ -71,9 +79,9 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
                 user.getLastName()).anyMatch(""::equals)) {
             throw new IllegalActionException("Invalid form");
         } else if (existsByUserName(user.getUsername())) {
-            throw new AlreadyTakenException("username");
+            throw new AlreadyTakenException("Username is taken");
         } else if (existsByEmail(user.getEmail())) {
-            throw new AlreadyTakenException("email");
+            throw new AlreadyTakenException("Email is taken");
         } else {
             setUserToStartingUser(user);
             return userRepository.save(user);

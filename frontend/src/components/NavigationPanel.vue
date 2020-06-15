@@ -161,6 +161,12 @@
         text-shadow: 0 0 5px var(--colour5);
     }
 
+    button:active, button:focus {
+        background: none!important;
+        border: 2px solid var(--colour4)!important;
+        box-shadow: none!important;
+    }
+
     .navigationRouter .router-link-exact-active {
         border-bottom: 3px solid var(--colour3);
         color: var(--colour3);

@@ -65,12 +65,12 @@ public class UserRestController {
     }
 
     @PatchMapping(path = "/me", consumes = "application/json-patch+json", produces = "application/json")
-    public ResponseEntity<User> updateUser(@RequestBody JsonPatch patch) throws JsonPatchException,
+    public ResponseEntity<UserResponse> updateUser(@RequestBody JsonPatch patch) throws JsonPatchException,
                                                                                 JsonProcessingException {
         User loggedUser = userContextService.getAuthenticatedUser();
         User updatedUser = userService.applyPatchToCustomer(patch, loggedUser);
         updatedUser = userService.update(updatedUser);
-        return ResponseEntity.ok(updatedUser);
+        return ResponseEntity.ok(UserToUserResponseConverter.convert(updatedUser));
     }
 
     @PutMapping(path = "/me/password", produces = "application/json")
