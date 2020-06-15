@@ -65,7 +65,7 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
     @Scheduled(cron = "0 0 10 ? * Mon")
     public void giveWeeklyCoins(){
         for(User user: userRepository.findAll()){
-            user.setCoins(user.getCoins() + WEEKLY_COINS);
+            user.addCoins(WEEKLY_COINS);
         }
     }
 
